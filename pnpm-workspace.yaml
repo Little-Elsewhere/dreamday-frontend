@@ -7,3 +7,7 @@ onlyBuiltDependencies:
   - '@swc/core'
   - esbuild
   - msw
+
+overrides:
+  'postcss': 'npm:postcss@8.5.15'
+  'esbuild': 'npm:esbuild@0.28.1'
