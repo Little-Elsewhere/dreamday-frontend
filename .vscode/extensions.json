@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "bradlc.vscode-tailwindcss",
+    "vscodevim.vim",
+    "esbenp.prettier-vscode",
+    "pkief.material-icon-theme",
+    "mhutchie.git-graph",
+    "eamodio.gitlens"
+  ]
+}
