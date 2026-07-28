@@ -7,5 +7,6 @@ allowBuilds:
   unrs-resolver: true
 
 overrides:
-  'postcss': 'npm:postcss@8.5.15'
-  'esbuild': 'npm:esbuild@0.28.1'
+  'postcss': 'npm:postcss@8.5.23'
+  'sharp': 'npm:sharp@0.35.3'
+  'brace-expansion': 'npm:brace-expansion@5.0.8'
