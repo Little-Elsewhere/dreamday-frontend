@@ -134,12 +134,12 @@ pnpm docker:prod             # Build production image
 cp .env.example .env.local
 ```
 
-| Variable             | Description                      |
-| :------------------- | :------------------------------- |
-| `APP_NAME`           | App name                         |
-| `APP_DEFAULT_TITLE`  | Default page title               |
-| `APP_TITLE_TEMPLATE` | Title template (%s = page title) |
-| `APP_DESCRIPTION`    | Meta description                 |
+| Variable                         | Description                      |
+| :------------------------------- | :------------------------------- |
+| `NEXT_PUBLIC_APP_NAME`           | App name                         |
+| `NEXT_PUBLIC_APP_DEFAULT_TITLE`  | Default page title               |
+| `NEXT_PUBLIC_APP_TITLE_TEMPLATE` | Title template (%s = page title) |
+| `NEXT_PUBLIC_APP_DESCRIPTION`    | Meta description                 |
 
 ## Environment Setup
 

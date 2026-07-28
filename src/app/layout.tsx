@@ -10,10 +10,10 @@ const beVietnamPro = Be_Vietnam_Pro({
   weight: ['400', '500', '600', '700'],
 })
 
-const appName = process.env.APP_NAME!
-const appDefaultTitle = process.env.APP_DEFAULT_TITLE!
-const appTitleTemplate = process.env.APP_TITLE_TEMPLATE!
-const appDescription = process.env.APP_DESCRIPTION!
+const appName = process.env.NEXT_PUBLIC_APP_NAME!
+const appDefaultTitle = process.env.NEXT_PUBLIC_APP_DEFAULT_TITLE!
+const appTitleTemplate = process.env.NEXT_PUBLIC_APP_TITLE_TEMPLATE!
+const appDescription = process.env.NEXT_PUBLIC_APP_DESCRIPTION!
 
 export const metadata: Metadata = {
   applicationName: appName,

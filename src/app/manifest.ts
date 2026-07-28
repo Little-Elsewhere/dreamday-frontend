@@ -3,9 +3,9 @@ import type { MetadataRoute } from 'next'
 // TODO: replace the SVG fallback with real PNG icons (192x192, 512x512, maskable)
 // placed under public/icons/ to satisfy the PWA installability criteria.
 const manifest = (): MetadataRoute.Manifest => ({
-  name: process.env.APP_NAME!,
-  short_name: process.env.APP_NAME!,
-  description: process.env.APP_DESCRIPTION!,
+  name: process.env.NEXT_PUBLIC_APP_NAME!,
+  short_name: process.env.NEXT_PUBLIC_APP_NAME!,
+  description: process.env.NEXT_PUBLIC_APP_DESCRIPTION!,
   start_url: '/en',
   scope: '/',
   display: 'standalone',
