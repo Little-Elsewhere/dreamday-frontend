@@ -10,3 +10,4 @@ overrides:
   'postcss': 'npm:postcss@8.5.23'
   'sharp': 'npm:sharp@0.35.3'
   'brace-expansion': 'npm:brace-expansion@5.0.8'
+  'minimatch': 'npm:minimatch@10.2.5'

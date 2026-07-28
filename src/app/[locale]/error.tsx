@@ -3,13 +3,7 @@
 import { Button } from '@/components/ui/button'
 import { useTranslations } from 'next-intl'
 
-export default function Error({
-  error,
-  reset,
-}: {
-  error: Error & { digest?: string }
-  reset: () => void
-}) {
+export default function Error({ reset }: { reset: () => void }) {
   const t = useTranslations('error')
 
   return (
