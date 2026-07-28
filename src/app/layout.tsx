@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 import { SerwistProvider } from './serwist'
 import { Be_Vietnam_Pro } from 'next/font/google'
-import { cn } from '@/utils'
+import { cn } from '@/utils/cn'
 
 const beVietnamPro = Be_Vietnam_Pro({
   variable: '--font-be-vietnam-pro',
