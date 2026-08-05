@@ -1,0 +1,319 @@
+---
+description: Error boundaries, Server Action errors, and user-facing error UX
+globs:
+  - 'src/**/*.{ts,tsx}'
+alwaysApply: true
+---
+
+# Error Handling Conventions
+
+## 1. Philosophy
+
+- NEVER swallow errors with empty `catch` blocks.
+- ALWAYS distinguish between **expected errors** (validation, not found) and **unexpected errors** (bugs, network down).
+- Expected errors: return to UI, let user fix or retry.
+- Unexpected errors: log, show generic fallback, alert team.
+
+## 2. Error Boundaries (React + App Router)
+
+### 2.1. Route-level Error UI
+
+- Create `error.tsx` files alongside `page.tsx` and `layout.tsx` to catch runtime errors in that route segment.
+- `error.tsx` MUST be a Client Component (`"use client"`).
+- Provide a "Try again" button that calls `reset()`.
+- NEVER show raw error stacks or internal messages to users.
+
+```tsx
+// src/app/[locale]/lessons/[slug]/error.tsx
+'use client'
+
+import { useEffect } from 'react'
+import { useTranslations } from 'next-intl'
+import { captureException } from '@/lib/monitoring'
+import { Button } from '@/components/ui/button'
+
+interface LessonErrorProps {
+  error: Error & { digest?: string }
+  reset: () => void
+}
+
+export default function LessonError({ error, reset }: LessonErrorProps): JSX.Element {
+  const t = useTranslations('LessonError')
+
+  useEffect(() => {
+    // Send to monitoring service (Sentry, LogRocket, etc.) — never use console.error
+    captureException(error)
+  }, [error])
+
+  return (
+    <div className="flex min-h-screen flex-col items-center justify-center gap-4">
+      <h2 className="text-xl font-semibold">{t('title')}</h2>
+      <p className="text-muted-foreground">{t('description')}</p>
+      <Button onClick={reset}>{t('retry')}</Button>
+    </div>
+  )
+}
+```
+
+### 2.2. Global Error
+
+- Use src/app/global-error.tsx for root-level crashes.
+- MUST include <html> and <body> tags because it replaces the root layout.
+
+```tsx
+// src/app/global-error.tsx
+'use client'
+
+interface GlobalErrorProps {
+  error: Error & { digest?: string }
+  reset: () => void
+}
+
+export default function GlobalError({ reset }: GlobalErrorProps): JSX.Element {
+  return (
+    <html>
+      <body className="flex min-h-screen flex-col items-center justify-center gap-4">
+        <h1 className="text-2xl font-bold">Something went wrong</h1>
+        <button onClick={reset}>Try again</button>
+      </body>
+    </html>
+  )
+}
+```
+
+## 3. Server Actions — Type-Safe Errors
+
+- NEVER let Server Actions throw raw errors to the client.
+- ALWAYS return a discriminated union: { success: true, data: T } | { success: false, error: string }.
+- Validate inputs with Zod. Return Zod issues in a user-friendly shape.
+- NEVER leak internal details (stack traces, SQL errors, file paths).
+
+```tsx
+// src/lib/actions.ts
+'use server'
+
+import { z } from 'zod'
+
+const submitAnswerSchema = z.object({
+  exerciseId: z.string().uuid(),
+  answer: z.string().min(1),
+})
+
+interface ActionSuccess<T> {
+  success: true
+  data: T
+}
+
+interface ActionError {
+  success: false
+  error: string
+  fieldErrors?: Record<string, string[]>
+}
+
+type ActionResult<T> = ActionSuccess<T> | ActionError
+
+export async function submitAnswer(
+  formData: FormData,
+): Promise<ActionResult<{ correct: boolean; xp: number }>> {
+  try {
+    const raw = Object.fromEntries(formData)
+    const parsed = submitAnswerSchema.safeParse(raw)
+
+    if (!parsed.success) {
+      return {
+        success: false,
+        error: 'Invalid input',
+        fieldErrors: parsed.error.flatten().fieldErrors,
+      }
+    }
+
+    // Business logic...
+    const result = await gradeExercise(parsed.data)
+
+    return { success: true, data: result }
+  } catch (err) {
+    // Log to monitoring (server-side only)
+    console.error('submitAnswer failed:', err)
+
+    return {
+      success: false,
+      error: 'Unable to submit answer. Please try again.',
+    }
+  }
+}
+```
+
+## 4. Client-side Error Handling
+
+- ALWAYS check result.success before using result.data.
+- Display field errors next to inputs. Display general errors in a toast or banner.
+- Use useActionState (React 19) to handle Server Action results declaratively.
+
+```tsx
+'use client'
+
+import { useActionState } from 'react'
+import { useTranslations } from 'next-intl'
+import { submitAnswer } from '@/lib/actions'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+
+type ActionState =
+  | { success: true; data: { xp: number } }
+  | { success: false; error: string; fieldErrors?: Record<string, string[]> }
+  | null
+
+export function ExerciseForm(): JSX.Element {
+  const t = useTranslations('ExerciseForm')
+  const [state, formAction, isPending] = useActionState(
+    async (_prev: ActionState, formData: FormData): Promise<ActionState> => {
+      return submitAnswer(formData)
+    },
+    null,
+  )
+
+  return (
+    <form action={formAction} className="flex flex-col gap-2">
+      <Input name="answer" />
+      {state?.success === false && state.fieldErrors?.answer && (
+        <p className="text-destructive text-sm">{state.fieldErrors.answer[0]}</p>
+      )}
+
+      {state?.success === false && !state.fieldErrors && (
+        <p className="text-destructive text-sm">{state.error}</p>
+      )}
+
+      <Button type="submit" disabled={isPending}>
+        {isPending ? t('submitting') : t('submit')}
+      </Button>
+
+      {state?.success === true && (
+        <p className="text-success text-sm">{t('correct', { xp: state.data.xp })}</p>
+      )}
+    </form>
+  )
+}
+```
+
+## 5. API Route Handlers
+
+- Route Handlers (route.ts) MUST return consistent JSON error shapes.
+- Use appropriate HTTP status codes.
+- NEVER return stack traces in production.
+
+```tsx
+// src/app/api/progress/route.ts
+import { NextResponse } from 'next/server'
+
+export async function GET(): Promise<NextResponse> {
+  try {
+    const progress = await getUserProgress()
+    return NextResponse.json({ success: true, data: progress })
+  } catch (error) {
+    console.error('API /progress error:', error)
+    return NextResponse.json({ success: false, error: 'Failed to load progress' }, { status: 500 })
+  }
+}
+```
+
+## 6. Not Found Handling
+
+- Use notFound() from next/navigation for expected "not found" cases.
+- Create custom src/app/not-found.tsx for global 404 UI.
+
+```tsx
+// src/app/[locale]/lessons/[slug]/page.tsx
+import { notFound } from 'next/navigation'
+import { LessonContent } from '@/components/lesson-content'
+
+interface LessonPageProps {
+  params: Promise<{ slug: string }>
+}
+
+async function getLesson(slug: string): Promise<Lesson | null> {
+  // ...
+}
+
+export default async function LessonPage({ params }: LessonPageProps): Promise<JSX.Element> {
+  const { slug } = await params
+  const lesson = await getLesson(slug)
+
+  if (!lesson) {
+    notFound() // Triggers nearest not-found.tsx
+  }
+
+  return <LessonContent lesson={lesson} />
+}
+```
+
+## 7. Logging Rules
+
+- Log errors on the server only. NEVER log to console.error in production Client Components (use a monitoring SDK instead).
+- NEVER log sensitive data: passwords, tokens, DATABASE_URL, user emails, answers to exercises.
+- Include a digest or requestId when reporting errors to correlate server and client logs.
+
+## 8. UX Guidelines for Errors
+
+- Expected errors (validation, network timeout): show inline messages, allow retry.
+- Unexpected errors (500, crashes): show friendly fallback, "Try again" button, optional "Contact support" link.
+- Loading failures (images, audio): show placeholder, do NOT block the entire UI.
+- Form submission failures: preserve user input so they don't have to retype.
+
+## 9. Example - BAD
+
+```tsx
+// Bad: swallows error, no user feedback, no type safety
+'use server'
+export async function submitAnswer(formData: FormData) {
+  try {
+    const data = Object.fromEntries(formData)
+    await db.answer.create({ data })
+  } catch (e) {
+    // Empty catch — user never knows what happened
+  }
+}
+```
+
+```tsx
+// Bad: throws raw error to client, leaks internal details
+'use server'
+export async function submitAnswer(formData: FormData) {
+  const data = Object.fromEntries(formData)
+  if (!data.answer) throw new Error('Zod validation failed at /src/lib/actions.ts:42')
+  await db.answer.create({ data })
+}
+```
+
+## 10. Example - GOOD
+
+```tsx
+// Good: discriminated union, Zod validation, user-friendly messages, no leak
+'use server'
+
+import { z } from 'zod'
+
+const schema = z.object({ answer: z.string().min(1, 'Answer is required') })
+
+export async function submitAnswer(
+  formData: FormData,
+): Promise<
+  | { success: true; data: { correct: boolean } }
+  | { success: false; error: string; fieldErrors?: Record<string, string[]> }
+> {
+  const parsed = schema.safeParse(Object.fromEntries(formData))
+  if (!parsed.success) {
+    return {
+      success: false,
+      error: 'Please check your answer',
+      fieldErrors: parsed.error.flatten().fieldErrors,
+    }
+  }
+
+  try {
+    const result = await gradeExercise(parsed.data)
+    return { success: true, data: result }
+  } catch {
+    return { success: false, error: 'Unable to grade answer. Please retry.' }
+  }
+}
+```

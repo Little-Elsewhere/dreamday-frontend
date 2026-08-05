@@ -1,0 +1,140 @@
+---
+description: Core architecture, TypeScript, rendering, and security foundations
+globs:
+  - 'src/**/*.{ts,tsx}'
+  - 'src/**/*.css'
+alwaysApply: true
+---
+
+# Core Coding Conventions
+
+## 1. Architecture
+
+- All routes live in `src/app/`. App Router is the only routing system.
+- Turbopack is the default bundler. Do NOT configure Webpack unless explicitly required.
+- React Compiler is enabled. Do NOT manually add `React.memo`, `useMemo`, or `useCallback` unless profiling proves it necessary — the compiler handles memoization automatically at build time.
+- Source code lives exclusively in `src/`. No top-level `app/` or `components/` folders.
+- Use Server Components by default. Add `"use client"` ONLY when using: useState, useEffect, useContext, browser APIs, event handlers, or client-only libraries.
+
+## 2. TypeScript
+
+- Strict mode is mandatory.
+- NEVER use `any`. Use `unknown` with type guards for dynamic types.
+- All functions MUST have explicit return types.
+- All component props MUST have an interface named `{ComponentName}Props`.
+- Prefer `interface` over `type` for object shapes. Use `type` for unions and mapped types.
+
+## 3. Rendering Strategy
+
+- Default to Static Generation for public pages.
+- Use ISR (export const revalidate = 60) for semi-dynamic content.
+- Use { cache: 'no-store' } for fully dynamic data.
+- Use Partial Pre-Rendering (PPR) by enabling it in next.config.ts and using Suspense boundaries.
+- Avoid CSR for initial page content — it hurts SEO and Core Web Vitals.
+
+## 4. Images & Fonts
+
+- ALWAYS use next/image for images.
+- ALWAYS use next/font for fonts. Self-host fonts to eliminate layout shift.
+
+## 5. Security
+
+- NEVER expose secrets to the client. Only NEXT_PUBLIC_* vars are client-safe.
+- Validate ALL external inputs with Zod.
+- Use server-only package to prevent server code from being imported in Client Components.
+- Sanitize any user-generated HTML before rendering.
+
+## 6. Environment Variables
+
+### 6.1. Server-only Variables
+
+- Server-only variables (database URLs, API secrets, private keys) MUST be validated in `src/env/server.ts`.
+- This file MUST import `"server-only"` to prevent accidental client bundling.
+- NEVER import `src/env/server.ts` into Client Components (`"use client"`). Doing so will leak secrets to the browser.
+
+```tsx
+// src/env/server.ts
+import 'server-only'
+import { z } from 'zod'
+
+const serverEnvSchema = z.object({
+  DATABASE_URL: z.string().url(),
+  API_SECRET: z.string().min(1),
+})
+
+export const env = serverEnvSchema.parse(process.env)
+```
+
+### 6.2. Client-safe Variables
+
+- Client-safe variables MUST be prefixed with NEXT_PUBLIC_.
+- Validate them in src/env/client.ts.
+- Only variables explicitly listed in the schema are exposed to the client.
+
+```tsx
+// src/env/client.ts
+import { z } from 'zod'
+
+const clientEnvSchema = z.object({
+  NEXT_PUBLIC_APP_URL: z.string().url(),
+  NEXT_PUBLIC_API_URL: z.string().url(),
+})
+
+export const clientEnv = clientEnvSchema.parse({
+  NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
+  NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+})
+```
+
+### 6.3. Usage Rules
+
+- In Server Components, Route Handlers, Server Actions, and Middleware: import from @/env/server.
+- In Client Components: import from @/env/client ONLY.
+- If a variable is missing or malformed, Zod will throw at build/dev time with a clear error message. Fix the .env file immediately.
+
+### 6.4. Example — Server
+
+```tsx
+// src/lib/db.ts
+import { env } from '@/env/server'
+
+export const db = createConnection({
+  url: env.DATABASE_URL,
+})
+```
+
+### 6.5. Example — Client
+
+```tsx
+// src/components/api-client.tsx
+'use client'
+
+import { clientEnv } from '@/env/client'
+
+export function ApiClient(): JSX.Element {
+  const apiUrl = clientEnv.NEXT_PUBLIC_API_URL
+  return <div>API: {apiUrl}</div>
+}
+```
+
+### 6.6. Security Warning
+
+- NEVER log secrets. NEVER send env.DATABASE_URL or env.API_SECRET in API responses.
+- NEVER access process.env directly in Client Components. Always go through clientEnv.
+
+## 7. Example - BAD
+
+```tsx
+// Bad: default export, no types, fetch in useEffect, inline styles, hardcoded text
+export default function Products() {
+  const [products, setProducts] = useState([])
+
+  useEffect(() => {
+    fetch('/api/products')
+      .then((r) => r.json())
+      .then(setProducts)
+  }, [])
+
+  return <div style={{ color: 'red' }}>Products</div>
+}
+```

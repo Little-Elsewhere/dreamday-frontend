@@ -1,0 +1,36 @@
+---
+description: Testing, linting, Docker, and PWA configuration
+globs:
+  - 'src/**/*.{ts,tsx}'
+  - 'src/**/*.test.{ts,tsx}'
+  - 'docker/**/*'
+alwaysApply: true
+---
+
+# Tooling Conventions
+
+## 1. Testing
+
+- Unit tests: Vitest with @vitest/browser-playwright for component tests.
+- E2E tests: Playwright directly.
+- Test files: **/*.test.ts or **/*.spec.ts.
+- Colocate tests next to source files OR in __tests__/ folders — be consistent.
+
+## 2. Linting & Formatting
+
+- ESLint uses flat config (eslint.config.mjs). Do NOT create .eslintrc.json.
+- Prettier with prettier-plugin-tailwindcss for class sorting.
+- Husky + lint-staged runs linting and formatting on commit.
+- ALWAYS run pnpm typecheck before pushing.
+
+## 3. Docker
+
+- Use docker:dev for local development.
+- Use docker:prod for production builds.
+- Do NOT commit .env files. Use .env.local and Docker secrets for production.
+
+## 4. PWA (Serwist)
+
+- Serwist handles the service worker. Do NOT write a custom service worker from scratch.
+- PWA config lives in src/app/sw.ts (or as configured).
+- Use @serwist/turbopack integration. Do NOT manually register SW in layout.

@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 import { SerwistProvider } from './serwist'
 import { Be_Vietnam_Pro } from 'next/font/google'
+import { env } from '@/env/server'
 import { cn } from '@/utils/cn'
 
 const beVietnamPro = Be_Vietnam_Pro({
@@ -10,10 +11,10 @@ const beVietnamPro = Be_Vietnam_Pro({
   weight: ['400', '500', '600', '700'],
 })
 
-const appName = process.env.NEXT_PUBLIC_APP_NAME!
-const appDefaultTitle = process.env.NEXT_PUBLIC_APP_DEFAULT_TITLE!
-const appTitleTemplate = process.env.NEXT_PUBLIC_APP_TITLE_TEMPLATE!
-const appDescription = process.env.NEXT_PUBLIC_APP_DESCRIPTION!
+const appName = env.NEXT_PUBLIC_APP_NAME
+const appDefaultTitle = env.NEXT_PUBLIC_APP_DEFAULT_TITLE
+const appTitleTemplate = env.NEXT_PUBLIC_APP_TITLE_TEMPLATE
+const appDescription = env.NEXT_PUBLIC_APP_DESCRIPTION
 
 export const metadata: Metadata = {
   applicationName: appName,

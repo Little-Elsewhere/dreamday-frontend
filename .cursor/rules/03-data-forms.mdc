@@ -1,0 +1,150 @@
+---
+description: Data fetching, Server Actions, forms, and state management
+globs:
+  - 'src/**/*.{ts,tsx}'
+alwaysApply: true
+---
+
+# Data Fetching, Server Actions, Forms, and State Management
+
+## 1. Data Fetching & Server Actions
+
+- Fetch data in Server Components using async/await.
+- Use Server Actions for ALL mutations (forms, writes, deletes). Server Actions live in src/app/actions.ts or co-located as actions.ts inside feature folders.
+- Validate ALL inputs in Server Actions using Zod.
+- Use revalidatePath() or revalidateTag() after mutations to clear cache.
+- NEVER fetch initial page data inside useEffect.
+
+```tsx
+// src/app/actions.ts
+'use server'
+
+import { revalidatePath } from 'next/cache'
+import { z } from 'zod'
+
+const createPostSchema = z.object({
+  title: z.string().min(1).max(200),
+  content: z.string().min(1),
+})
+
+export async function createPost(formData: FormData): Promise<void> {
+  const data = Object.fromEntries(formData)
+  const validated = createPostSchema.parse(data)
+
+  await db.post.create({ data: validated })
+
+  revalidatePath('/posts')
+}
+```
+
+## 2. Forms
+
+- Use Server Actions for form submission.
+- Use useActionState (React 19) for form state management.
+- Use Zod for schema validation.
+- Display validation errors next to fields.
+
+```tsx
+'use client'
+
+import { useActionState } from 'react'
+import { useTranslations } from 'next-intl'
+import { createPost } from '@/app/actions'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+
+export function PostForm(): JSX.Element {
+  const t = useTranslations('PostForm')
+  const [state, formAction, isPending] = useActionState(createPost, null)
+
+  return (
+    <form action={formAction} className="flex flex-col gap-4">
+      <Input name="title" />
+      {state?.errors?.title && <p className="text-destructive text-sm">{state.errors.title}</p>}
+
+      <Button type="submit" disabled={isPending}>
+        {isPending ? t('saving') : t('save')}
+      </Button>
+    </form>
+  )
+}
+```
+
+## 3. Example - GOOD (Server Component + next-intl)
+
+```tsx
+// src/app/dashboard/page.tsx
+import { getTranslations } from 'next-intl/server'
+import { Suspense } from 'react'
+import { env } from '@/env/server'
+import { RecentOrders } from '@/components/recent-orders'
+import { OrderSkeleton } from '@/components/order-skeleton'
+
+export const revalidate = 60
+
+interface Order {
+  id: string
+  total: number
+  status: 'pending' | 'completed'
+}
+
+async function getOrders(): Promise<Order[]> {
+  const res = await fetch(`${env.API_URL}/orders`, {
+    next: { revalidate: 60 },
+  })
+  return res.json()
+}
+
+export default async function DashboardPage(): Promise<JSX.Element> {
+  const t = await getTranslations('Dashboard')
+  const orders = await getOrders()
+
+  return (
+    <main className="container mx-auto p-6">
+      <h1 className="mb-6 text-3xl font-bold">{t('title')}</h1>
+      <Suspense fallback={<OrderSkeleton />}>
+        <RecentOrders orders={orders} />
+      </Suspense>
+    </main>
+  )
+}
+```
+
+## 17. Example — GOOD (Client Component + useOptimistic)
+
+```tsx
+// src/components/like-button.tsx
+'use client'
+
+import { useOptimistic } from 'react'
+import { likePost } from '@/app/actions'
+import { HeartIcon } from '@hugeicons/react'
+import { cn } from '@/utils/cn'
+
+interface LikeButtonProps {
+  postId: string
+  initialLikes: number
+}
+
+export function LikeButton({ postId, initialLikes }: LikeButtonProps): JSX.Element {
+  const [optimisticLikes, addOptimisticLike] = useOptimistic(initialLikes, (state) => state + 1)
+
+  const handleLike = async (): Promise<void> => {
+    addOptimisticLike(undefined)
+    await likePost(postId)
+  }
+
+  return (
+    <button
+      onClick={handleLike}
+      className={cn(
+        'inline-flex items-center gap-2 rounded-lg px-4 py-2',
+        'bg-rose-500 text-white transition-colors hover:bg-rose-600',
+      )}
+    >
+      <HeartIcon size={20} />
+      <span>{optimisticLikes}</span>
+    </button>
+  )
+}
+```

@@ -1,0 +1,21 @@
+---
+description: Project stack overview and global context
+globs: '**/*'
+alwaysApply: true
+---
+
+# Project Context
+
+This is a Next.js project using App Router. Exact dependency versions are defined in `package.json` — refer to it when you need specific version information.
+
+## Stack
+
+- **Framework**: Next.js with App Router and Turbopack
+- **UI Library**: React with React Compiler enabled
+- **Language**: TypeScript (strict mode)
+- **Styling**: Tailwind CSS v4 (CSS-first configuration)
+- **Components**: shadcn/ui built on Base UI
+- **Icons**: HugeIcons
+- **Validation**: Zod
+- **i18n**: next-intl
+- **PWA**: Serwist

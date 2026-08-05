@@ -1,0 +1,37 @@
+---
+description: next-intl conventions and translation standards
+globs:
+  - 'src/**/*.{ts,tsx}'
+  - 'messages/**/*.json'
+alwaysApply: true
+---
+
+# Internationalization (i18n) Conventions
+
+## 1. next-intl (i18n)
+
+- All user-facing strings MUST use next-intl. NEVER hardcode text.
+- Translations live in messages/ (e.g., messages/en/common.json, messages/vi/common.json).
+- Use useTranslations() in Client Components and getTranslations() in Server Components.
+- Format dates/numbers with useFormatter() or getFormatter().
+
+```tsx
+// Server Component
+import { getTranslations } from 'next-intl/server'
+
+export default async function HomePage(): Promise<JSX.Element> {
+  const t = await getTranslations('HomePage')
+  return <h1>{t('title')}</h1>
+}
+```
+
+```tsx
+// Client Component
+'use client'
+import { useTranslations } from 'next-intl'
+
+export function Greeting(): JSX.Element {
+  const t = useTranslations('Greeting')
+  return <p>{t('hello')}</p>
+}
+```
