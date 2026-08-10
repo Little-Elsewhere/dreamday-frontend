@@ -45,16 +45,5 @@ jobs:
           commit: 'chore: version bump'
           title: 'chore: version bump'
           setupGitUser: true
-          body: |
-            ## Summary
-
-            Automated version bump and changelog update created by Changesets.
-
-            Please review and merge to create the release.
-          labels: |
-            release
-            automated
-          destination: main
-          auto-merge: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
