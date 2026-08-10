@@ -1,0 +1,60 @@
+name: Release
+
+on:
+  push:
+    branches: [develop]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Create Release PR
+        uses: changesets/action@v2
+        with:
+          version: pnpm changelog
+          commit: 'chore: version bump'
+          title: 'chore: version bump'
+          setupGitUser: true
+          body: |
+            ## Summary
+
+            Automated version bump and changelog update created by Changesets.
+
+            Please review and merge to create the release.
+          labels: |
+            release
+            automated
+          destination: main
+          auto-merge: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,10 @@
+{
+  "$schema": "https://pnpm.io/package.json",
+  "changelog": "@changesets/cli/changelog",
+  "commit": false,
+  "fixed": [],
+  "linked": [],
+  "baseBranch": "main",
+  "updateInternalDependencies": "patch",
+  "ignore": []
+}
