@@ -39,7 +39,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Create Release PR
-        uses: changesets/action@v2
+        uses: changesets/action@v1
         with:
           version: pnpm changelog
           commit: 'chore: version bump'
