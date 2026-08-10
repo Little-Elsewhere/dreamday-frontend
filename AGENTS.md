@@ -207,7 +207,7 @@ When working on this codebase, adopt the appropriate agent persona based on the 
 4. **Accessibility Second**: Any interactive element must be keyboard-accessible and screen-reader friendly.
 5. **i18n Always**: Any user-facing text must go through i18n Agent — no exceptions.
 6. **Test Before Done**: Quality Agent verifies type safety and basic test coverage before task completion.
-7. **Changesets Before Commit**: When creating features, fixes, or any user-facing change, ALWAYS run `pnpm changeset` first and include the changeset file in the commit.
+7. **Conventional Commits**: Always use conventional commits format for clear changelog generation. Commit types: `feat`, `fix`, `docs`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, `revert`.
 
 ---
 
@@ -215,12 +215,11 @@ When working on this codebase, adopt the appropriate agent persona based on the 
 
 ### GitHub Actions Workflows
 
-| Workflow                | Trigger                            | Purpose                                      |
-| ----------------------- | ---------------------------------- | -------------------------------------------- |
-| `ci.yml`                | Push to `develop`, PR to `develop` | Build, lint, format, typecheck, Docker build |
-| `release.yml`           | Push to `develop`                  | Bump version, create CHANGELOG, create PR    |
-| `changeset-enforce.yml` | PR to `develop`                    | Enforce changeset file exists                |
-| `cd.yml`                | Push to `develop` (on merge)       | Deploy to production                         |
+| Workflow      | Trigger                            | Purpose                                       |
+| ------------- | ---------------------------------- | --------------------------------------------- |
+| `ci.yml`      | Push to `develop`, PR to `develop` | Build, lint, format, typecheck, Docker build  |
+| `release.yml` | Push to `main`                     | Release-please: version bump, CHANGELOG, tags |
+| `cd.yml`      | Push to `main` (on merge)          | Deploy to production                          |
 
 ### CI Checks
 
@@ -230,14 +229,24 @@ Every PR must pass all checks before merge:
 - ✅ Lint
 - ✅ Type check
 - ✅ Build
-- ✅ Changeset file exists (except for `docs:` PRs and `github-actions[bot]`)
 
-### Version Bump Rule
+### Version Bump (release-please)
 
-- **MUST include changeset** for every code change
-- Use `pnpm changeset` to create changeset before committing
-- Changeset files are mandatory in PRs targeting `develop`
-- `changeset-enforce.yml` CI will fail if changeset is missing
+release-please automatically bumps version based on commit types:
+
+| Commit Type                  | Version Bump          |
+| ---------------------------- | --------------------- |
+| `feat`                       | minor (1.0.0 → 1.1.0) |
+| `fix`                        | patch (1.0.0 → 1.0.1) |
+| `feat!` or `BREAKING CHANGE` | major (1.0.0 → 2.0.0) |
+
+### Release Flow
+
+1. Commit with conventional commits: `feat: add lesson card`
+2. Merge to `develop` → CI passes ✅
+3. Create PR `develop` → `main`
+4. Merge to `main` → release-please creates Release PR
+5. Merge Release PR → version tagged, CHANGELOG updated
 
 ---
 

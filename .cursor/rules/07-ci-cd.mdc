@@ -1,13 +1,14 @@
 ---
-description: CI/CD pipeline, versioning with Changesets, and GitHub Actions workflows
+description: CI/CD pipeline, release-please configuration, and GitHub Actions workflows
 globs:
   - '.github/workflows/*'
-  - '.changeset/*'
+  - 'release-please-config.json'
   - 'package.json'
+  - 'CHANGELOG.md'
 alwaysApply: true
 ---
 
-# CI/CD & Versioning Conventions
+# CI/CD & Release Conventions
 
 ## GitHub Actions Workflows
 
@@ -21,101 +22,167 @@ Jobs:
 - **Type Check**: `pnpm tsc --noEmit`
 - **Build**: Docker build
 
-### 2. release.yml (Version Bump)
+### 2. release.yml (Release Please)
 
-Runs on: **push to `develop`**
+Runs on: **push to `main`**
 
 Purpose:
-- Reads changeset files from `.changeset/`
-- Bumps version in `package.json`
-- Updates `CHANGELOG.md`
-- Creates PR: `changeset-release/develop` → `develop`
+- release-please watches for commits with conventional commits format
+- Creates "Release PR" listing all changes
+- When Release PR is merged: bumps version, updates CHANGELOG, creates git tag
 
-### 3. changeset-enforce.yml (Changeset Check)
+### 3. cd.yml (Deploy)
 
-Runs on: **PR to `develop`** (opened, synchronize, reopened, ready_for_review)
-
-Skip conditions:
-- PR title starts with `docs:`
-- Actor is `dependabot[bot]`
-- Actor is `github-actions[bot]`
-
-Fail if: No changeset file found in `.changeset/`
-
-### 4. cd.yml (Deploy)
-
-Runs on: **push to `develop`** (after merge)
+Runs on: **push to `main`** (after merge)
 
 Purpose: Deploy to production environment.
 
 ---
 
-## Changesets Configuration
+## Release Please Configuration
 
-Config file: `.changeset/config.json`
+Config file: `release-please-config.json`
 
 ```json
 {
-  "baseBranch": "develop",
-  "commit": false,
-  "updateInternalDependencies": "patch"
+  "packages": {
+    ".": {
+      "release-type": "node",
+      "changelog-path": "CHANGELOG.md",
+      "component": "next16-codebase"
+    }
+  }
 }
 ```
 
 **Key points:**
-- `baseBranch: "develop"` — Changesets compares against `develop`
-- `commit: false` — Let GitHub Action handle commits
-- Private project — No npm publish
+- `release-type: "node"` — updates package.json version
+- Private project — no npm publish
+- `changelog-path: "CHANGELOG.md"` — generates changelog
 
 ---
 
-## Using Changesets
+## Conventional Commits Format
 
-### Create a Changeset
+release-please parses commit messages to generate changelog and bump versions.
 
-```bash
-pnpm changeset
+### Commit Message Format
+
+```
+<type>(<scope>): <description>
+
+[optional body]
+
+[optional footer(s)]
 ```
 
-Interactive prompts:
-1. Select packages (press space to select)
-2. Choose bump type: patch / minor / major
-3. Write description
+### Valid Types
 
-Creates file: `.changeset/<random-name>.md`
+| Type | Description | Included in Release |
+|------|-------------|-------------------|
+| `feat` | New feature | ✅ Yes |
+| `fix` | Bug fix | ✅ Yes |
+| `docs` | Documentation | ✅ Yes |
+| `refactor` | Code refactoring | ✅ Yes |
+| `perf` | Performance improvement | ✅ Yes |
+| `test` | Tests | ✅ Yes |
+| `build` | Build system | ✅ Yes |
+| `ci` | CI/CD | ✅ Yes |
+| `chore` | Maintenance | ✅ Yes |
+| `revert` | Revert | ✅ Yes |
+| `style` | Styles | ✅ Yes |
+
+### Examples
+
+```bash
+# Feature
+git commit -m "feat: add user profile page"
+
+# Bug fix
+git commit -m "fix(auth): resolve login timeout issue"
+
+# With scope
+git commit -m "feat(lessons): add audio playback feature"
+
+# Breaking change
+git commit -m "feat!: change API response format"
+git commit -m "fix: remove deprecated function
+
+BREAKING CHANGE: oldFunction() is removed"
+```
+
+### Breaking Changes
+
+Use `!` after type or add `BREAKING CHANGE:` in footer:
+
+```bash
+# Option 1: Using !
+git commit -m "feat!: change API response format"
+
+# Option 2: Using footer
+git commit -m "fix: remove deprecated function
+
+BREAKING CHANGE: oldFunction() is removed"
+```
+
+---
+
+## Version Bump Rules
+
+| If commit contains | Version bumps |
+|-------------------|--------------|
+| `feat` (new feature) | `minor` (1.0.0 → 1.1.0) |
+| `fix` (bug fix) | `patch` (1.0.0 → 1.0.1) |
+| `feat!` or `BREAKING CHANGE` | `major` (1.0.0 → 2.0.0) |
+
+---
+
+## Release Flow
+
+```
+1. Developer commits with conventional format:
+   git commit -m "feat: add lesson card"
+
+2. Merge to develop → CI runs ✅
+
+3. Create PR: develop → main
+
+4. Merge to main
+
+5. release-please detects commits:
+   - Creates "Release PR" (e.g., "chore(main): release 1.2.0")
+   - Lists all commits since last release
+
+6. Review and merge Release PR
+
+7. release-please automatically:
+   - Bumps version in package.json
+   - Updates CHANGELOG.md
+   - Creates git tag (e.g., v1.2.0)
+   - Creates GitHub Release
+```
+
+---
+
+## Generated CHANGELOG Example
 
 ```md
----
-"next16-codebase": patch
----
+# Changelog
 
-Fix button click issue on mobile
+## 1.2.0 (2026-08-10)
+
+### Features
+
+- **add lesson card**: Add new lesson card component (#123)
+
+### Bug Fixes
+
+- **fix auth timeout**: Resolve login timeout issue (#124)
+
+### Documentation
+
+- **update README**: Add installation instructions (#125)
 ```
-
-### Commit Changeset
-
-```bash
-git add .changeset/*.md
-git commit -m "feat: add new feature"
-git push
-```
-
-### Bump Version
-
-When PR is merged, `release.yml` automatically:
-1. Runs `pnpm changelog` (version bump + lockfile update)
-2. Creates "Version Packages" PR
-3. After that PR merges, version is updated
-
----
-
-## Version Bump Types
-
-| Type | Example | Use when |
-|------|---------|----------|
-| `patch` | 1.0.0 → 1.0.1 | Bug fixes |
-| `minor` | 1.0.0 → 1.1.0 | New features |
-| `major` | 1.0.0 → 2.0.0 | Breaking changes |
 
 ---
 
@@ -127,4 +194,13 @@ When PR is merged, `release.yml` automatically:
 | Lint fail | Fix ESLint errors |
 | Type check fail | Fix TypeScript errors |
 | Build fail | Check Docker setup |
-| Changeset enforce fail | Run `pnpm changeset` and add file |
+| Release PR not created | Check commit messages use conventional format |
+
+---
+
+## Important Notes
+
+1. **Use squash merge** when merging PRs — this creates a single clean commit on main
+2. **Merge commits** also work, but squash merge is recommended for cleaner history
+3. **release-please skips `chore:` and `build:`** from changelog features section (they still trigger release)
+4. **No manual version bumps** needed — release-please handles everything

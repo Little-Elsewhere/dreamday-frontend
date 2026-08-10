@@ -14,49 +14,69 @@ pnpm typecheck    # Run TypeScript type checking
 pnpm storybook    # Start Storybook (:6006)
 pnpm build-storybook  # Build static Storybook
 pnpm clean        # Remove .next and node_modules
-
-# Changesets (versioning)
-pnpm changeset           # Create a new changeset file
-pnpm changelog           # Bump version + update lockfile
 ```
 
 ## Versioning & Release
 
-This project uses **Changesets** for versioning (private project, no npm publish).
+This project uses **release-please** for automatic versioning and changelog generation.
 
 ### Workflow
 
-1. Create changeset before committing:
+1. **On `develop`**: Code freely, use conventional commits
+2. **Merge to `main`**: release-please detects conventional commits
+3. **Automatic**: Creates Release PR with version bump and CHANGELOG
+4. **Merge Release PR**: Version tagged, CHANGELOG updated
 
-   ```bash
-   pnpm changeset
-   ```
-   - Select package (`next16-codebase`)
-   - Choose bump type: `patch` (bug fix), `minor` (new feature), `major` (breaking change)
-   - Write description of changes
+### Conventional Commits Format
 
-2. Commit the changeset file (`.changeset/*.md`) along with your code changes
+Use this format for commit messages to trigger release-please:
 
-3. When PR is merged to `develop`:
-   - CI runs changeset-enforce to verify changeset exists
-   - release.yml creates "Version Packages" PR with version bump
+| Type       | Description      | Example                             |
+| ---------- | ---------------- | ----------------------------------- |
+| `feat`     | New feature      | `feat: add lesson card component`   |
+| `fix`      | Bug fix          | `fix: button click issue on mobile` |
+| `docs`     | Documentation    | `docs: update README`               |
+| `refactor` | Code refactoring | `refactor: simplify UserService`    |
+| `perf`     | Performance      | `perf: optimize image loading`      |
+| `test`     | Tests            | `test: add unit tests for utils`    |
+| `build`    | Build system     | `build: update Docker config`       |
+| `ci`       | CI/CD            | `ci: add GitHub Actions workflow`   |
+| `chore`    | Maintenance      | `chore: update dependencies`        |
+| `revert`   | Revert           | `revert: undo loading changes`      |
 
-### Version Bump Types
+### Breaking Changes
 
-| Type    | Example       | When to use                        |
-| ------- | ------------- | ---------------------------------- |
-| `patch` | 1.0.0 → 1.0.1 | Bug fixes                          |
-| `minor` | 1.0.0 → 1.1.0 | New features (backward compatible) |
-| `major` | 1.0.0 → 2.0.0 | Breaking changes                   |
+Add `!` after type or `BREAKING CHANGE:` in footer:
+
+```
+feat!: change API response format
+
+BREAKING CHANGE: User API now returns id instead of _id
+```
+
+### Version Bump
+
+| Commit Type                  | Version Bump          |
+| ---------------------------- | --------------------- |
+| `feat`                       | minor (1.0.0 → 1.1.0) |
+| `fix`                        | patch (1.0.0 → 1.0.1) |
+| `feat!` or `BREAKING CHANGE` | major (1.0.0 → 2.0.0) |
 
 ### Branch Strategy
 
-| Branch           | Purpose                                          |
-| ---------------- | ------------------------------------------------ |
-| `develop`        | Main development branch, contains latest version |
-| Feature branches | Branch from `develop`, merge back via PR         |
+| Branch           | Purpose                                      |
+| ---------------- | -------------------------------------------- |
+| `develop`        | Main development branch                      |
+| `main`           | Release branch (release-please watches this) |
+| Feature branches | Branch from `develop`, merge back via PR     |
 
-CI/CD runs on every push to `develop` and every PR targeting `develop`.
+### Release PR
+
+When commits are merged to `main`, release-please creates a PR:
+
+- Title: "chore(main): release X.Y.Z"
+- Body: Lists all commits with their authors and PRs
+- Merging this PR triggers the release
 
 ## Architecture
 

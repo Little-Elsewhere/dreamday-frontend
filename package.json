@@ -15,10 +15,7 @@
     "clean": "rm -rf .next node_modules",
     "docker:dev": "docker compose -f docker/dev/docker-compose.yml up --build",
     "docker:dev:down": "docker compose -f docker/dev/docker-compose.yml down",
-    "docker:prod": "docker compose -f docker/prod/docker-compose.yml build --no-cache",
-    "changeset": "changeset",
-    "version": "changeset version",
-    "changelog": "changeset version && pnpm install --no-frozen-lockfile"
+    "docker:prod": "docker compose -f docker/prod/docker-compose.yml build --no-cache"
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",
@@ -35,7 +32,6 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.27.12",
     "@chromatic-com/storybook": "^5.2.1",
     "@serwist/turbopack": "^9.5.12",
     "@storybook/addon-a11y": "^10.5.6",
@@ -58,6 +54,7 @@
     "playwright": "^1.62.1",
     "prettier": "^3.9.6",
     "prettier-plugin-tailwindcss": "^0.8.1",
+    "release-please": "^17.11.1",
     "serwist": "^9.5.12",
     "shadcn": "^4.16.1",
     "storybook": "^10.5.6",
