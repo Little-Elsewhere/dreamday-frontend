@@ -1,5 +1,11 @@
 # next16-codebase
 
+## 0.1.4
+
+### Patch Changes
+
+- e2ae3f1: Update rules for agents
+
 ## 0.1.3
 
 ### Patch Changes
