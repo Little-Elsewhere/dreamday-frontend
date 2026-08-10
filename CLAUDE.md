@@ -10,10 +10,53 @@ pnpm build        # Production build
 pnpm start        # Start production server
 pnpm lint         # Run ESLint (flat config)
 pnpm format       # Format with Prettier
+pnpm typecheck    # Run TypeScript type checking
 pnpm storybook    # Start Storybook (:6006)
 pnpm build-storybook  # Build static Storybook
 pnpm clean        # Remove .next and node_modules
+
+# Changesets (versioning)
+pnpm changeset           # Create a new changeset file
+pnpm changelog           # Bump version + update lockfile
 ```
+
+## Versioning & Release
+
+This project uses **Changesets** for versioning (private project, no npm publish).
+
+### Workflow
+
+1. Create changeset before committing:
+
+   ```bash
+   pnpm changeset
+   ```
+   - Select package (`next16-codebase`)
+   - Choose bump type: `patch` (bug fix), `minor` (new feature), `major` (breaking change)
+   - Write description of changes
+
+2. Commit the changeset file (`.changeset/*.md`) along with your code changes
+
+3. When PR is merged to `develop`:
+   - CI runs changeset-enforce to verify changeset exists
+   - release.yml creates "Version Packages" PR with version bump
+
+### Version Bump Types
+
+| Type    | Example       | When to use                        |
+| ------- | ------------- | ---------------------------------- |
+| `patch` | 1.0.0 → 1.0.1 | Bug fixes                          |
+| `minor` | 1.0.0 → 1.1.0 | New features (backward compatible) |
+| `major` | 1.0.0 → 2.0.0 | Breaking changes                   |
+
+### Branch Strategy
+
+| Branch           | Purpose                                          |
+| ---------------- | ------------------------------------------------ |
+| `develop`        | Main development branch, contains latest version |
+| Feature branches | Branch from `develop`, merge back via PR         |
+
+CI/CD runs on every push to `develop` and every PR targeting `develop`.
 
 ## Architecture
 

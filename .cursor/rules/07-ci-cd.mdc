@@ -1,0 +1,130 @@
+---
+description: CI/CD pipeline, versioning with Changesets, and GitHub Actions workflows
+globs:
+  - '.github/workflows/*'
+  - '.changeset/*'
+  - 'package.json'
+alwaysApply: true
+---
+
+# CI/CD & Versioning Conventions
+
+## GitHub Actions Workflows
+
+### 1. ci.yml (Build and Test)
+
+Runs on: **push to `develop`**, **PR to `develop`**
+
+Jobs:
+- **Format**: `pnpm format --check`
+- **Lint**: `pnpm lint`
+- **Type Check**: `pnpm tsc --noEmit`
+- **Build**: Docker build
+
+### 2. release.yml (Version Bump)
+
+Runs on: **push to `develop`**
+
+Purpose:
+- Reads changeset files from `.changeset/`
+- Bumps version in `package.json`
+- Updates `CHANGELOG.md`
+- Creates PR: `changeset-release/develop` → `develop`
+
+### 3. changeset-enforce.yml (Changeset Check)
+
+Runs on: **PR to `develop`** (opened, synchronize, reopened, ready_for_review)
+
+Skip conditions:
+- PR title starts with `docs:`
+- Actor is `dependabot[bot]`
+- Actor is `github-actions[bot]`
+
+Fail if: No changeset file found in `.changeset/`
+
+### 4. cd.yml (Deploy)
+
+Runs on: **push to `develop`** (after merge)
+
+Purpose: Deploy to production environment.
+
+---
+
+## Changesets Configuration
+
+Config file: `.changeset/config.json`
+
+```json
+{
+  "baseBranch": "develop",
+  "commit": false,
+  "updateInternalDependencies": "patch"
+}
+```
+
+**Key points:**
+- `baseBranch: "develop"` — Changesets compares against `develop`
+- `commit: false` — Let GitHub Action handle commits
+- Private project — No npm publish
+
+---
+
+## Using Changesets
+
+### Create a Changeset
+
+```bash
+pnpm changeset
+```
+
+Interactive prompts:
+1. Select packages (press space to select)
+2. Choose bump type: patch / minor / major
+3. Write description
+
+Creates file: `.changeset/<random-name>.md`
+
+```md
+---
+"next16-codebase": patch
+---
+
+Fix button click issue on mobile
+```
+
+### Commit Changeset
+
+```bash
+git add .changeset/*.md
+git commit -m "feat: add new feature"
+git push
+```
+
+### Bump Version
+
+When PR is merged, `release.yml` automatically:
+1. Runs `pnpm changelog` (version bump + lockfile update)
+2. Creates "Version Packages" PR
+3. After that PR merges, version is updated
+
+---
+
+## Version Bump Types
+
+| Type | Example | Use when |
+|------|---------|----------|
+| `patch` | 1.0.0 → 1.0.1 | Bug fixes |
+| `minor` | 1.0.0 → 1.1.0 | New features |
+| `major` | 1.0.0 → 2.0.0 | Breaking changes |
+
+---
+
+## CI Failure Resolution
+
+| Issue | Solution |
+|-------|----------|
+| Format fail | Run `pnpm format` locally |
+| Lint fail | Fix ESLint errors |
+| Type check fail | Fix TypeScript errors |
+| Build fail | Check Docker setup |
+| Changeset enforce fail | Run `pnpm changeset` and add file |
