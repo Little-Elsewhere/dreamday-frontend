@@ -29,3 +29,8 @@ jobs:
           tags: next16-codebase:prod
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: |
+            NEXT_PUBLIC_APP_NAME=${{ secrets.NEXT_PUBLIC_APP_NAME }}
+            NEXT_PUBLIC_APP_DEFAULT_TITLE=${{ secrets.NEXT_PUBLIC_APP_DEFAULT_TITLE }}
+            NEXT_PUBLIC_APP_TITLE_TEMPLATE=${{ secrets.NEXT_PUBLIC_APP_TITLE_TEMPLATE }}
+            NEXT_PUBLIC_APP_DESCRIPTION=${{ secrets.NEXT_PUBLIC_APP_DESCRIPTION }}
