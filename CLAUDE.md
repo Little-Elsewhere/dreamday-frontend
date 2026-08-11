@@ -11,6 +11,7 @@ pnpm start        # Start production server
 pnpm lint         # Run ESLint (flat config)
 pnpm format       # Format with Prettier
 pnpm typecheck    # Run TypeScript type checking
+pnpm commit       # Interactive Conventional Commit (Commitizen)
 pnpm storybook    # Start Storybook (:6006)
 pnpm build-storybook  # Build static Storybook
 pnpm clean        # Remove .next and node_modules
@@ -29,7 +30,17 @@ This project uses **release-please** for automatic versioning and changelog gene
 
 ### Conventional Commits Format
 
-Use this format for commit messages to trigger release-please:
+Follow [Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.0/).
+Enforced by **commitlint** (Husky `commit-msg` + CI on PRs to `develop`).
+Prefer `pnpm commit` for an interactive prompt.
+
+```
+<type>[optional scope][optional !]: <description>
+
+[optional body]
+
+[optional footer(s)]
+```
 
 | Type       | Description      | Example                             |
 | ---------- | ---------------- | ----------------------------------- |
@@ -42,6 +53,8 @@ Use this format for commit messages to trigger release-please:
 | `build`    | Build system     | `build: update Docker config`       |
 | `ci`       | CI/CD            | `ci: add GitHub Actions workflow`   |
 | `chore`    | Maintenance      | `chore: update dependencies`        |
+| `deps`     | Dependency bumps | `deps: bump zod to v4`              |
+| `style`    | Styles           | `style: adjust button spacing`      |
 | `revert`   | Revert           | `revert: undo loading changes`      |
 
 ### Breaking Changes

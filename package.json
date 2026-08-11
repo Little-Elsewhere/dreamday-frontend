@@ -8,6 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "prepare": "husky",
+    "commit": "cz",
+    "commitlint": "commitlint",
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit",
     "storybook": "storybook dev -p 6006",
@@ -16,6 +18,11 @@
     "docker:dev": "docker compose -f docker/dev/docker-compose.yml up --build",
     "docker:dev:down": "docker compose -f docker/dev/docker-compose.yml down",
     "docker:prod": "docker compose -f docker/prod/docker-compose.yml build --no-cache"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",
@@ -33,6 +40,9 @@
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^5.2.1",
+    "@commitlint/cli": "^21.2.1",
+    "@commitlint/config-conventional": "^21.2.0",
+    "@commitlint/types": "^21.2.0",
     "@serwist/turbopack": "^9.5.12",
     "@storybook/addon-a11y": "^10.5.6",
     "@storybook/addon-docs": "^10.5.6",
@@ -45,6 +55,8 @@
     "@vitest/browser-playwright": "^4.1.10",
     "@vitest/coverage-v8": "^4.1.10",
     "babel-plugin-react-compiler": "1.0.0",
+    "commitizen": "^4.3.2",
+    "cz-conventional-changelog": "^3.3.0",
     "esbuild": "^0.28.1",
     "eslint": "^9.34.4",
     "eslint-config-next": "16.3.0",

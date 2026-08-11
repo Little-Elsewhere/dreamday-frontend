@@ -215,16 +215,17 @@ When working on this codebase, adopt the appropriate agent persona based on the 
 
 ### GitHub Actions Workflows
 
-| Workflow      | Trigger                            | Purpose                                       |
-| ------------- | ---------------------------------- | --------------------------------------------- |
-| `ci.yml`      | Push to `develop`, PR to `develop` | Build, lint, format, typecheck, Docker build  |
-| `release.yml` | Push to `main`                     | Release-please: version bump, CHANGELOG, tags |
-| `cd.yml`      | Push to `main` (on merge)          | Deploy to production                          |
+| Workflow      | Trigger                            | Purpose                                                  |
+| ------------- | ---------------------------------- | -------------------------------------------------------- |
+| `ci.yml`      | Push to `develop`, PR to `develop` | Commitlint, build, lint, format, typecheck, Docker build |
+| `release.yml` | Push to `main`                     | Release-please: version bump, CHANGELOG, tags            |
+| `cd.yml`      | Push to `main` (on merge)          | Deploy to production                                     |
 
 ### CI Checks
 
 Every PR must pass all checks before merge:
 
+- ✅ Commitlint (Conventional Commits 1.0.0)
 - ✅ Format check
 - ✅ Lint
 - ✅ Type check
