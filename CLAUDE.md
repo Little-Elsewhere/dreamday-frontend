@@ -11,7 +11,6 @@ pnpm start        # Start production server
 pnpm lint         # Run ESLint (flat config)
 pnpm format       # Format with Prettier
 pnpm typecheck    # Run TypeScript type checking
-pnpm commit       # Interactive Conventional Commit (Commitizen)
 pnpm storybook    # Start Storybook (:6006)
 pnpm build-storybook  # Build static Storybook
 pnpm clean        # Remove .next and node_modules
@@ -32,7 +31,6 @@ This project uses **release-please** for automatic versioning and changelog gene
 
 Follow [Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.0/).
 Enforced by **commitlint** (Husky `commit-msg` + CI on PRs to `develop`).
-Prefer `pnpm commit` for an interactive prompt.
 
 ```
 <type>[optional scope][optional !]: <description>
