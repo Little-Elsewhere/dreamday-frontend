@@ -33,7 +33,14 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
+  experimental: {
+    turbopackRustReactCompiler: true,
+    turbopackLocalPostcssConfig: true,
+    useOffline: true,
+  },
   crossOrigin: 'anonymous',
+  cacheComponents: true,
+  partialPrefetching: true,
   async headers() {
     return [
       {

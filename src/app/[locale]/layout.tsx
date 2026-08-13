@@ -1,8 +1,63 @@
 import { routing } from '@/i18n/routing'
 import { hasLocale, NextIntlClientProvider } from 'next-intl'
-import { setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
+import type { Metadata, Viewport } from 'next'
+import { Be_Vietnam_Pro } from 'next/font/google'
 import { ReactNode } from 'react'
+import { SerwistProvider } from '../serwist'
+import { env } from '@/env/server'
+import { cn } from '@/utils/cn'
+import '../globals.css'
+
+const beVietnamPro = Be_Vietnam_Pro({
+  variable: '--font-be-vietnam-pro',
+  subsets: ['latin', 'vietnamese'],
+  weight: ['400', '500', '600', '700'],
+})
+
+const appName = env.NEXT_PUBLIC_APP_NAME
+const appDefaultTitle = env.NEXT_PUBLIC_APP_DEFAULT_TITLE
+const appTitleTemplate = env.NEXT_PUBLIC_APP_TITLE_TEMPLATE
+const appDescription = env.NEXT_PUBLIC_APP_DESCRIPTION
+
+export const metadata: Metadata = {
+  applicationName: appName,
+  manifest: '/manifest.webmanifest',
+  title: {
+    default: appDefaultTitle,
+    template: appTitleTemplate,
+  },
+  description: appDescription,
+  appleWebApp: {
+    capable: true,
+    title: appDefaultTitle,
+    statusBarStyle: 'default',
+  },
+  formatDetection: {
+    telephone: false,
+  },
+  openGraph: {
+    type: 'website',
+    siteName: appName,
+    title: {
+      default: appDefaultTitle,
+      template: appTitleTemplate,
+    },
+    description: appDescription,
+  },
+  twitter: {
+    card: 'summary',
+    title: {
+      default: appDefaultTitle,
+      template: appTitleTemplate,
+    },
+    description: appDescription,
+  },
+}
+
+export const viewport: Viewport = {
+  themeColor: '#ffffff',
+}
 
 type Props = {
   children: ReactNode
@@ -20,10 +75,15 @@ const LocaleLayout = async ({ children, params }: Props) => {
     notFound()
   }
 
-  // Enable static rendering
-  setRequestLocale(locale)
-
-  return <NextIntlClientProvider locale={locale}>{children}</NextIntlClientProvider>
+  return (
+    <html lang={locale} className={cn('font-be-vietnam-pro', beVietnamPro.variable)}>
+      <body>
+        <SerwistProvider swUrl="/serwist/sw.js">
+          <NextIntlClientProvider locale={locale}>{children}</NextIntlClientProvider>
+        </SerwistProvider>
+      </body>
+    </html>
+  )
 }
 
 export default LocaleLayout
