@@ -6,6 +6,11 @@ allowBuilds:
   sharp: true
   unrs-resolver: true
 
+minimumReleaseAgeExclude:
+  - '@posthog/types@1.404.0'
+  - posthog-js@1.417.0
+  - '@posthog/core@1.48.0'
+
 overrides:
   'postcss': 'npm:postcss@8.5.23'
   'sharp': 'npm:sharp@0.35.3'

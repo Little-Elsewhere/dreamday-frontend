@@ -34,6 +34,9 @@ importers:
       next-intl:
         specifier: ^4.13.6
         version: 4.13.6(next@16.3.0(@babel/core@7.29.7)(@types/node@26.2.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)(typescript@6.0.3)
+      posthog-js:
+        specifier: 1.417.0
+        version: 1.417.0
       react:
         specifier: 19.2.8
         version: 19.2.8
@@ -2203,6 +2206,24 @@ packages:
         integrity: sha512-wwQAWhWSuHaag8c4q/KN/vCoeOJYshAIvMQwD4GpSb3OiZklFfvAgmj0VCBBImRpuF/aFgIRzllXlVX93Jevww==,
       }
 
+  '@posthog/browser-common@0.5.0':
+    resolution:
+      {
+        integrity: sha512-8DaxVZS1bQPbA514RePurLNbYjei3P4jhnC206DwVv5XThmZM3QdlsXenI2ujE3pLbgQ79hYn9o1Kda8I3WK/Q==,
+      }
+
+  '@posthog/core@1.48.0':
+    resolution:
+      {
+        integrity: sha512-ezKjVLw9y3Q235PUY+2hRr5DN9t6j2jF1mFAvnvhCCu/Ha6/qBv3zmVJBaHu9PnqqSNtx2St3ggN8Z3TTu/12A==,
+      }
+
+  '@posthog/types@1.404.0':
+    resolution:
+      {
+        integrity: sha512-/Y1zKv8SdwkK725SkmgT5QVYnXE7Fi23SPDCZ5Ybu27gTQub4yMTKWuUQekW+gkSKBZ0LyYCQK52mhyMMigMBw==,
+      }
+
   '@rolldown/binding-android-arm64@1.2.3':
     resolution:
       {
@@ -3589,6 +3610,7 @@ packages:
         integrity: sha512-KRYzxepc14G/CEpEGc3Yn+JKaAeT63smlDr+vjB8jRfgTBBI9wRj/nkQEO+ucV8p8I9bfKLWp37uHgFrbntPvw==,
       }
     engines: { node: '>=10.0.0' }
+    deprecated: this version has critical issues, please update to the latest version
 
   accepts@2.0.0:
     resolution:
@@ -4243,6 +4265,12 @@ packages:
       }
     engines: { node: '>=18' }
 
+  core-js@3.50.0:
+    resolution:
+      {
+        integrity: sha512-BRWgOLKkFeCgRudR6zrs8p9XJZcE14grzKMMssoYrk6krtuEZ7MTKPIY5RzOnqsEKIR9kst7wNzphttraT+Yqw==,
+      }
+
   cors@2.8.6:
     resolution:
       {
@@ -4548,6 +4576,12 @@ packages:
         integrity: sha512-cgwlv/1iFQiFnU96XXgROh8xTeetsnJiDsTc7TYCLFd9+/WNkIqPTxiM/8pSd8VIrhXGTf1Ny1q1hquVqDJB5w==,
       }
     engines: { node: '>= 4' }
+
+  dompurify@3.4.13:
+    resolution:
+      {
+        integrity: sha512-2vmYIoqjze2d+kakP8S/nS5shfsl587kzwEjcGlTdiksUVgFHnFCsLYDVj/JNqJVOQZGSYBTmuycv0PodwmnMQ==,
+      }
 
   domutils@3.2.2:
     resolution:
@@ -5105,6 +5139,12 @@ packages:
     peerDependenciesMeta:
       picomatch:
         optional: true
+
+  fflate@0.4.9:
+    resolution:
+      {
+        integrity: sha512-zdxgIEddhfsyCaWpJ2SdXEP8ZMrKJ6+5jl4OupODcywU0IhRk6gdXuVGcPICyfx2H97hVK7xmJtRLPjkxAX8Vw==,
+      }
 
   figures@3.2.0:
     resolution:
@@ -7263,12 +7303,29 @@ packages:
       }
     engines: { node: ^10 || ^12 || >=14 }
 
+  posthog-js@1.417.0:
+    resolution:
+      {
+        integrity: sha512-jokL2hiuBYO0+bSJ1l/ZLxFIc4+xwe5P8srIbivSU3MVSWsE4AP2U6IaVW8hQLdcz4k8ZWEa2jDPn9sTUcQ5yw==,
+      }
+
   powershell-utils@0.1.0:
     resolution:
       {
         integrity: sha512-dM0jVuXJPsDN6DvRpea484tCUaMiXWjuCn++HGTqUWzGDjv5tZkEZldAJ/UMlqRYGFrD/etByo4/xOuC/snX2A==,
       }
     engines: { node: '>=20' }
+
+  preact@10.29.8:
+    resolution:
+      {
+        integrity: sha512-ej2aVZ+vZ8WO7tvlQWRM9N63A0KzF9q4mWJfDUHgYaIofWY9hu74QdnQrjoPMmZi2/nZ5gN0bJCQF49xQqx09Q==,
+      }
+    peerDependencies:
+      preact-render-to-string: '>=5'
+    peerDependenciesMeta:
+      preact-render-to-string:
+        optional: true
 
   prelude-ls@1.2.1:
     resolution:
@@ -7397,6 +7454,12 @@ packages:
         integrity: sha512-O9gl3zCl5h5blw1KGUzQKhA5oUXSl8rwUIM5o0S3nCXMliSvy5Dzx7/DJcI+SwgICv+IneSZwhBh1oSyEHA71A==,
       }
     engines: { node: '>=0.6' }
+
+  query-selector-shadow-dom@1.0.1:
+    resolution:
+      {
+        integrity: sha512-lT5yCqEBgfoMYpf3F2xQRK7zEr1rhIIZuceDK6+xRkJQ4NMbHTwXqk4NkwDwQMNqXgG9r9fyHnzwNVs6zV5KRw==,
+      }
 
   queue-microtask@1.2.3:
     resolution:
@@ -8684,6 +8747,18 @@ packages:
         optional: true
       jsdom:
         optional: true
+
+  web-vitals@5.3.0:
+    resolution:
+      {
+        integrity: sha512-q6LWsLatGYZp5VGBIOvbTj6JBV2nOmC8KvWztXBmwJcfFAzhwKwbOxhUH306XY3CcaZDUlSmSuNPBsCn0bFu+g==,
+      }
+
+  web-vitals@6.0.0:
+    resolution:
+      {
+        integrity: sha512-Guaibvy/+uNtL6Bsu4jmMJGzuSl91oeRH5iO9pPRbYftnFUr3yqT1TUNX/OE4o9HexuEMU3Kb/Wg7iKhlffZUA==,
+      }
 
   webpack-virtual-modules@0.6.2:
     resolution:
@@ -10089,6 +10164,17 @@ snapshots:
 
   '@polka/url@1.0.0-next.29': {}
 
+  '@posthog/browser-common@0.5.0':
+    dependencies:
+      '@posthog/core': 1.48.0
+      '@posthog/types': 1.404.0
+
+  '@posthog/core@1.48.0':
+    dependencies:
+      '@posthog/types': 1.404.0
+
+  '@posthog/types@1.404.0': {}
+
   '@rolldown/binding-android-arm64@1.2.3':
     optional: true
 
@@ -11289,6 +11375,8 @@ snapshots:
   cookie@1.1.1:
     optional: true
 
+  core-js@3.50.0: {}
+
   cors@2.8.6:
     dependencies:
       object-assign: 4.1.1
@@ -11439,6 +11527,10 @@ snapshots:
   domhandler@5.0.3:
     dependencies:
       domelementtype: 2.3.0
+
+  dompurify@3.4.13:
+    optionalDependencies:
+      '@types/trusted-types': 2.0.7
 
   domutils@3.2.2:
     dependencies:
@@ -11991,6 +12083,8 @@ snapshots:
   fdir@6.5.0(picomatch@4.0.5):
     optionalDependencies:
       picomatch: 4.0.5
+
+  fflate@0.4.9: {}
 
   figures@3.2.0:
     dependencies:
@@ -13185,7 +13279,24 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
+  posthog-js@1.417.0:
+    dependencies:
+      '@posthog/browser-common': 0.5.0
+      '@posthog/core': 1.48.0
+      '@posthog/types': 1.404.0
+      core-js: 3.50.0
+      dompurify: 3.4.13
+      fflate: 0.4.9
+      preact: 10.29.8
+      query-selector-shadow-dom: 1.0.1
+      web-vitals: 5.3.0
+      web-vitals-soft-navs: web-vitals@6.0.0
+    transitivePeerDependencies:
+      - preact-render-to-string
+
   powershell-utils@0.1.0: {}
+
+  preact@10.29.8: {}
 
   prelude-ls@1.2.1: {}
 
@@ -13229,6 +13340,8 @@ snapshots:
     dependencies:
       es-define-property: 1.0.1
       side-channel: 1.1.1
+
+  query-selector-shadow-dom@1.0.1: {}
 
   queue-microtask@1.2.3: {}
 
@@ -14173,6 +14286,10 @@ snapshots:
       '@vitest/coverage-v8': 4.1.10(@vitest/browser@4.1.10)(vitest@4.1.10)
     transitivePeerDependencies:
       - msw
+
+  web-vitals@5.3.0: {}
+
+  web-vitals@6.0.0: {}
 
   webpack-virtual-modules@0.6.2: {}
 
