@@ -1,5 +1,19 @@
 # next16-codebase
 
+## [0.3.0](https://github.com/hahoangnhat/next16-codebase/compare/v0.2.0...v0.3.0) (2026-08-14)
+
+
+### Features
+
+* **commitlint:** setup commitlint ([395a789](https://github.com/hahoangnhat/next16-codebase/commit/395a7892a8bd54672453bbd976fa7d6af2ccdb0e))
+* **csp:** config csp and posthog ([093f349](https://github.com/hahoangnhat/next16-codebase/commit/093f3493e19f47e8bb25727b100ed108bdf9d6d6))
+* upgrade version of NextJS and dependencies ([bd87e94](https://github.com/hahoangnhat/next16-codebase/commit/bd87e94f680e786492fbbf42a9893cf80ddd3583))
+
+
+### Documentation
+
+* update README.md ([eefced7](https://github.com/hahoangnhat/next16-codebase/commit/eefced75b9745583b950b6196deb6b1b80ad387f))
+
 ## [0.2.0](https://github.com/hahoangnhat/next16-codebase/compare/v0.1.2...v0.2.0) (2026-08-11)
 
 
