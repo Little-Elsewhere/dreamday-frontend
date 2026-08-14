@@ -1,150 +1,158 @@
-# WeList
+# Next 16 Codebase
 
-A Next.js 16 starter with React 19, TypeScript, Tailwind CSS v4, i18n, Storybook, and PWA support.
+A modern web application starter built with Next.js App Router, internationalization, a component system, PWA/offline support, and development quality tooling.
 
 ## Tech Stack
 
-| Category      | Tech                                          |
-| :------------ | :-------------------------------------------- |
-| Framework     | Next.js 16.2.4, React 19.2.5                  |
-| Language      | TypeScript 5 (strict mode)                    |
-| Styling       | Tailwind CSS v4 + shadcn/ui (base-maia style) |
-| UI Primitives | @base-ui/react                                |
-| Icons         | @hugeicons/react                              |
-| i18n          | next-intl                                     |
-| Validation    | Zod                                           |
-| Testing       | Vitest + Playwright + Storybook               |
-| Docs          | Storybook                                     |
-| PWA           | Serwist                                       |
-| Linting       | ESLint (flat config)                          |
-| Formatting    | Prettier + Tailwind Prettier plugin           |
-| Git hooks     | Husky + lint-staged                           |
+| Category             | Technology                                        |
+| :------------------- | :------------------------------------------------ |
+| Framework            | Next.js 16.3.0, App Router, Turbopack             |
+| UI runtime           | React 19.2.8, React Compiler                      |
+| Language             | TypeScript 6, strict mode                         |
+| Styling              | Tailwind CSS v4, `tw-animate-css`                 |
+| UI components        | shadcn/ui base-maia, `@base-ui/react`             |
+| Icons                | `@hugeicons/react`                                |
+| Internationalization | `next-intl`, locales `en` and `vi`                |
+| Validation           | Zod 4                                             |
+| Analytics            | PostHog (`posthog-js`)                            |
+| PWA                  | Serwist, service worker, and offline fallback     |
+| Tooling              | ESLint 9, Prettier, Vitest, Playwright, Storybook |
+| Git workflow         | Husky, lint-staged, commitlint, release-please    |
+
+## Requirements
+
+- Node.js 24, as used in CI
+- pnpm 10
+- Docker Desktop for container-based development
+
+Install pnpm if it is not already available:
+
+```bash
+npm install --global pnpm
+```
 
 ## Getting Started
 
 ```bash
-# Install dependencies
 pnpm install
-
-# Start dev server
+cp .env.example .env.local
 pnpm dev
-
-# Open http://localhost:3000/en
 ```
 
-> **Note:** This project uses locale-based routing via next-intl. The root `/` redirects to `/en`. Supported locales: `en`, `vi`.
+Open [http://localhost:3000/en](http://localhost:3000/en) or
+[http://localhost:3000/vi](http://localhost:3000/vi).
+
+The application uses locale-based routing. The default locale is `en`; supported
+locales are defined in `src/i18n/routing.ts`.
+
+## Environment Variables
+
+The `.env.example` file contains the variables required for local development:
+
+| Variable                            | Required | Description                                          |
+| :---------------------------------- | :------: | :--------------------------------------------------- |
+| `NEXT_PUBLIC_APP_NAME`              |   Yes    | Application name                                     |
+| `NEXT_PUBLIC_APP_DEFAULT_TITLE`     |   Yes    | Default page title                                   |
+| `NEXT_PUBLIC_APP_TITLE_TEMPLATE`    |   Yes    | Title template; use `%s` for the page title          |
+| `NEXT_PUBLIC_APP_DESCRIPTION`       |   Yes    | Application and metadata description                 |
+| `NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN` |    No    | PostHog token; leave empty to disable analytics      |
+| `NEXT_PUBLIC_POSTHOG_HOST`          |    No    | PostHog host, defaults to `https://us.i.posthog.com` |
+
+Environment variables are validated with Zod in `src/env/server.ts` and
+`src/env/client.ts`.
 
 ## Scripts
 
 ```bash
-pnpm dev             # Start dev server
-pnpm build           # Production build
-pnpm start           # Start production server
-pnpm typecheck       # Run TypeScript type checking
-pnpm lint            # Run ESLint
-pnpm format          # Format all files with Prettier
-pnpm storybook       # Start Storybook on :6006
-pnpm build-storybook # Build static Storybook
-pnpm clean           # Remove .next and node_modules
+pnpm dev                 # Start the development server
+pnpm build               # Create a production build
+pnpm start               # Start the production server
+pnpm lint                # Run ESLint
+pnpm typecheck           # Run TypeScript checks
+pnpm format              # Format the project with Prettier
+pnpm storybook           # Start Storybook at http://localhost:6006
+pnpm build-storybook     # Build Storybook as a static site
+pnpm clean               # Remove .next and node_modules
+pnpm docker:dev          # Build and run the development container
+pnpm docker:dev:down     # Stop the development container
+pnpm docker:prod         # Build the production Docker image
+pnpm commitlint          # Validate commit messages
 ```
+
+Vitest and Playwright are installed for unit and browser testing. Dedicated test
+scripts will be added alongside the corresponding test suites.
 
 ## Project Structure
 
-```
+```text
 src/
-├── app/                  # Next.js App Router pages & layouts
-│   ├── [locale]/         # Locale-routed pages (en, vi)
-│   │   ├── layout.tsx
-│   │   └── page.tsx
-│   ├── layout.tsx        # Root layout (Serwist, fonts, metadata)
-│   ├── globals.css       # Tailwind v4 CSS with design tokens
-│   └── sw.ts             # Service worker source
-├── components/
-│   ├── ui/               # shadcn/ui components
-│   └── index.ts
-├── hooks/                # Custom React hooks
-├── utils/
-│   └── cn.ts             # clsx + tailwind-merge
-├── i18n/                 # next-intl config
-│   ├── routing.ts
-│   ├── request.ts
-│   └── navigation.ts
-├── types/                # TypeScript types
-├── schemas/              # Zod schemas
-├── modules/              # Feature modules
-├── constants/            # Constants
-└── stories/              # Storybook stories
-messages/                 # i18n translation files
-├── en/
-└── vi/
+├── app/
+│   ├── [locale]/              # Locale-based routes: en, vi
+│   │   ├── layout.tsx         # Metadata, font, i18n provider, Serwist
+│   │   ├── page.tsx           # Home page
+│   │   └── ~offline/          # Offline fallback page
+│   ├── api/csp-report/        # CSP violation reports endpoint
+│   ├── globals.css            # Design tokens and Tailwind CSS v4
+│   ├── manifest.ts            # PWA manifest
+│   └── sw.ts                  # Service worker source
+├── components/ui/             # shadcn/ui components
+├── hooks/                     # Custom React hooks
+├── i18n/                      # Routing, request config, and navigation
+├── modules/                   # Feature modules
+├── schemas/                   # Zod schemas
+├── types/                     # TypeScript types
+├── constants/                 # Shared constants
+├── env/                       # Environment variable validation
+└── utils/cn.ts                # className utility
+messages/
+├── en/                        # English translations
+└── vi/                        # Vietnamese translations
 ```
 
-## Features
+## Development Conventions
 
-### i18n (next-intl)
+### Internationalization
 
-- Supported locales: `en`, `vi`
-- Translations in `messages/{locale}/`
-- Use `next-intl/navigation` for locale-aware links
+Translation files live in `messages/{locale}/` and are loaded in
+`src/i18n/request.ts`. Use `getTranslations` in Server Components,
+`useTranslations` in Client Components, and the helpers in
+`src/i18n/navigation.ts` for locale-aware links and redirects.
 
-### shadcn/ui
+### Components and Styling
 
-- Components managed via `shadcn` CLI
-- Style: `base-maia`, icons: `@hugeicons/react`
-- Add new components:
+UI components use shadcn/ui with the configuration in `components.json`,
+CSS-first Tailwind CSS v4, and Hugeicons. Add a new component with:
 
 ```bash
-npx shadcn add button
+pnpm dlx shadcn add button
 ```
 
-### Storybook
+### PWA and Offline Support
 
-- Run: `pnpm storybook`
-- Addons: a11y, chromatic (visual regression), vitest, docs
-- Stories in `src/**/*.stories.tsx`
-
-### PWA (Serwist)
-
-- Service worker in `src/app/sw.ts`
-- Manifest in `src/app/manifest.ts` (served at `/manifest.webmanifest`)
-- Offline fallback page at `src/app/[locale]/~offline/page.tsx`
-- Configured in `next.config.ts`
-- PWA features (precache, offline fallback) only activate in production builds (`pnpm build && pnpm start`)
-
-### Pre-commit Hooks
-
-- Husky runs `lint-staged` on staged files
-- ESLint + Prettier format on commit
-- Hook setup runs automatically via `prepare` script
-
-## Docker
+Serwist is integrated in `next.config.ts`. The manifest is available at
+`/manifest.webmanifest`, the service worker at `/serwist/sw.js`, and the offline
+page at `/[locale]/~offline`. Precache and offline features require a production
+build:
 
 ```bash
-# Development
-pnpm docker:dev              # Start dev container
-pnpm docker:dev:down        # Stop dev container
-
-# Production
-pnpm docker:prod             # Build production image
+pnpm build
+pnpm start
 ```
 
-## Environment Variables
+### Commits and CI
 
-```bash
-cp .env.example .env.local
+Husky runs `lint-staged` before commits. Commit messages must follow
+[Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/), for example:
+
+```text
+feat(i18n): add Vietnamese offline page
+fix(ui): improve button focus state
 ```
 
-| Variable                         | Description                      |
-| :------------------------------- | :------------------------------- |
-| `NEXT_PUBLIC_APP_NAME`           | App name                         |
-| `NEXT_PUBLIC_APP_DEFAULT_TITLE`  | Default page title               |
-| `NEXT_PUBLIC_APP_TITLE_TEMPLATE` | Title template (%s = page title) |
-| `NEXT_PUBLIC_APP_DESCRIPTION`    | Meta description                 |
+CI checks commitlint, formatting, linting, type safety, and the Docker build.
+See [`CONTRIBUTING.md`](./CONTRIBUTING.md) for the complete contribution guide.
 
-## Environment Setup
+## License
 
-This project uses **pnpm**. Install it if you haven't:
-
-```bash
-npm install -g pnpm
-```
+This is an internal/starter codebase. Add license information if the project is
+released publicly.
