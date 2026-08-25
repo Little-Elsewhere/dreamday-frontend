@@ -72,11 +72,11 @@
   },
   "lint-staged": {
     "*.{js,ts,jsx,tsx}": [
-      "pnpm lint",
-      "pnpm format"
+      "eslint --fix --no-warn-ignored",
+      "prettier --write"
     ],
     "*.{css,json,yaml,yml,mjs,md,mdx}": [
-      "pnpm format"
+      "prettier --write"
     ]
   }
 }
