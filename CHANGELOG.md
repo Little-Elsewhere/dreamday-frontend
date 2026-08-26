@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.1](https://github.com/hahoangnhat/next16-codebase/compare/v0.1.0...v0.1.1) (2026-08-26)
+
+
+### Continuous Integration
+
+* add Claude Code Review workflow ([8ca6389](https://github.com/hahoangnhat/next16-codebase/commit/8ca6389b81b9ccc07c2c06678b96a62e1d464189))
+* add Claude PR Assistant workflow ([0233453](https://github.com/hahoangnhat/next16-codebase/commit/023345354a3d16d8ebbf6a49f0d561430ddacdb0))
+
 ## [0.1.0](https://github.com/hahoangnhat/next16-codebase/compare/v0.0.1...v0.1.0) (2026-08-24)
 
 
