@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.2](https://github.com/hahoangnhat/next16-codebase/compare/v0.1.1...v0.1.2) (2026-08-27)
+
+
+### Bug Fixes
+
+* **ci:** fix Claude Code Review workflow always failing ([3c417d2](https://github.com/hahoangnhat/next16-codebase/commit/3c417d2ef7738c4652bfb2aba0fbc33b2c672538))
+
+
+### Continuous Integration
+
+* **review:** use Sonnet-only code review command instead of Opus plugin ([e1e706a](https://github.com/hahoangnhat/next16-codebase/commit/e1e706afe7a089ea799147bb4de096a8205f84da))
+
 ## [0.1.1](https://github.com/hahoangnhat/next16-codebase/compare/v0.1.0...v0.1.1) (2026-08-26)
 
 
