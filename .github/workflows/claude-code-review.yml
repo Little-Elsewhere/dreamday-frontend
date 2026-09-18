@@ -9,6 +9,7 @@ jobs:
     if: github.event.pull_request.user.login != 'github-actions[bot]'
 
     runs-on: ubuntu-latest
+    environment: prod
     permissions:
       contents: read
       pull-requests: read
