@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.2.1](https://github.com/hahoangnhat/dreamday-frontend/compare/v0.2.0...v0.2.1) (2026-09-18)
+
+
+### Bug Fixes
+
+* patch vulnerable dependencies ([f8de81f](https://github.com/hahoangnhat/dreamday-frontend/commit/f8de81ff384addb454450624c6daf1a5566486a0))
+
+
+### Continuous Integration
+
+* configure prod environment for Claude workflows ([5927eb8](https://github.com/hahoangnhat/dreamday-frontend/commit/5927eb856309d54faf70796249865ab799a822c1))
+
 ## [0.2.0](https://github.com/hahoangnhat/dreamday-frontend/compare/v0.1.2...v0.2.0) (2026-09-12)
 
 
