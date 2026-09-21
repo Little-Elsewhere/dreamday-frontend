@@ -4,20 +4,25 @@ A modern web application starter built with Next.js App Router, internationaliza
 
 ## Tech Stack
 
-| Category             | Technology                                        |
-| :------------------- | :------------------------------------------------ |
-| Framework            | Next.js 16.3.0, App Router, Turbopack             |
-| UI runtime           | React 19.2.8, React Compiler                      |
-| Language             | TypeScript 6, strict mode                         |
-| Styling              | Tailwind CSS v4, `tw-animate-css`                 |
-| UI components        | shadcn/ui base-maia, `@base-ui/react`             |
-| Icons                | `@hugeicons/react`                                |
-| Internationalization | `next-intl`, locales `en` and `vi`                |
-| Validation           | Zod 4                                             |
-| Analytics            | PostHog (`posthog-js`)                            |
-| PWA                  | Serwist, service worker, and offline fallback     |
-| Tooling              | ESLint 9, Prettier, Vitest, Playwright, Storybook |
-| Git workflow         | Husky, lint-staged, commitlint, release-please    |
+| Category             | Technology                                                                                   |
+| :------------------- | :------------------------------------------------------------------------------------------- |
+| Framework            | Next.js 16.3.5 with the App Router, Turbopack, Cache Components, and partial prefetching     |
+| UI runtime           | React 19.3.0, React DOM 19.3.0, and the React Compiler                                       |
+| Language             | TypeScript 6.0.3 with strict mode                                                            |
+| Styling              | Tailwind CSS 4.3, PostCSS, `tw-animate-css`, `clsx`, and `tailwind-merge`                    |
+| UI components        | shadcn/ui v4 (base-maia), `@base-ui/react`, and Class Variance Authority                     |
+| Forms                | React Hook Form with `@hookform/resolvers`                                                   |
+| Icons                | Hugeicons (`@hugeicons/react` and `@hugeicons/core-free-icons`)                              |
+| Internationalization | `next-intl` 4.13 with locale-based routing for English (`en`) and Vietnamese (`vi`)          |
+| Validation           | Zod 4.4                                                                                      |
+| Analytics            | PostHog (`posthog-js`)                                                                       |
+| PWA and offline      | Serwist 9.5, a service worker, web app manifest, and a locale-aware offline fallback         |
+| Security             | Content Security Policy, CSP reporting endpoint, and standard security response headers      |
+| Component workshop   | Storybook 10 with the Next.js + Vite framework, Chromatic, docs, and accessibility add-ons   |
+| Testing              | Vitest 4 browser tests through Playwright/Chromium, including Storybook story tests          |
+| Code quality         | ESLint 9 (Next.js Core Web Vitals and Storybook rules) and Prettier with Tailwind CSS plugin |
+| Git workflow         | Husky, lint-staged, Commitlint, Conventional Commits, and release-please                     |
+| Containers           | Docker Compose with Node.js 24 Alpine development and production images                      |
 
 ## Requirements
 
