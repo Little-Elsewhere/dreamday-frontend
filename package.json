@@ -6,11 +6,12 @@
     "node": ">=22.22.1"
   },
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "dev": "doppler run --watch -- next dev",
+    "build": "doppler run -- next build",
+    "start": "doppler run -- next start",
     "lint": "eslint",
     "prepare": "husky",
+    "postinstall": "doppler setup --no-interactive",
     "commitlint": "commitlint",
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit",
