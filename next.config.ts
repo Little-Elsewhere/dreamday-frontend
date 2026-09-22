@@ -49,15 +49,15 @@ const securityHeaders = [
           key: 'Strict-Transport-Security',
           value: 'max-age=63072000; includeSubDomains; preload',
         },
+        {
+          key: 'Content-Security-Policy-Report-Only',
+          value: contentSecurityPolicyReportOnly,
+        },
       ]
     : []),
   {
     key: 'Content-Security-Policy',
     value: contentSecurityPolicy,
-  },
-  {
-    key: 'Content-Security-Policy-Report-Only',
-    value: contentSecurityPolicyReportOnly,
   },
   {
     key: 'X-Frame-Options',
