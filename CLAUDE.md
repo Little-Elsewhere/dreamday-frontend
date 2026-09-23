@@ -48,7 +48,7 @@ Enforced by **commitlint** (Husky `commit-msg` + CI on PRs to `develop`).
 | `refactor` | Code refactoring | `refactor: simplify UserService`    |
 | `perf`     | Performance      | `perf: optimize image loading`      |
 | `test`     | Tests            | `test: add unit tests for utils`    |
-| `build`    | Build system     | `build: update Docker config`       |
+| `build`    | Build system     | `build: update project tooling`     |
 | `ci`       | CI/CD            | `ci: add GitHub Actions workflow`   |
 | `chore`    | Maintenance      | `chore: update dependencies`        |
 | `deps`     | Dependency bumps | `deps: bump zod to v4`              |

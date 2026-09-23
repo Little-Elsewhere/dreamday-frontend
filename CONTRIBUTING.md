@@ -39,7 +39,7 @@ Rules that matter in practice:
 | `style`    | Formatting / UI styling (no logic) | `style: adjust button spacing`      |
 | `refactor` | Code change without feature/fix    | `refactor: simplify env validation` |
 | `test`     | Tests only                         | `test: add unit tests for utils`    |
-| `build`    | Build system / bundler / Docker    | `build: update prod Dockerfile`     |
+| `build`    | Build system / bundler             | `build: update project tooling`     |
 | `ci`       | CI/CD workflows and hooks          | `ci: add commitlint job`            |
 | `chore`    | Maintenance that is not deps/ci    | `chore: clean up unused exports`    |
 | `deps`     | Add / remove / bump dependencies   | `deps: bump zod to v4`              |
@@ -49,11 +49,11 @@ Rules that matter in practice:
 
 Scope is a short noun for the area you touched — not a file path.
 
-Examples for this repo: `ci`, `docker`, `i18n`, `ui`, `pwa`, `env`, `auth`, `release`.
+Examples for this repo: `ci`, `i18n`, `ui`, `pwa`, `env`, `auth`, `release`.
 
 ```
 feat(i18n): add Vietnamese offline page
-fix(docker): pass NEXT_PUBLIC build args
+build: update project tooling
 ci: enforce conventional commits on PRs
 ```
 

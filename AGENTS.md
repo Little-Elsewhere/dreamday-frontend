@@ -215,11 +215,11 @@ When working on this codebase, adopt the appropriate agent persona based on the 
 
 ### GitHub Actions Workflows
 
-| Workflow      | Trigger         | Purpose                                                  |
-| ------------- | --------------- | -------------------------------------------------------- |
-| `ci.yml`      | PR to `develop` | Commitlint, build, lint, format, typecheck, Docker build |
-| `release.yml` | Push to `main`  | Release-please: version bump, CHANGELOG, tags            |
-| `cd.yml`      | PR to `main`    | Build the production Docker image                        |
+| Workflow      | Trigger         | Purpose                                        |
+| ------------- | --------------- | ---------------------------------------------- |
+| `ci.yml`      | PR to `develop` | Commitlint, lint, format, typecheck, and build |
+| `release.yml` | Push to `main`  | Release-please: version bump, CHANGELOG, tags  |
+| `cd.yml`      | PR to `main`    | Production Next.js build                       |
 
 ### CI Checks
 

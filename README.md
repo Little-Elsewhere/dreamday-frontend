@@ -22,13 +22,11 @@ A modern web application starter built with Next.js App Router, internationaliza
 | Testing              | Vitest 4 browser tests through Playwright/Chromium, including Storybook story tests          |
 | Code quality         | ESLint 9 (Next.js Core Web Vitals and Storybook rules) and Prettier with Tailwind CSS plugin |
 | Git workflow         | Husky, lint-staged, Commitlint, Conventional Commits, and release-please                     |
-| Containers           | Docker Compose with Node.js 24 Alpine development and production images                      |
 
 ## Requirements
 
 - Node.js 24, as used in CI
 - pnpm 10
-- Docker Desktop for container-based development
 
 Install pnpm if it is not already available:
 
@@ -56,6 +54,7 @@ The `.env.example` file contains the variables required for local development:
 
 | Variable                            | Required | Description                                          |
 | :---------------------------------- | :------: | :--------------------------------------------------- |
+| `DOPPLER_ENVIRONMENT`               |   Yes    | Doppler environment (`dev` or `prod`)                |
 | `NEXT_PUBLIC_APP_NAME`              |   Yes    | Application name                                     |
 | `NEXT_PUBLIC_APP_DEFAULT_TITLE`     |   Yes    | Default page title                                   |
 | `NEXT_PUBLIC_APP_TITLE_TEMPLATE`    |   Yes    | Title template; use `%s` for the page title          |
@@ -78,9 +77,6 @@ pnpm format              # Format the project with Prettier
 pnpm storybook           # Start Storybook at http://localhost:6006
 pnpm build-storybook     # Build Storybook as a static site
 pnpm clean               # Remove .next and node_modules
-pnpm docker:dev          # Build and run the development container
-pnpm docker:dev:down     # Stop the development container
-pnpm docker:prod         # Build the production Docker image
 pnpm commitlint          # Validate commit messages
 ```
 
@@ -154,7 +150,7 @@ feat(i18n): add Vietnamese offline page
 fix(ui): improve button focus state
 ```
 
-CI checks commitlint, formatting, linting, type safety, and the Docker build.
+CI checks commitlint, formatting, linting, type safety, and the Next.js build.
 See [`CONTRIBUTING.md`](./CONTRIBUTING.md) for the complete contribution guide.
 
 ## License
