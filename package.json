@@ -16,7 +16,7 @@
     "typecheck": "tsc --noEmit",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "clean": "rm -rf .next node_modules"
+    "clean": "rm -rf .next node_modules pnpm-lock.yaml"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",
