@@ -3,8 +3,8 @@ import createNextIntlPlugin from 'next-intl/plugin'
 import { withSerwist } from '@serwist/turbopack'
 
 const withNextIntl = createNextIntlPlugin()
-const isDevelopment = process.env.NODE_ENV === 'development'
-const isProduction = process.env.NODE_ENV === 'production'
+const isDevelopment = process.env.DOPPLER_ENVIRONMENT === 'dev'
+const isProduction = process.env.DOPPLER_ENVIRONMENT === 'prod'
 
 const contentSecurityPolicy = [
   "default-src 'self'",
