@@ -6,21 +6,17 @@
     "node": ">=22.22.1"
   },
   "scripts": {
-    "dev": "doppler run --watch -- next dev",
+    "dev": "doppler run -- next dev",
     "build": "doppler run -- next build",
-    "start": "doppler run -- next start",
+    "start": "next start",
     "lint": "eslint",
     "prepare": "husky",
-    "postinstall": "doppler setup --no-interactive",
     "commitlint": "commitlint",
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "clean": "rm -rf .next node_modules",
-    "docker:dev": "docker compose -f docker/dev/docker-compose.yml up --build",
-    "docker:dev:down": "docker compose -f docker/dev/docker-compose.yml down",
-    "docker:prod": "docker compose -f docker/prod/docker-compose.yml build --no-cache"
+    "clean": "rm -rf .next node_modules"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",

@@ -21,9 +21,17 @@ Jobs:
 - **Format**: `pnpm format --check`
 - **Lint**: `pnpm lint`
 - **Type Check**: `pnpm tsc --noEmit`
-- **Build**: Docker build
+- **Build**: `pnpm exec next build`
 
-### 2. release.yml (Release Please)
+### 2. cd.yml (Production Build)
+
+Runs on: **pull requests to `main`**
+
+Purpose: Validate the production Next.js build.
+
+---
+
+### 3. release.yml (Release Please)
 
 Runs on: **push to `main`**
 
@@ -31,12 +39,6 @@ Purpose:
 - release-please watches for commits with conventional commits format
 - Creates "Release PR" listing all changes
 - When Release PR is merged: bumps version, updates CHANGELOG, creates git tag
-
-### 3. cd.yml (Deploy)
-
-Runs on: **push to `main`** (after merge)
-
-Purpose: Deploy to production environment.
 
 ---
 
@@ -196,7 +198,6 @@ BREAKING CHANGE: oldFunction() is removed"
 | Format fail | Run `pnpm format` locally |
 | Lint fail | Fix ESLint errors |
 | Type check fail | Fix TypeScript errors |
-| Build fail | Check Docker setup |
 | Release PR not created | Check commit messages use conventional format |
 
 ---

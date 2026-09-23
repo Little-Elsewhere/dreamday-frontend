@@ -13,24 +13,27 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     environment: prod
+    env:
+      DOPPLER_ENVIRONMENT: prod
+      NEXT_PUBLIC_APP_NAME: ${{ vars.NEXT_PUBLIC_APP_NAME }}
+      NEXT_PUBLIC_APP_DEFAULT_TITLE: ${{ vars.NEXT_PUBLIC_APP_DEFAULT_TITLE }}
+      NEXT_PUBLIC_APP_TITLE_TEMPLATE: ${{ vars.NEXT_PUBLIC_APP_TITLE_TEMPLATE }}
+      NEXT_PUBLIC_APP_DESCRIPTION: ${{ vars.NEXT_PUBLIC_APP_DESCRIPTION }}
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build Docker image
-        uses: docker/build-push-action@v6
+      - uses: pnpm/action-setup@v4
         with:
-          context: .
-          file: ./docker/prod/Dockerfile
-          push: false
-          tags: next16-codebase:prod
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          build-args: |
-            NEXT_PUBLIC_APP_NAME=${{ vars.NEXT_PUBLIC_APP_NAME }}
-            NEXT_PUBLIC_APP_DEFAULT_TITLE=${{ vars.NEXT_PUBLIC_APP_DEFAULT_TITLE }}
-            NEXT_PUBLIC_APP_TITLE_TEMPLATE=${{ vars.NEXT_PUBLIC_APP_TITLE_TEMPLATE }}
-            NEXT_PUBLIC_APP_DESCRIPTION=${{ vars.NEXT_PUBLIC_APP_DESCRIPTION }}
-            NODE_ENV=production
+          version: 12.5.1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: HUSKY=0 pnpm install --frozen-lockfile
+
+      - name: Build Next.js application
+        run: pnpm exec next build
