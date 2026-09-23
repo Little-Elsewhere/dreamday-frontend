@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.2.2](https://github.com/hahoangnhat/dreamday-frontend/compare/v0.2.1...v0.2.2) (2026-09-23)
+
+
+### Documentation
+
+* align CD workflow documentation ([5f99f1d](https://github.com/hahoangnhat/dreamday-frontend/commit/5f99f1de58b3f9fa5f1a125fdc1433a12bb6b6d0))
+* align CI trigger documentation ([80db21e](https://github.com/hahoangnhat/dreamday-frontend/commit/80db21e1c7de8d95dd04cd3dfaf39ebe99577e58))
+* update technology stack ([9112ad2](https://github.com/hahoangnhat/dreamday-frontend/commit/9112ad24f2e6fcaaee0948b156cf74f24994b3fd))
+
 ## [0.2.1](https://github.com/hahoangnhat/dreamday-frontend/compare/v0.2.0...v0.2.1) (2026-09-18)
 
 
