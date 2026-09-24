@@ -1,0 +1,34 @@
+{
+  "metadata": {
+    "title": "Tạo tài khoản",
+    "description": "Tạo tài khoản dream day để lưu các ý tưởng và kế hoạch du lịch của bạn."
+  },
+  "content": {
+    "eyebrow": "Bắt đầu cùng dream day",
+    "title": "Tạo tài khoản của bạn",
+    "intro": "Lưu mọi ý tưởng, lịch trình và điểm đến trong một không gian dành riêng cho chuyến đi của bạn."
+  },
+  "labels": {
+    "name": "Họ và tên",
+    "email": "Email",
+    "password": "Mật khẩu",
+    "confirmPassword": "Xác nhận mật khẩu"
+  },
+  "placeholders": {
+    "name": "Tên của bạn",
+    "email": "tenban@example.com",
+    "password": "Tối thiểu 8 ký tự",
+    "confirmPassword": "Nhập lại mật khẩu"
+  },
+  "messages": {
+    "confirmEmail": "Tài khoản đã được tạo. Hãy kiểm tra hộp thư và xác nhận email trước khi đăng nhập."
+  },
+  "prompts": {
+    "hasAccount": "Đã có tài khoản?"
+  },
+  "actions": {
+    "submit": "Tạo tài khoản",
+    "submitting": "Đang tạo tài khoản…",
+    "login": "Đăng nhập"
+  }
+}

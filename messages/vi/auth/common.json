@@ -1,0 +1,26 @@
+{
+  "content": {
+    "visualQuote": "Mỗi hành trình đẹp bắt đầu từ một ngày được mơ tới.",
+    "visualMeta": "Vịnh Lan Hạ, Việt Nam · Ảnh: Ronin / Unsplash",
+    "footer": "© 2026 dream day · Lên kế hoạch chu đáo cho từng hành trình."
+  },
+  "labels": {
+    "brandHome": "dream day trang chủ",
+    "visualSection": "Cảm hứng cho hành trình tiếp theo"
+  },
+  "descriptions": {
+    "visualImageAlt": "Những dãy núi đá vôi soi bóng trên làn nước yên ả ở vịnh Lan Hạ"
+  },
+  "actions": {
+    "showPassword": "Hiện mật khẩu",
+    "hidePassword": "Ẩn mật khẩu"
+  },
+  "errors": {
+    "invalidInput": "Hãy kiểm tra thông tin vừa nhập rồi thử lại.",
+    "signInFailed": "Không thể đăng nhập bằng thông tin này. Hãy kiểm tra email và mật khẩu.",
+    "signUpFailed": "Không thể tạo tài khoản. Hãy kiểm tra thông tin rồi thử lại.",
+    "resetFailed": "Không thể gửi hướng dẫn khôi phục mật khẩu. Vui lòng thử lại.",
+    "updateFailed": "Không thể cập nhật mật khẩu. Vui lòng thử lại.",
+    "sessionExpired": "Liên kết khôi phục mật khẩu đã hết hạn. Hãy yêu cầu liên kết mới để tiếp tục."
+  }
+}
