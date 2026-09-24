@@ -1,0 +1,26 @@
+{
+  "content": {
+    "visualQuote": "Every beautiful journey begins with a day you dreamed of.",
+    "visualMeta": "Lan Ha Bay, Vietnam · Photo: Ronin / Unsplash",
+    "footer": "© 2026 dream day · Your journeys, thoughtfully planned."
+  },
+  "labels": {
+    "brandHome": "dream day home",
+    "visualSection": "A little inspiration for your next journey"
+  },
+  "descriptions": {
+    "visualImageAlt": "Limestone islands reflected in the calm water of Lan Ha Bay"
+  },
+  "actions": {
+    "showPassword": "Show password",
+    "hidePassword": "Hide password"
+  },
+  "errors": {
+    "invalidInput": "Check the information you entered and try again.",
+    "signInFailed": "We couldn’t sign you in with those details. Check your email and password.",
+    "signUpFailed": "We couldn’t create your account. Check the details and try again.",
+    "resetFailed": "We couldn’t send password reset instructions. Please try again.",
+    "updateFailed": "We couldn’t update your password. Please try again.",
+    "sessionExpired": "This password reset link has expired. Request a new one to continue."
+  }
+}

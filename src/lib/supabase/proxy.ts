@@ -1,9 +1,10 @@
 import { ROUTES } from '@/constants/routes'
 import { serverEnv } from '@/env/server'
+import { routing } from '@/i18n/routing'
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
-export async function updateSession(request: NextRequest) {
+export async function updateSession(request: NextRequest): Promise<NextResponse> {
   let supabaseResponse = NextResponse.next({
     request,
   })
@@ -36,9 +37,16 @@ export async function updateSession(request: NextRequest) {
 
   const user = data?.claims
 
-  if (!user && !request.nextUrl.pathname.startsWith('/auth')) {
+  const localeSegment = request.nextUrl.pathname.match(/^\/([^/]+)(?=\/|$)/)?.[1]
+  const locale = routing.locales.find((candidate) => candidate === localeSegment)
+  const pathname = locale
+    ? request.nextUrl.pathname.slice(locale.length + 1) || '/'
+    : request.nextUrl.pathname
+  const isPublicAuthPath = /^\/auth(?:\/|$)/.test(pathname)
+
+  if (!user && !isPublicAuthPath) {
     const url = request.nextUrl.clone()
-    url.pathname = ROUTES.PUBLIC.AUTH.LOGIN
+    url.pathname = `${locale ? `/${locale}` : ''}${ROUTES.PUBLIC.AUTH.LOGIN}`
     return NextResponse.redirect(url)
   }
 
