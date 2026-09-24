@@ -1,12 +1,12 @@
 import type { MetadataRoute } from 'next'
-import { env } from '@/env/server'
+import { serverEnv } from '@/env/server'
 
 // TODO: replace the SVG fallback with real PNG icons (192x192, 512x512, maskable)
 // placed under public/icons/ to satisfy the PWA installability criteria.
 const manifest = (): MetadataRoute.Manifest => ({
-  name: env.NEXT_PUBLIC_APP_NAME,
-  short_name: env.NEXT_PUBLIC_APP_NAME,
-  description: env.NEXT_PUBLIC_APP_DESCRIPTION,
+  name: serverEnv.NEXT_PUBLIC_APP_NAME,
+  short_name: serverEnv.NEXT_PUBLIC_APP_NAME,
+  description: serverEnv.NEXT_PUBLIC_APP_DESCRIPTION,
   start_url: '/en',
   scope: '/',
   display: 'standalone',
