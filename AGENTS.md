@@ -8,6 +8,21 @@
 
 ---
 
+## Shared Cursor Rules
+
+Additional project conventions are maintained in `.cursor/rules/*.mdc`. Codex does not load these Cursor rule files automatically, so before changing files, read and follow the rules relevant to the task. Use the Markdown body as guidance; the YAML frontmatter is Cursor-specific metadata.
+
+- `00-project.mdc` — project stack and global context
+- `01-core.mdc` — architecture, TypeScript, rendering, and security
+- `02-styling.mdc` — Tailwind, shadcn/ui, icons, and styling
+- `03-data-forms.mdc` — data fetching, Server Actions, forms, and state
+- `04-i18n.mdc` — next-intl and translations
+- `05-tooling.mdc` — testing, linting, and PWA
+- `06-error-handling.mdc` — error boundaries and error UX
+- `07-ci-cd.mdc` — CI/CD and release conventions
+
+---
+
 ## Agent Definitions
 
 When working on this codebase, adopt the appropriate agent persona based on the task context. Each persona has a specific focus, constraints, and decision-making authority.

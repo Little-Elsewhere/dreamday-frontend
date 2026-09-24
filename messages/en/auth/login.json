@@ -1,0 +1,34 @@
+{
+  "metadata": {
+    "title": "Sign in",
+    "description": "Sign in to dream day and continue planning your next journey."
+  },
+  "content": {
+    "eyebrow": "Welcome back",
+    "title": "Continue your journey",
+    "intro": "Sign in to revisit your itinerary, save places you love, and shape the trip ahead.",
+    "securityNote": "Your sign-in is protected by secure authentication and is used only to access your account."
+  },
+  "labels": {
+    "email": "Email",
+    "password": "Password",
+    "secureSignIn": "Secure sign in"
+  },
+  "placeholders": {
+    "email": "you@example.com",
+    "password": "Enter your password"
+  },
+  "messages": {
+    "loading": "Loading sign-in form",
+    "confirmationFailed": "We couldn’t confirm that email link. Request a new link and try again."
+  },
+  "prompts": {
+    "noAccount": "New to dream day?"
+  },
+  "actions": {
+    "forgotPassword": "Forgot password?",
+    "submit": "Sign in",
+    "submitting": "Signing in…",
+    "register": "Create an account"
+  }
+}
