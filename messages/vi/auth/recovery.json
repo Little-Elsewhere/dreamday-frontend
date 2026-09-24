@@ -1,0 +1,21 @@
+{
+  "content": {
+    "title": "Khôi phục mật khẩu",
+    "intro": "Nhập email đã đăng ký. Chúng tôi sẽ gửi hướng dẫn để bạn tạo mật khẩu mới."
+  },
+  "labels": {
+    "email": "Email"
+  },
+  "placeholders": {
+    "email": "tenban@example.com"
+  },
+  "messages": {
+    "resetEmailSent": "Nếu email này đã đăng ký tài khoản, hướng dẫn khôi phục mật khẩu đang được gửi đến bạn."
+  },
+  "actions": {
+    "close": "Đóng hộp thoại khôi phục mật khẩu",
+    "cancel": "Hủy",
+    "submit": "Gửi hướng dẫn",
+    "submitting": "Đang gửi…"
+  }
+}

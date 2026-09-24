@@ -1,0 +1,21 @@
+{
+  "content": {
+    "title": "Reset your password",
+    "intro": "Enter the email address on your account. We’ll send instructions to choose a new password."
+  },
+  "labels": {
+    "email": "Email"
+  },
+  "placeholders": {
+    "email": "you@example.com"
+  },
+  "messages": {
+    "resetEmailSent": "If an account uses that email, password reset instructions are on the way."
+  },
+  "actions": {
+    "close": "Close password reset dialog",
+    "cancel": "Cancel",
+    "submit": "Send instructions",
+    "submitting": "Sending…"
+  }
+}
