@@ -18,6 +18,7 @@
   --color-input-border: oklch(0.7703 0.01402 152.53);
   --color-placeholder: oklch(0.5806 0.0131 161.78);
   --color-champagne: oklch(0.7134 0.07068 86.43);
+  --color-champagne-ink: oklch(0.48 0.07068 86.43);
   --color-champagne-soft: oklch(0.8686 0.03814 88.48);
   --color-shade: oklch(0.2148 0.03072 173);
   --color-error: oklch(0.4688 0.14364 24.57);

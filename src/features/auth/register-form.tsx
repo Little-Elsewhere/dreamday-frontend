@@ -1,0 +1,181 @@
+'use client'
+
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useTranslations } from 'next-intl'
+import { FormProvider, useForm } from 'react-hook-form'
+import { useRef, useState, type ReactElement } from 'react'
+
+import { Button } from '@/components/ui/button'
+import { FormInput } from '@/components/form/form-input'
+import { ROUTES } from '@/constants/routes'
+import { Link, useRouter } from '@/i18n/navigation'
+
+import { signUpAction, type AuthError } from './actions'
+import { AuthFeedback } from './components/auth-feedback'
+import { PasswordToggle } from './components/password-toggle'
+import { registrationSchema, type RegistrationFormValues } from './schemas/auth'
+
+export function RegisterForm(): ReactElement {
+  const t = useTranslations('auth')
+  const router = useRouter()
+  const errorSummary = useRef<HTMLDivElement>(null)
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmation, setShowConfirmation] = useState(false)
+  const [message, setMessage] = useState<{ text: string; isError: boolean } | null>(null)
+  const form = useForm<RegistrationFormValues>({
+    resolver: zodResolver(registrationSchema),
+    defaultValues: { name: '', email: '', password: '', confirmPassword: '' },
+  })
+
+  const errorMessages: Record<AuthError, string> = {
+    invalidInput: t('common.errors.invalidInput'),
+    signInFailed: t('common.errors.signInFailed'),
+    signUpFailed: t('common.errors.signUpFailed'),
+    resetFailed: t('common.errors.resetFailed'),
+    updateFailed: t('common.errors.updateFailed'),
+    sessionExpired: t('common.errors.sessionExpired'),
+  }
+
+  function showError(error: AuthError): void {
+    setMessage({ text: errorMessages[error], isError: true })
+    requestAnimationFrame(() => errorSummary.current?.focus())
+  }
+
+  async function handleRegistration(values: RegistrationFormValues): Promise<void> {
+    setMessage(null)
+
+    const result = await signUpAction(values)
+    if (!result.success) return showError(result.error)
+
+    if (!result.data.confirmationRequired) {
+      router.replace('/')
+      router.refresh()
+      return
+    }
+
+    setMessage({ text: t('register.messages.confirmEmail'), isError: false })
+  }
+
+  return (
+    <>
+      <p className="text-champagne-ink mb-3 text-[13px] font-semibold tracking-[0.16em] uppercase">
+        {t('register.content.eyebrow')}
+      </p>
+      <h1
+        className="text-primary focus-visible:outline-focus m-0 max-w-[14ch] text-[clamp(2rem,8vw,3.5rem)] leading-[1.12] font-medium tracking-[-0.055em] focus-visible:outline-2 focus-visible:outline-offset-3"
+        id="auth-title"
+        tabIndex={-1}
+      >
+        {t('register.content.title')}
+      </h1>
+      <p className="text-ink-soft mt-4 max-w-[42ch]">{t('register.content.intro')}</p>
+
+      {message && (
+        <AuthFeedback
+          message={message.text}
+          isError={message.isError}
+          focusRef={message.isError ? errorSummary : undefined}
+        />
+      )}
+
+      <FormProvider {...form}>
+        <form
+          className="mt-10 grid gap-5"
+          noValidate
+          onSubmit={(event) => {
+            void form.handleSubmit(handleRegistration)(event)
+          }}
+        >
+          <FormInput
+            name="name"
+            id="register-name"
+            label={t('register.labels.name')}
+            labelClassName="text-ink"
+            type="text"
+            autoComplete="name"
+            placeholder={t('register.placeholders.name')}
+            required
+            maxLength={80}
+            errorMessage={t('common.errors.nameInvalid')}
+          />
+          <FormInput
+            name="email"
+            id="register-email"
+            label={t('register.labels.email')}
+            labelClassName="text-ink"
+            type="email"
+            autoComplete="email"
+            inputMode="email"
+            placeholder={t('register.placeholders.email')}
+            required
+            maxLength={254}
+            errorMessage={t('common.errors.emailInvalid')}
+          />
+          <FormInput
+            name="password"
+            id="register-password"
+            label={t('register.labels.password')}
+            labelClassName="text-ink"
+            className="pr-14"
+            type={showPassword ? 'text' : 'password'}
+            autoComplete="new-password"
+            placeholder={t('register.placeholders.password')}
+            description={t('register.content.passwordHelp')}
+            required
+            minLength={8}
+            maxLength={72}
+            errorMessage={t('common.errors.passwordLength')}
+            endAdornment={
+              <PasswordToggle
+                shown={showPassword}
+                onToggle={() => setShowPassword((shown) => !shown)}
+                showLabel={t('common.actions.showPassword')}
+                hideLabel={t('common.actions.hidePassword')}
+              />
+            }
+          />
+          <FormInput
+            name="confirmPassword"
+            id="confirm-password"
+            label={t('register.labels.confirmPassword')}
+            labelClassName="text-ink"
+            className="pr-14"
+            type={showConfirmation ? 'text' : 'password'}
+            autoComplete="new-password"
+            placeholder={t('register.placeholders.confirmPassword')}
+            required
+            minLength={8}
+            maxLength={72}
+            errorMessage={t('common.errors.passwordMismatch')}
+            endAdornment={
+              <PasswordToggle
+                shown={showConfirmation}
+                onToggle={() => setShowConfirmation((shown) => !shown)}
+                showLabel={t('common.actions.showPassword')}
+                hideLabel={t('common.actions.hidePassword')}
+              />
+            }
+          />
+          <Button
+            className="w-full"
+            type="submit"
+            loading={form.formState.isSubmitting}
+            loadingLabel={t('register.actions.submitting')}
+          >
+            {t('register.actions.submit')}
+          </Button>
+        </form>
+      </FormProvider>
+
+      <p className="text-ink-soft mt-6 flex flex-wrap items-center justify-center gap-2 text-sm">
+        <span>{t('register.prompts.hasAccount')}</span>
+        <Link
+          className="text-primary focus-visible:outline-focus min-h-9 cursor-pointer rounded-md bg-transparent p-0 text-sm font-medium underline decoration-transparent underline-offset-4 transition-colors hover:decoration-current focus-visible:outline-2 focus-visible:outline-offset-2"
+          href={ROUTES.PUBLIC.AUTH.LOGIN}
+        >
+          {t('register.actions.login')}
+        </Link>
+      </p>
+    </>
+  )
+}
