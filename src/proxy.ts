@@ -1,16 +1,16 @@
 import createMiddleware from 'next-intl/middleware'
 import { NextResponse, type NextRequest } from 'next/server'
-import { routing } from './i18n/routing'
-import { updateSession } from './lib/supabase/proxy'
+
+import { routing } from '@/i18n/routing'
+import { updateSession } from '@/lib/supabase/proxy'
 
 const intlMiddleware = createMiddleware(routing)
 
-export default async function proxy(request: NextRequest): Promise<NextResponse> {
+export async function proxy(request: NextRequest): Promise<NextResponse> {
   const supabaseResponse = await updateSession(request)
-  const redirectLocation = supabaseResponse.headers.get('location')
-  const response = redirectLocation
-    ? NextResponse.redirect(redirectLocation, supabaseResponse.status)
-    : intlMiddleware(request)
+  if (supabaseResponse.headers.has('location')) return supabaseResponse
+
+  const response = intlMiddleware(request)
 
   supabaseResponse.cookies.getAll().forEach((cookie) => response.cookies.set(cookie))
   for (const header of ['cache-control', 'expires', 'pragma']) {
