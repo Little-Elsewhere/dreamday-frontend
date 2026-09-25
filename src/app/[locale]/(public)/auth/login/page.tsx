@@ -20,7 +20,8 @@ export const generateMetadata = async (): Promise<Metadata> => {
 
 async function LoginContent({ searchParams }: Props): Promise<ReactElement> {
   const { status } = await searchParams
-  const initialStatus = status === 'confirmation-failed' ? status : undefined
+  const initialStatus =
+    status === 'confirmation-failed' || status === 'recovery-failed' ? status : undefined
 
   return <LoginForm initialStatus={initialStatus} />
 }

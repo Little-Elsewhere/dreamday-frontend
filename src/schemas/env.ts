@@ -5,6 +5,17 @@ export const clientEnvSchema = z.object({
   NEXT_PUBLIC_APP_DEFAULT_TITLE: z.string().min(1),
   NEXT_PUBLIC_APP_TITLE_TEMPLATE: z.string().min(1),
   NEXT_PUBLIC_APP_DESCRIPTION: z.string().min(1),
+  NEXT_PUBLIC_APP_URL: z.url().refine((value) => {
+    const url = new URL(value)
+    return (
+      ['http:', 'https:'].includes(url.protocol) &&
+      url.pathname === '/' &&
+      !url.search &&
+      !url.hash &&
+      !url.username &&
+      !url.password
+    )
+  }),
 
   // Supabase
   NEXT_PUBLIC_SUPABASE_URL: z.url().min(1),

@@ -4,7 +4,7 @@ import type { ReactElement } from 'react'
 import { useTranslations } from 'next-intl'
 
 export function AuthLoading(): ReactElement {
-  const t = useTranslations('auth.login')
+  const t = useTranslations('auth.common')
 
   return (
     <div className="w-full" aria-busy="true">
