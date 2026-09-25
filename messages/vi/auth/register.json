@@ -6,7 +6,8 @@
   "content": {
     "eyebrow": "Bắt đầu cùng dream day",
     "title": "Tạo tài khoản của bạn",
-    "intro": "Lưu mọi ý tưởng, lịch trình và điểm đến trong một không gian dành riêng cho chuyến đi của bạn."
+    "intro": "Lưu mọi ý tưởng, lịch trình và điểm đến trong một không gian dành riêng cho chuyến đi của bạn.",
+    "passwordHelp": "Sử dụng ít nhất 8 ký tự."
   },
   "labels": {
     "name": "Họ và tên",

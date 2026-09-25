@@ -6,7 +6,8 @@
   "content": {
     "eyebrow": "Start with dream day",
     "title": "Create your account",
-    "intro": "Keep every idea, itinerary, and destination together in a space made for your next trip."
+    "intro": "Keep every idea, itinerary, and destination together in a space made for your next trip.",
+    "passwordHelp": "Use at least 8 characters."
   },
   "labels": {
     "name": "Full name",
