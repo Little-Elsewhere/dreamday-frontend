@@ -15,8 +15,16 @@
     "showPassword": "Hiện mật khẩu",
     "hidePassword": "Ẩn mật khẩu"
   },
+  "messages": {
+    "loading": "Đang tải biểu mẫu xác thực"
+  },
   "errors": {
     "invalidInput": "Hãy kiểm tra thông tin vừa nhập rồi thử lại.",
+    "nameInvalid": "Nhập họ và tên từ 2 đến 80 ký tự.",
+    "emailInvalid": "Nhập địa chỉ email hợp lệ.",
+    "passwordRequired": "Nhập mật khẩu của bạn.",
+    "passwordLength": "Mật khẩu cần từ 8 đến 72 ký tự.",
+    "passwordMismatch": "Mật khẩu xác nhận chưa khớp.",
     "signInFailed": "Không thể đăng nhập bằng thông tin này. Hãy kiểm tra email và mật khẩu.",
     "signUpFailed": "Không thể tạo tài khoản. Hãy kiểm tra thông tin rồi thử lại.",
     "resetFailed": "Không thể gửi hướng dẫn khôi phục mật khẩu. Vui lòng thử lại.",

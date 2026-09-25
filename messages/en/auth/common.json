@@ -15,8 +15,16 @@
     "showPassword": "Show password",
     "hidePassword": "Hide password"
   },
+  "messages": {
+    "loading": "Loading authentication form"
+  },
   "errors": {
     "invalidInput": "Check the information you entered and try again.",
+    "nameInvalid": "Enter your full name using 2 to 80 characters.",
+    "emailInvalid": "Enter a valid email address.",
+    "passwordRequired": "Enter your password.",
+    "passwordLength": "Use a password with 8 to 72 characters.",
+    "passwordMismatch": "The passwords do not match.",
     "signInFailed": "We couldn’t sign you in with those details. Check your email and password.",
     "signUpFailed": "We couldn’t create your account. Check the details and try again.",
     "resetFailed": "We couldn’t send password reset instructions. Please try again.",
