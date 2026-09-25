@@ -56,34 +56,40 @@ password recovery. Supabase configuration is required. Copy `.env.example` to
 server-only `DATABASE_PASSWORD` in the environment used by the Doppler-backed
 `pnpm dev` and `pnpm build` scripts.
 
-| Variable                               | Required | Description                                          |
-| :------------------------------------- | :------: | :--------------------------------------------------- |
-| `DOPPLER_ENVIRONMENT`                  |   Yes    | Doppler environment (`dev` or `prod`)                |
-| `NEXT_PUBLIC_APP_NAME`                 |   Yes    | Application name                                     |
-| `NEXT_PUBLIC_APP_DEFAULT_TITLE`        |   Yes    | Default page title                                   |
-| `NEXT_PUBLIC_APP_TITLE_TEMPLATE`       |   Yes    | Title template; use `%s` for the page title          |
-| `NEXT_PUBLIC_APP_DESCRIPTION`          |   Yes    | Application and metadata description                 |
-| `DATABASE_PASSWORD`                    |   Yes    | Server-only value required by environment validation |
-| `NEXT_PUBLIC_SUPABASE_URL`             |   Yes    | Supabase project URL                                 |
-| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` |   Yes    | Supabase publishable key; safe for browser exposure  |
-| `NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN`    |    No    | PostHog token; leave empty to disable analytics      |
-| `NEXT_PUBLIC_POSTHOG_HOST`             |    No    | PostHog host, defaults to `https://us.i.posthog.com` |
+| Variable                               | Required | Description                                           |
+| :------------------------------------- | :------: | :---------------------------------------------------- |
+| `DOPPLER_ENVIRONMENT`                  |   Yes    | Doppler environment (`dev` or `prod`)                 |
+| `NEXT_PUBLIC_APP_NAME`                 |   Yes    | Application name                                      |
+| `NEXT_PUBLIC_APP_DEFAULT_TITLE`        |   Yes    | Default page title                                    |
+| `NEXT_PUBLIC_APP_TITLE_TEMPLATE`       |   Yes    | Title template; use `%s` for the page title           |
+| `NEXT_PUBLIC_APP_DESCRIPTION`          |   Yes    | Application and metadata description                  |
+| `NEXT_PUBLIC_APP_URL`                  |   Yes    | Canonical application origin for Supabase email links |
+| `DATABASE_PASSWORD`                    |   Yes    | Server-only value required by environment validation  |
+| `NEXT_PUBLIC_SUPABASE_URL`             |   Yes    | Supabase project URL                                  |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` |   Yes    | Supabase publishable key; safe for browser exposure   |
+| `NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN`    |    No    | PostHog token; leave empty to disable analytics       |
+| `NEXT_PUBLIC_POSTHOG_HOST`             |    No    | PostHog host, defaults to `https://us.i.posthog.com`  |
 
 Environment variables are validated with Zod in `src/env/server.ts` and
 `src/env/client.ts`. The Supabase URL and publishable key are required by the
 client and server schemas; never use a Supabase secret or `service_role` key in
 the `NEXT_PUBLIC_*` variables.
 
+Set `NEXT_PUBLIC_APP_URL` to the canonical origin for each environment (for example,
+`http://localhost:3000` locally). Auth email links use this configured origin,
+so they do not depend on a request-supplied `Origin` header.
+
 In Supabase Auth, enable the Email provider and add the local and production
 callback URL (`/auth/confirm`) to **URL Configuration → Redirect URLs**. The
 callback URL sent to Supabase is locale-neutral. `next-intl` selects the locale
 from the `NEXT_LOCALE` cookie, then the browser's `Accept-Language` header, and
 finally falls back to `en`; it routes the callback to `/{locale}/auth/confirm`.
-The app supports Supabase's PKCE `code` callback. If you customize the email
-templates to use the `token_hash` callback format, send confirmation links to
-`{{ .RedirectTo }}?token_hash={{ .TokenHash }}&type=email` and recovery links to
-`{{ .RedirectTo }}&token_hash={{ .TokenHash }}&type=recovery`. Configure a
-production email provider for reliable confirmation and recovery email delivery.
+The callback accepts only `token_hash` links. Update the **Confirm signup** email
+template link to `{{ .RedirectTo }}?token_hash={{ .TokenHash }}&type=email` and
+the **Reset password** template link to
+`{{ .RedirectTo }}?token_hash={{ .TokenHash }}&type=recovery`. The Supabase
+default email templates use a different callback format and will not work with
+this route. Configure a production email provider for reliable delivery.
 
 ## Scripts
 
