@@ -8,8 +8,6 @@ const intlMiddleware = createMiddleware(routing)
 
 export async function proxy(request: NextRequest): Promise<NextResponse> {
   const supabaseResponse = await updateSession(request)
-  if (supabaseResponse.headers.has('location')) return supabaseResponse
-
   const response = intlMiddleware(request)
 
   supabaseResponse.cookies.getAll().forEach((cookie) => response.cookies.set(cookie))

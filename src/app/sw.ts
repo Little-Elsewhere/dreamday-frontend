@@ -3,7 +3,7 @@
 /// <reference lib="webworker" />
 import { defaultCache } from '@serwist/turbopack/worker'
 import type { PrecacheEntry, SerwistGlobalConfig } from 'serwist'
-import { Serwist } from 'serwist'
+import { NetworkOnly, Serwist } from 'serwist'
 
 declare global {
   interface WorkerGlobalScope extends SerwistGlobalConfig {
@@ -18,7 +18,14 @@ const serwist = new Serwist({
   skipWaiting: true,
   clientsClaim: true,
   navigationPreload: true,
-  runtimeCaching: defaultCache,
+  runtimeCaching: [
+    {
+      matcher: ({ sameOrigin, url }) =>
+        sameOrigin && /^\/(?:[a-z]{2}\/)?auth(?:\/|$)/.test(url.pathname),
+      handler: new NetworkOnly(),
+    },
+    ...defaultCache,
+  ],
 })
 
 serwist.setCatchHandler(async ({ request, url }) => {
