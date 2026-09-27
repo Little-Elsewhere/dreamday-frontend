@@ -2,6 +2,8 @@
 
 import 'server-only'
 
+import { revalidatePath } from 'next/cache'
+
 import { ROUTES } from '@/constants/routes'
 import { serverEnv } from '@/env/server'
 import { createClient } from '@/lib/supabase/server'
@@ -18,6 +20,7 @@ export type AuthError =
   | 'signUpFailed'
   | 'resetFailed'
   | 'updateFailed'
+  | 'signOutFailed'
   | 'sessionExpired'
 
 export type AuthResult<T = null> = { success: true; data: T } | { success: false; error: AuthError }
@@ -38,14 +41,30 @@ export async function signInAction(values: unknown): Promise<AuthResult> {
 
   try {
     const supabase = await createClient()
-    const { error } = await supabase.auth.signInWithPassword(input.data)
+    const { data, error } = await supabase.auth.signInWithPassword(input.data)
 
-    if (error) return { success: false, error: 'signInFailed' }
+    if (error || !data.session) return { success: false, error: 'signInFailed' }
 
+    revalidatePath('/', 'layout')
     return { success: true, data: null }
   } catch (error) {
     logUnexpectedAuthError('sign in', error)
     return { success: false, error: 'signInFailed' }
+  }
+}
+
+export async function signOutAction(): Promise<AuthResult> {
+  try {
+    const supabase = await createClient()
+    const { error } = await supabase.auth.signOut()
+
+    if (error) return { success: false, error: 'signOutFailed' }
+
+    revalidatePath('/', 'layout')
+    return { success: true, data: null }
+  } catch (error) {
+    logUnexpectedAuthError('sign out', error)
+    return { success: false, error: 'signOutFailed' }
   }
 }
 
@@ -71,6 +90,7 @@ export async function signUpAction(
 
     if (error) return { success: false, error: 'signUpFailed' }
 
+    if (data.session) revalidatePath('/', 'layout')
     return { success: true, data: { confirmationRequired: !data.session } }
   } catch (error) {
     logUnexpectedAuthError('sign up', error)

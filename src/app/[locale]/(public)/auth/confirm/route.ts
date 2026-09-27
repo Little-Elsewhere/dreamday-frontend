@@ -1,26 +1,19 @@
 import { NextResponse, type NextRequest } from 'next/server'
 
-import { confirmationSchema } from '@/features/auth/schemas/callback'
-import { ROUTES } from '@/constants/routes'
-import { serverEnv } from '@/env/server'
-import { createClient } from '@/lib/supabase/server'
 import { HTTP_STATUS } from '@/constants/httpStatuses'
+import { ROUTES } from '@/constants/routes'
+import { confirmationSchema } from '@/features/auth/schemas/callback'
+import { getPathname } from '@/i18n/navigation'
 import { routing } from '@/i18n/routing'
-
-function localizedPath(locale: string, path: string): string {
-  return `/${locale}${path === ROUTES.PUBLIC.ROOT ? '' : path}`
-}
-
-function localizedUrl(locale: string, path: string): URL {
-  const origin = new URL(serverEnv.NEXT_PUBLIC_APP_URL).origin
-  return new URL(localizedPath(locale, path), origin)
-}
+import { createClient } from '@/lib/supabase/server'
+import { serverEnv } from '@/env/server'
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
   const { searchParams } = request.nextUrl
   const requestedLocale = request.nextUrl.pathname.split('/')[1]
   const locale =
     routing.locales.find((candidate) => candidate === requestedLocale) ?? routing.defaultLocale
+  const origin = new URL(serverEnv.NEXT_PUBLIC_APP_URL).origin
   const parsed = confirmationSchema.safeParse({
     token_hash: searchParams.get('token_hash'),
     type: searchParams.get('type'),
@@ -33,26 +26,23 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
       if (!error) {
         const destination =
-          parsed.data.type === 'recovery' ? ROUTES.PUBLIC.AUTH.UPDATE_PASSWORD : ROUTES.PUBLIC.ROOT
-        const response = NextResponse.redirect(localizedUrl(locale, destination), {
+          parsed.data.type === 'recovery'
+            ? ROUTES.PUBLIC.AUTH.UPDATE_PASSWORD
+            : ROUTES.PRIVATE.ACCOUNT
+        const destinationUrl = new URL(getPathname({ locale, href: destination }), origin)
+        return NextResponse.redirect(destinationUrl, {
           status: HTTP_STATUS.FOUND,
         })
-        response.headers.set('Cache-Control', 'no-store, max-age=0')
-        response.headers.set('Referrer-Policy', 'no-referrer')
-        return response
       }
     } catch (error) {
       console.error('[auth] email confirmation failed unexpectedly', error)
     }
   }
 
-  const failureUrl = localizedUrl(locale, ROUTES.PUBLIC.AUTH.LOGIN)
+  const failureUrl = new URL(getPathname({ locale, href: ROUTES.PUBLIC.AUTH.LOGIN }), origin)
   failureUrl.searchParams.set(
     'status',
     searchParams.get('type') === 'recovery' ? 'recovery-failed' : 'confirmation-failed',
   )
-  const response = NextResponse.redirect(failureUrl, { status: HTTP_STATUS.FOUND })
-  response.headers.set('Cache-Control', 'no-store, max-age=0')
-  response.headers.set('Referrer-Policy', 'no-referrer')
-  return response
+  return NextResponse.redirect(failureUrl, { status: HTTP_STATUS.FOUND })
 }

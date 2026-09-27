@@ -6,7 +6,7 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { useRef, useState, type ReactElement } from 'react'
 
 import { Button } from '@/components/ui/button'
-import { FormInput } from '@/components/form/form-input'
+import { Input } from '@/components/ui/input'
 import { ROUTES } from '@/constants/routes'
 import { Link, useRouter } from '@/i18n/navigation'
 
@@ -33,6 +33,7 @@ export function RegisterForm(): ReactElement {
     signUpFailed: t('common.errors.signUpFailed'),
     resetFailed: t('common.errors.resetFailed'),
     updateFailed: t('common.errors.updateFailed'),
+    signOutFailed: t('common.errors.signOutFailed'),
     sessionExpired: t('common.errors.sessionExpired'),
   }
 
@@ -48,7 +49,7 @@ export function RegisterForm(): ReactElement {
     if (!result.success) return showError(result.error)
 
     if (!result.data.confirmationRequired) {
-      router.replace('/')
+      router.replace(ROUTES.PRIVATE.ACCOUNT)
       router.refresh()
       return
     }
@@ -86,7 +87,7 @@ export function RegisterForm(): ReactElement {
             void form.handleSubmit(handleRegistration)(event)
           }}
         >
-          <FormInput
+          <Input
             name="name"
             id="register-name"
             label={t('register.labels.name')}
@@ -96,9 +97,8 @@ export function RegisterForm(): ReactElement {
             placeholder={t('register.placeholders.name')}
             required
             maxLength={80}
-            errorMessage={t('common.errors.nameInvalid')}
           />
-          <FormInput
+          <Input
             name="email"
             id="register-email"
             label={t('register.labels.email')}
@@ -109,9 +109,8 @@ export function RegisterForm(): ReactElement {
             placeholder={t('register.placeholders.email')}
             required
             maxLength={254}
-            errorMessage={t('common.errors.emailInvalid')}
           />
-          <FormInput
+          <Input
             name="password"
             id="register-password"
             label={t('register.labels.password')}
@@ -124,7 +123,6 @@ export function RegisterForm(): ReactElement {
             required
             minLength={8}
             maxLength={72}
-            errorMessage={t('common.errors.passwordLength')}
             endAdornment={
               <PasswordToggle
                 shown={showPassword}
@@ -134,7 +132,7 @@ export function RegisterForm(): ReactElement {
               />
             }
           />
-          <FormInput
+          <Input
             name="confirmPassword"
             id="confirm-password"
             label={t('register.labels.confirmPassword')}
@@ -146,7 +144,6 @@ export function RegisterForm(): ReactElement {
             required
             minLength={8}
             maxLength={72}
-            errorMessage={t('common.errors.passwordMismatch')}
             endAdornment={
               <PasswordToggle
                 shown={showConfirmation}

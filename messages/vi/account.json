@@ -1,0 +1,26 @@
+{
+  "metadata": {
+    "title": "Tài khoản của bạn",
+    "description": "Tài khoản dream day và những kế hoạch du lịch của bạn."
+  },
+  "labels": {
+    "brand": "dream day",
+    "account": "Tài khoản của bạn",
+    "signedInAs": "Đã đăng nhập bằng",
+    "verifiedAccount": "Tài khoản của bạn"
+  },
+  "content": {
+    "eyebrow": "Không gian của bạn",
+    "title": "Chào mừng bạn trở lại hành trình.",
+    "description": "Tài khoản đã sẵn sàng. Những hành trình bạn lưu sẽ xuất hiện ở đây khi bạn tiếp tục lên kế hoạch.",
+    "imageAlt": "Những đảo đá vôi ở vịnh Lan Hạ"
+  },
+  "actions": {
+    "signOut": "Đăng xuất",
+    "signingOut": "Đang đăng xuất…"
+  },
+  "messages": {
+    "loading": "Đang tải tài khoản…",
+    "signOutFailed": "Không thể đăng xuất. Vui lòng thử lại."
+  }
+}

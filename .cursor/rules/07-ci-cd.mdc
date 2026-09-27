@@ -14,20 +14,26 @@ alwaysApply: true
 
 ### 1. ci.yml (Build and Test)
 
-Runs on: **push to `develop`**, **PR to `develop`**
+Runs on: **PR to `develop`**
 
 Jobs:
 - **Commitlint**: validate PR commit messages (Conventional Commits 1.0.0)
 - **Format**: `pnpm format --check`
 - **Lint**: `pnpm lint`
 - **Type Check**: `pnpm tsc --noEmit`
-- **Build**: `pnpm exec next build`
+- **Build**: `pnpm build:dev` using Doppler `dreamday/dev`
+
+The GitHub `dev` environment supplies a read-only `DOPPLER_TOKEN` scoped to
+`dreamday/dev`. Application environment values are fetched from Doppler, not
+stored in GitHub Actions variables.
 
 ### 2. cd.yml (Production Build)
 
 Runs on: **pull requests to `main`**
 
-Purpose: Validate the production Next.js build.
+Purpose: Validate the production Next.js build with `pnpm build:prod` and
+Doppler `dreamday/prod`. The GitHub `prod` environment supplies a read-only
+`DOPPLER_TOKEN` scoped to that config.
 
 ---
 
