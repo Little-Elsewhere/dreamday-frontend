@@ -50,11 +50,11 @@ locales are defined in `src/i18n/routing.ts`.
 ## Environment Variables
 
 The application uses Supabase Auth for email/password sign-in, registration, and
-password recovery. Local commands use `.env.local`; copy `.env.example` to
-`.env.local` and fill in the required values. `pnpm dev` overrides the Supabase
-connection values with local values and sets the local app origin.
-`pnpm build:dev` and `pnpm build:prod` load `dreamday/dev` and `dreamday/prod`,
-respectively, for CI/CD.
+password recovery. `pnpm dev` loads app variables from Doppler `dreamday/dev`.
+Install and authenticate the Doppler CLI before running it. `pnpm build:dev` and
+`pnpm build:prod` load `dreamday/dev` and `dreamday/prod`, respectively.
+`pnpm start` reads its production runtime variables from `.env.local`; copy
+`.env.example` when configuring that command locally.
 
 The GitHub Actions `dev` and `prod` environments each need a `DOPPLER_TOKEN`
 secret. Use read-only Doppler Service Tokens scoped to `dreamday/dev` and
@@ -80,13 +80,12 @@ Environment variables are validated with Zod in `src/env/server.ts` and
 client and server schemas; never use a Supabase secret or `service_role` key in
 the `NEXT_PUBLIC_*` variables.
 
-`next.config.ts` uses `DOPPLER_ENVIRONMENT` when building security headers. Set
-it to `dev` in `.env.local`; CI/CD gets it from the matching Doppler config.
+`next.config.ts` uses `DOPPLER_ENVIRONMENT` when building security headers.
+Set it to `dev` in Doppler `dreamday/dev`; CI/CD gets it from the matching
+Doppler config.
 
-Set `NEXT_PUBLIC_APP_URL` to the canonical origin in `.env.local` and the
-respective Doppler config. The `pnpm dev` command overrides it to
-`http://localhost:3000` for local Auth email links. Auth email links do not
-depend on a request-supplied `Origin` header.
+Set `NEXT_PUBLIC_APP_URL` to the canonical origin in the respective Doppler
+config. Auth email links do not depend on a request-supplied `Origin` header.
 
 In Supabase Auth, enable the Email provider, set **URL Configuration → Site URL**
 to the canonical app origin, and add the local and production callback URL
@@ -104,7 +103,7 @@ destination from `type`: signup goes to the account page; recovery goes to
 `next` parameter; do not use it to control redirects. Configure a production
 email provider for reliable delivery.
 
-## Local Supabase and email testing
+## Local Supabase
 
 The Supabase CLI runs an isolated local stack in Docker. Its local SMTP service
 captures Auth emails in Mailpit instead of delivering them. Start the stack and
@@ -116,36 +115,24 @@ pnpm supabase:status
 ```
 
 Mailpit is available at `http://127.0.0.1:54324`; Supabase Studio is at
-`http://127.0.0.1:54323`. `pnpm dev` reads the API URL and Publishable key from
-`supabase status --output json` at startup, then injects them into Next.js along
-with the local database password (`postgres`). The helper rejects a non-local
-Supabase URL and never forwards the Supabase Secret key to the app.
-
-Use `.env.local` for app variables during local development. The local helper
-overrides `NEXT_PUBLIC_APP_URL`, `NEXT_PUBLIC_SUPABASE_URL`,
-`NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, and `DATABASE_PASSWORD` with local
-values. It also removes both PostHog variables before starting Next.js, so they
-do not reach the local app process. Set `DOPPLER_ENVIRONMENT=dev` in
-`.env.local`. These Supabase variables can remain blank for `pnpm dev`; for
-`pnpm build` or `pnpm start`, set the URL and publishable key from
-`pnpm supabase:status` in `.env.local`.
-
-Start the Supabase stack first with `pnpm supabase:start`, then launch the app
-with `pnpm dev`. The command uses `.env.local` for application settings and
-always uses local Supabase values. Email confirmations are enabled in local
-Auth so signup and recovery tests can exercise the real flow; generated emails
-are captured by Mailpit. The local email and verification request limits are
-raised for repeated test runs.
+`http://127.0.0.1:54323`. `pnpm dev` uses the Supabase values from Doppler
+`dreamday/dev`; starting this local stack does not change that connection.
 
 Use `pnpm supabase:reset:local` to reset only the local database and replay
 migrations and seed data. This repository does not yet contain application
-database migrations, so add versioned migrations and deterministic seed data
-before writing E2E cases that depend on app tables.
+database migrations; add versioned migrations and deterministic seed data when
+the app needs local database tables.
+
+Stop the local Supabase containers when you want to release their resources:
+
+```bash
+pnpm supabase:stop
+```
 
 ## Scripts
 
 ```bash
-pnpm dev                 # Start with local Supabase and env from .env.local
+pnpm dev                 # Start with Doppler dreamday/dev environment
 pnpm build:dev           # CI/CD build with Doppler dreamday/dev
 pnpm build:prod          # CI/CD build with Doppler dreamday/prod
 pnpm start               # Start production build with env from .env.local

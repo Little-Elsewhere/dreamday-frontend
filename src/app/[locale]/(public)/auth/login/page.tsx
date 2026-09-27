@@ -2,11 +2,11 @@ import type { Metadata } from 'next'
 import { Suspense } from 'react'
 import type { ReactElement } from 'react'
 import { getLocale, getTranslations } from 'next-intl/server'
-import { redirect } from 'next/navigation'
 
 import { ROUTES } from '@/constants/routes'
 import { AuthLoading } from '@/features/auth/components/auth-loading'
 import { LoginForm } from '@/features/auth/login-form'
+import { redirect } from '@/i18n/navigation'
 import { createClient } from '@/lib/supabase/server'
 
 type Props = {
@@ -27,14 +27,12 @@ async function LoginContent({ searchParams }: Props): Promise<ReactElement> {
 
   if (data?.claims) {
     const locale = await getLocale()
-    redirect(`/${locale}${ROUTES.PRIVATE.ACCOUNT}`)
+    redirect({ href: ROUTES.PRIVATE.ACCOUNT, locale })
   }
 
   const { status } = await searchParams
-  const initialStatus =
-    status === 'confirmation-failed' || status === 'recovery-failed' ? status : undefined
 
-  return <LoginForm initialStatus={initialStatus} />
+  return <LoginForm status={status as string} />
 }
 
 export default function Login({ searchParams }: Props): ReactElement {
