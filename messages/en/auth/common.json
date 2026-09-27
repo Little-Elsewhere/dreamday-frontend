@@ -20,15 +20,21 @@
   },
   "errors": {
     "invalidInput": "Check the information you entered and try again.",
-    "nameInvalid": "Enter your full name using 2 to 80 characters.",
     "emailInvalid": "Enter a valid email address.",
+    "emailTooLong": "Email must be 254 characters or fewer.",
+    "nameTooShort": "Enter at least 2 characters for your name.",
+    "nameTooLong": "Name must be 80 characters or fewer.",
     "passwordRequired": "Enter your password.",
-    "passwordLength": "Use a password with 8 to 72 characters.",
+    "passwordTooShort": "Use at least 8 characters for your password.",
+    "passwordTooLong": "Password must be 72 characters or fewer.",
+    "confirmPasswordRequired": "Confirm your password.",
+    "confirmPasswordTooLong": "Password confirmation must be 72 characters or fewer.",
     "passwordMismatch": "The passwords do not match.",
     "signInFailed": "We couldn’t sign you in with those details. Check your email and password.",
     "signUpFailed": "We couldn’t create your account. Check the details and try again.",
     "resetFailed": "We couldn’t send password reset instructions. Please try again.",
     "updateFailed": "We couldn’t update your password. Please try again.",
+    "signOutFailed": "We couldn’t sign you out. Please try again.",
     "sessionExpired": "This password reset link has expired. Request a new one to continue."
   }
 }
