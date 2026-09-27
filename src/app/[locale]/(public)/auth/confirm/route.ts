@@ -2,7 +2,6 @@ import { NextResponse, type NextRequest } from 'next/server'
 
 import { HTTP_STATUS } from '@/constants/httpStatuses'
 import { ROUTES } from '@/constants/routes'
-import { LOGIN_STATUS } from '@/features/auth/constants'
 import { confirmationSchema } from '@/features/auth/schemas/callback'
 import { getPathname } from '@/i18n/navigation'
 import { routing } from '@/i18n/routing'
@@ -43,9 +42,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   const failureUrl = new URL(getPathname({ locale, href: ROUTES.PUBLIC.AUTH.LOGIN }), origin)
   failureUrl.searchParams.set(
     'status',
-    searchParams.get('type') === 'recovery'
-      ? LOGIN_STATUS.RECOVERY_FAILED
-      : LOGIN_STATUS.CONFIRMATION_FAILED,
+    searchParams.get('type') === 'recovery' ? 'recovery-failed' : 'confirmation-failed',
   )
   return NextResponse.redirect(failureUrl, { status: HTTP_STATUS.FOUND })
 }
