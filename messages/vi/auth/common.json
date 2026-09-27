@@ -20,15 +20,21 @@
   },
   "errors": {
     "invalidInput": "Hãy kiểm tra thông tin vừa nhập rồi thử lại.",
-    "nameInvalid": "Nhập họ và tên từ 2 đến 80 ký tự.",
     "emailInvalid": "Nhập địa chỉ email hợp lệ.",
+    "emailTooLong": "Email không được dài quá 254 ký tự.",
+    "nameTooShort": "Họ và tên cần có ít nhất 2 ký tự.",
+    "nameTooLong": "Họ và tên không được dài quá 80 ký tự.",
     "passwordRequired": "Nhập mật khẩu của bạn.",
-    "passwordLength": "Mật khẩu cần từ 8 đến 72 ký tự.",
+    "passwordTooShort": "Mật khẩu cần có ít nhất 8 ký tự.",
+    "passwordTooLong": "Mật khẩu không được dài quá 72 ký tự.",
+    "confirmPasswordRequired": "Vui lòng xác nhận mật khẩu.",
+    "confirmPasswordTooLong": "Mật khẩu xác nhận không được dài quá 72 ký tự.",
     "passwordMismatch": "Mật khẩu xác nhận chưa khớp.",
     "signInFailed": "Không thể đăng nhập bằng thông tin này. Hãy kiểm tra email và mật khẩu.",
     "signUpFailed": "Không thể tạo tài khoản. Hãy kiểm tra thông tin rồi thử lại.",
     "resetFailed": "Không thể gửi hướng dẫn khôi phục mật khẩu. Vui lòng thử lại.",
     "updateFailed": "Không thể cập nhật mật khẩu. Vui lòng thử lại.",
+    "signOutFailed": "Không thể đăng xuất. Vui lòng thử lại.",
     "sessionExpired": "Liên kết khôi phục mật khẩu đã hết hạn. Hãy yêu cầu liên kết mới để tiếp tục."
   }
 }

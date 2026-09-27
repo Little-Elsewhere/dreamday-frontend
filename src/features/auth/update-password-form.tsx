@@ -7,7 +7,7 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { useRef, useState, type ReactElement } from 'react'
 
 import { Button } from '@/components/ui/button'
-import { FormInput } from '@/components/form/form-input'
+import { Input } from '@/components/ui/input'
 import { ROUTES } from '@/constants/routes'
 
 import { updatePasswordAction, type AuthError } from './actions'
@@ -33,6 +33,7 @@ export function UpdatePasswordForm(): ReactElement {
     signUpFailed: t('common.errors.signUpFailed'),
     resetFailed: t('common.errors.resetFailed'),
     updateFailed: t('common.errors.updateFailed'),
+    signOutFailed: t('common.errors.signOutFailed'),
     sessionExpired: t('common.errors.sessionExpired'),
   }
 
@@ -83,7 +84,7 @@ export function UpdatePasswordForm(): ReactElement {
               void form.handleSubmit(handleSubmit)(event)
             }}
           >
-            <FormInput
+            <Input
               name="password"
               id="new-password"
               label={t('updatePassword.labels.password')}
@@ -94,7 +95,6 @@ export function UpdatePasswordForm(): ReactElement {
               required
               minLength={8}
               maxLength={72}
-              errorMessage={t('common.errors.passwordLength')}
               endAdornment={
                 <PasswordToggle
                   shown={showPassword}
@@ -104,7 +104,7 @@ export function UpdatePasswordForm(): ReactElement {
                 />
               }
             />
-            <FormInput
+            <Input
               name="confirmPassword"
               id="confirm-new-password"
               label={t('updatePassword.labels.confirmPassword')}
@@ -115,7 +115,6 @@ export function UpdatePasswordForm(): ReactElement {
               required
               minLength={8}
               maxLength={72}
-              errorMessage={t('common.errors.passwordMismatch')}
               endAdornment={
                 <PasswordToggle
                   shown={showConfirmation}

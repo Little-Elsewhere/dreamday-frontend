@@ -1,0 +1,26 @@
+{
+  "metadata": {
+    "title": "Your account",
+    "description": "Your dream day account and travel plans."
+  },
+  "labels": {
+    "brand": "dream day",
+    "account": "Your account",
+    "signedInAs": "Signed in as",
+    "verifiedAccount": "Your account"
+  },
+  "content": {
+    "eyebrow": "Your space",
+    "title": "Welcome back to your journey.",
+    "description": "Your account is ready. Your saved journeys will appear here as you plan what comes next.",
+    "imageAlt": "Limestone islands in Lan Ha Bay"
+  },
+  "actions": {
+    "signOut": "Sign out",
+    "signingOut": "Signing out…"
+  },
+  "messages": {
+    "loading": "Loading your account…",
+    "signOutFailed": "We couldn’t sign you out. Please try again."
+  }
+}

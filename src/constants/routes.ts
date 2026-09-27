@@ -8,4 +8,7 @@ export const ROUTES = {
       UPDATE_PASSWORD: '/auth/update-password',
     },
   },
+  PRIVATE: {
+    ACCOUNT: '/account',
+  },
 } as const

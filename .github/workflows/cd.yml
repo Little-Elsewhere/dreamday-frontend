@@ -12,23 +12,12 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    environment: prod
-    env:
-      DOPPLER_ENVIRONMENT: ${{ vars.DOPPLER_ENVIRONMENT }}
-      NEXT_PUBLIC_APP_NAME: ${{ vars.NEXT_PUBLIC_APP_NAME }}
-      NEXT_PUBLIC_APP_DEFAULT_TITLE: ${{ vars.NEXT_PUBLIC_APP_DEFAULT_TITLE }}
-      NEXT_PUBLIC_APP_TITLE_TEMPLATE: ${{ vars.NEXT_PUBLIC_APP_TITLE_TEMPLATE }}
-      NEXT_PUBLIC_APP_DESCRIPTION: ${{ vars.NEXT_PUBLIC_APP_DESCRIPTION }}
-      NEXT_PUBLIC_APP_URL: ${{ vars.NEXT_PUBLIC_APP_URL }}
-      NEXT_PUBLIC_SUPABASE_URL: ${{ vars.NEXT_PUBLIC_SUPABASE_URL }}
-      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ vars.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY }}
-      DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
     steps:
       - uses: actions/checkout@v4
 
       - uses: pnpm/action-setup@v4
         with:
-          version: 12.5.1
+          version: 12.6.0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -39,5 +28,10 @@ jobs:
       - name: Install dependencies
         run: HUSKY=0 pnpm install --frozen-lockfile
 
+      - name: Install Doppler CLI
+        uses: dopplerhq/cli-action@v4
+
       - name: Build Next.js application
-        run: pnpm exec next build
+        run: pnpm build:prod
+        env:
+          DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN }}

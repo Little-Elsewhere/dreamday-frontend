@@ -1,0 +1,1 @@
+-- Add deterministic local-only fixtures here as app migrations are introduced.

@@ -230,11 +230,11 @@ When working on this codebase, adopt the appropriate agent persona based on the 
 
 ### GitHub Actions Workflows
 
-| Workflow      | Trigger         | Purpose                                        |
-| ------------- | --------------- | ---------------------------------------------- |
-| `ci.yml`      | PR to `develop` | Commitlint, lint, format, typecheck, and build |
-| `release.yml` | Push to `main`  | Release-please: version bump, CHANGELOG, tags  |
-| `cd.yml`      | PR to `main`    | Production Next.js build                       |
+| Workflow      | Trigger         | Purpose                                                               |
+| ------------- | --------------- | --------------------------------------------------------------------- |
+| `ci.yml`      | PR to `develop` | Commitlint, lint, format, typecheck, and Doppler `dreamday/dev` build |
+| `release.yml` | Push to `main`  | Release-please: version bump, CHANGELOG, tags                         |
+| `cd.yml`      | PR to `main`    | Production build with Doppler `dreamday/prod`                         |
 
 ### CI Checks
 
@@ -244,7 +244,10 @@ Every PR must pass all checks before merge:
 - ✅ Format check
 - ✅ Lint
 - ✅ Type check
-- ✅ Build
+- ✅ Build with env from Doppler (`dev` for CI, `prod` for production)
+
+GitHub Actions stores only read-only Doppler Service Tokens in the `dev` and
+`prod` environments. The application env values are loaded from Doppler.
 
 ### Version Bump (release-please)
 
