@@ -9,7 +9,7 @@ import { Controller, useFormContext } from 'react-hook-form'
 import { Label } from '@/components/ui/label'
 import { cn } from '@/utils/cn'
 
-interface InputProps<TFieldValues extends FieldValues> extends Omit<
+export interface InputProps<TFieldValues extends FieldValues> extends Omit<
   React.ComponentProps<'input'>,
   'name' | 'value' | 'defaultValue' | 'onChange' | 'onBlur'
 > {
