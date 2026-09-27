@@ -1,22 +1,12 @@
-import { Button } from '@/components/ui/button'
-import { getTranslations } from 'next-intl/server'
+import { ROUTES } from '@/constants/routes'
+import { redirect } from '@/i18n/navigation'
 
-export const generateMetadata = async () => {
-  const t = await getTranslations('page')
-  return {
-    title: t('home'),
-  }
+type Props = {
+  params: Promise<{ locale: string }>
 }
 
-const Home = async () => {
-  const t = await getTranslations('common')
+export default async function Home({ params }: Props) {
+  const { locale } = await params
 
-  return (
-    <div>
-      <Button>Click me</Button>
-      <h1>{t('say_hello')}</h1>
-    </div>
-  )
+  redirect({ href: ROUTES.PUBLIC.AUTH.LOGIN, locale })
 }
-
-export default Home
