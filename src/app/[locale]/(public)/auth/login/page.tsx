@@ -4,8 +4,8 @@ import type { ReactElement } from 'react'
 import { getLocale, getTranslations } from 'next-intl/server'
 
 import { ROUTES } from '@/constants/routes'
-import { AuthLoading } from '@/features/auth/components/auth-loading'
-import { LoginForm } from '@/features/auth/login-form'
+import { AuthLoading } from '@/features/auth/components/common/auth-loading'
+import { LoginForm } from '@/features/auth/components/forms/login-form'
 import { redirect } from '@/i18n/navigation'
 import { createClient } from '@/lib/supabase/server'
 
