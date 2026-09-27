@@ -13,9 +13,13 @@
 
 # testing
 /coverage
+/test-results/
+/playwright-report/
+/blob-report/
 
 # next.js
 /.next/
+/.next-e2e/
 /out/
 
 # production
@@ -34,6 +38,7 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env
 .env.local
+.env.e2e.local
 .supabase/
 
 # vercel

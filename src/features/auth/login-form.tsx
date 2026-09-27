@@ -19,10 +19,10 @@ import { PasswordResetForm } from './password-reset-form'
 import { loginSchema, type LoginFormValues } from './schemas/auth'
 
 interface LoginFormProps {
-  initialStatus?: 'confirmation-failed' | 'recovery-failed'
+  status?: string
 }
 
-export function LoginForm({ initialStatus }: LoginFormProps): ReactElement {
+export function LoginForm({ status }: LoginFormProps): ReactElement {
   const t = useTranslations('auth')
   const router = useRouter()
   const errorSummary = useRef<HTMLDivElement>(null)
@@ -30,10 +30,10 @@ export function LoginForm({ initialStatus }: LoginFormProps): ReactElement {
   const [resetDialogOpen, setResetDialogOpen] = useState(false)
   const [resetInitialEmail, setResetInitialEmail] = useState('')
   const [message, setMessage] = useState<{ text: string; isError: boolean } | null>(
-    initialStatus
+    status
       ? {
           text: t(
-            initialStatus === 'recovery-failed'
+            status === 'recovery-failed'
               ? 'login.messages.recoveryFailed'
               : 'login.messages.confirmationFailed',
           ),
@@ -171,7 +171,7 @@ export function LoginForm({ initialStatus }: LoginFormProps): ReactElement {
       <p className="text-ink-soft mt-6 flex flex-wrap items-center justify-center gap-2 text-sm">
         <span>{t('login.prompts.noAccount')}</span>
         <Link
-          className="text-primary focus-visible:outline-focus min-h-9 cursor-pointer rounded-md bg-transparent p-0 text-sm font-medium underline decoration-transparent underline-offset-4 transition-colors hover:decoration-current focus-visible:outline-2 focus-visible:outline-offset-2"
+          className="text-primary focus-visible:outline-focus inline-flex min-h-9 cursor-pointer items-center rounded-md bg-transparent p-0 text-sm font-medium underline decoration-transparent underline-offset-4 transition-colors hover:decoration-current focus-visible:outline-2 focus-visible:outline-offset-2"
           href={ROUTES.PUBLIC.AUTH.REGISTER}
         >
           {t('login.actions.register')}

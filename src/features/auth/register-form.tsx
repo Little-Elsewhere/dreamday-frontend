@@ -167,7 +167,7 @@ export function RegisterForm(): ReactElement {
       <p className="text-ink-soft mt-6 flex flex-wrap items-center justify-center gap-2 text-sm">
         <span>{t('register.prompts.hasAccount')}</span>
         <Link
-          className="text-primary focus-visible:outline-focus min-h-9 cursor-pointer rounded-md bg-transparent p-0 text-sm font-medium underline decoration-transparent underline-offset-4 transition-colors hover:decoration-current focus-visible:outline-2 focus-visible:outline-offset-2"
+          className="text-primary focus-visible:outline-focus inline-flex min-h-9 cursor-pointer items-center rounded-md bg-transparent p-0 text-sm font-medium underline decoration-transparent underline-offset-4 transition-colors hover:decoration-current focus-visible:outline-2 focus-visible:outline-offset-2"
           href={ROUTES.PUBLIC.AUTH.LOGIN}
         >
           {t('register.actions.login')}
