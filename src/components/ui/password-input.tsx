@@ -2,11 +2,12 @@
 
 import { useState, type ReactElement } from 'react'
 import type { FieldValues } from 'react-hook-form'
+import { EyeIcon, EyeOffIcon } from '@hugeicons/core-free-icons'
+import { HugeiconsIcon } from '@hugeicons/react'
 
+import { Button } from '@/components/ui/button'
 import { Input, type InputProps } from '@/components/ui/input'
 import { cn } from '@/utils/cn'
-
-import { PasswordToggle } from './password-toggle'
 
 interface PasswordInputProps<T extends FieldValues> extends Omit<
   InputProps<T>,
@@ -29,12 +30,23 @@ export function PasswordInput<T extends FieldValues>({
       className={cn('pr-14', props.className)}
       type={shown ? 'text' : 'password'}
       endAdornment={
-        <PasswordToggle
-          shown={shown}
-          onToggle={() => setShown((current) => !current)}
-          showLabel={showLabel}
-          hideLabel={hideLabel}
-        />
+        <Button
+          variant="ghost"
+          size="icon"
+          className="text-ink-soft absolute top-1 right-1 rounded-md"
+          type="button"
+          onClick={() => setShown((current) => !current)}
+          aria-label={shown ? hideLabel : showLabel}
+          aria-pressed={shown}
+        >
+          <HugeiconsIcon
+            className="size-5"
+            icon={shown ? EyeOffIcon : EyeIcon}
+            size={20}
+            strokeWidth={1.7}
+            aria-hidden="true"
+          />
+        </Button>
       }
     />
   )

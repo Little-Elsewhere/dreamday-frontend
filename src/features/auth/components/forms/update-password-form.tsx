@@ -7,19 +7,16 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { useRef, useState, type ReactElement } from 'react'
 
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { PasswordInput } from '@/components/ui/password-input'
 import { ROUTES } from '@/constants/routes'
 
-import { updatePasswordAction, type AuthError } from './actions'
-import { AuthFeedback } from './components/auth-feedback'
-import { PasswordToggle } from './components/password-toggle'
-import { type UpdatePasswordFormValues, updatePasswordSchema } from './schemas/auth'
+import { updatePasswordAction, type AuthError } from '../../actions'
+import { AuthFeedback } from '../common/auth-feedback'
+import { type UpdatePasswordFormValues, updatePasswordSchema } from '../../schemas/auth'
 
 export function UpdatePasswordForm(): ReactElement {
   const t = useTranslations('auth')
   const summary = useRef<HTMLDivElement>(null)
-  const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmation, setShowConfirmation] = useState(false)
   const [message, setMessage] = useState<string | null>(null)
   const [updated, setUpdated] = useState(false)
   const form = useForm<UpdatePasswordFormValues>({
@@ -84,45 +81,29 @@ export function UpdatePasswordForm(): ReactElement {
               void form.handleSubmit(handleSubmit)(event)
             }}
           >
-            <Input
+            <PasswordInput<UpdatePasswordFormValues>
               name="password"
               id="new-password"
               label={t('updatePassword.labels.password')}
               labelClassName="text-ink"
-              className="pr-14"
-              type={showPassword ? 'text' : 'password'}
               autoComplete="new-password"
               required
               minLength={8}
               maxLength={72}
-              endAdornment={
-                <PasswordToggle
-                  shown={showPassword}
-                  onToggle={() => setShowPassword((shown) => !shown)}
-                  showLabel={t('common.actions.showPassword')}
-                  hideLabel={t('common.actions.hidePassword')}
-                />
-              }
+              showLabel={t('common.actions.showPassword')}
+              hideLabel={t('common.actions.hidePassword')}
             />
-            <Input
+            <PasswordInput<UpdatePasswordFormValues>
               name="confirmPassword"
               id="confirm-new-password"
               label={t('updatePassword.labels.confirmPassword')}
               labelClassName="text-ink"
-              className="pr-14"
-              type={showConfirmation ? 'text' : 'password'}
               autoComplete="new-password"
               required
               minLength={8}
               maxLength={72}
-              endAdornment={
-                <PasswordToggle
-                  shown={showConfirmation}
-                  onToggle={() => setShowConfirmation((shown) => !shown)}
-                  showLabel={t('common.actions.showPassword')}
-                  hideLabel={t('common.actions.hidePassword')}
-                />
-              }
+              showLabel={t('common.actions.showPassword')}
+              hideLabel={t('common.actions.hidePassword')}
             />
             <Button
               className="w-full"
