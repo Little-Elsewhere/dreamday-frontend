@@ -12,15 +12,13 @@ import { Link, useRouter } from '@/i18n/navigation'
 
 import { signUpAction, type AuthError } from './actions'
 import { AuthFeedback } from './components/auth-feedback'
-import { PasswordToggle } from './components/password-toggle'
+import { PasswordInput } from './components/password-input'
 import { registrationSchema, type RegistrationFormValues } from './schemas/auth'
 
 export function RegisterForm(): ReactElement {
   const t = useTranslations('auth')
   const router = useRouter()
   const errorSummary = useRef<HTMLDivElement>(null)
-  const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmation, setShowConfirmation] = useState(false)
   const [message, setMessage] = useState<{ text: string; isError: boolean } | null>(null)
   const form = useForm<RegistrationFormValues>({
     resolver: zodResolver(registrationSchema),
@@ -110,48 +108,32 @@ export function RegisterForm(): ReactElement {
             required
             maxLength={254}
           />
-          <Input
+          <PasswordInput<RegistrationFormValues>
             name="password"
             id="register-password"
             label={t('register.labels.password')}
             labelClassName="text-ink"
-            className="pr-14"
-            type={showPassword ? 'text' : 'password'}
             autoComplete="new-password"
             placeholder={t('register.placeholders.password')}
             description={t('register.content.passwordHelp')}
             required
             minLength={8}
             maxLength={72}
-            endAdornment={
-              <PasswordToggle
-                shown={showPassword}
-                onToggle={() => setShowPassword((shown) => !shown)}
-                showLabel={t('common.actions.showPassword')}
-                hideLabel={t('common.actions.hidePassword')}
-              />
-            }
+            showLabel={t('common.actions.showPassword')}
+            hideLabel={t('common.actions.hidePassword')}
           />
-          <Input
+          <PasswordInput<RegistrationFormValues>
             name="confirmPassword"
             id="confirm-password"
             label={t('register.labels.confirmPassword')}
             labelClassName="text-ink"
-            className="pr-14"
-            type={showConfirmation ? 'text' : 'password'}
             autoComplete="new-password"
             placeholder={t('register.placeholders.confirmPassword')}
             required
             minLength={8}
             maxLength={72}
-            endAdornment={
-              <PasswordToggle
-                shown={showConfirmation}
-                onToggle={() => setShowConfirmation((shown) => !shown)}
-                showLabel={t('common.actions.showPassword')}
-                hideLabel={t('common.actions.hidePassword')}
-              />
-            }
+            showLabel={t('common.actions.showPassword')}
+            hideLabel={t('common.actions.hidePassword')}
           />
           <Button
             className="w-full"

@@ -14,7 +14,7 @@ import { Link, useRouter } from '@/i18n/navigation'
 
 import { signInAction, type AuthError } from './actions'
 import { AuthFeedback } from './components/auth-feedback'
-import { PasswordToggle } from './components/password-toggle'
+import { PasswordInput } from './components/password-input'
 import { PasswordResetForm } from './password-reset-form'
 import { loginSchema, type LoginFormValues } from './schemas/auth'
 
@@ -26,7 +26,6 @@ export function LoginForm({ status }: LoginFormProps): ReactElement {
   const t = useTranslations('auth')
   const router = useRouter()
   const errorSummary = useRef<HTMLDivElement>(null)
-  const [showPassword, setShowPassword] = useState(false)
   const [resetDialogOpen, setResetDialogOpen] = useState(false)
   const [resetInitialEmail, setResetInitialEmail] = useState('')
   const [message, setMessage] = useState<{ text: string; isError: boolean } | null>(
@@ -118,25 +117,17 @@ export function LoginForm({ status }: LoginFormProps): ReactElement {
             required
             maxLength={254}
           />
-          <Input
+          <PasswordInput<LoginFormValues>
             name="password"
             id="login-password"
             label={t('login.labels.password')}
             labelClassName="text-ink"
-            className="pr-14"
-            type={showPassword ? 'text' : 'password'}
             autoComplete="current-password"
             placeholder={t('login.placeholders.password')}
             required
             maxLength={72}
-            endAdornment={
-              <PasswordToggle
-                shown={showPassword}
-                onToggle={() => setShowPassword((shown) => !shown)}
-                showLabel={t('common.actions.showPassword')}
-                hideLabel={t('common.actions.hidePassword')}
-              />
-            }
+            showLabel={t('common.actions.showPassword')}
+            hideLabel={t('common.actions.hidePassword')}
           />
           <div className="flex items-center justify-between gap-4 text-sm max-[420px]:flex-col max-[420px]:items-start max-[420px]:gap-1">
             <span className="text-ink-soft [&_svg]:text-champagne inline-flex items-center gap-2 [&_svg]:shrink-0">
