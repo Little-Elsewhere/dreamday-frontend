@@ -9,14 +9,14 @@ import { HugeiconsIcon } from '@hugeicons/react'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { PasswordInput } from '@/components/ui/password-input'
 import { ROUTES } from '@/constants/routes'
 import { Link, useRouter } from '@/i18n/navigation'
 
-import { signInAction, type AuthError } from './actions'
-import { AuthFeedback } from './components/auth-feedback'
-import { PasswordInput } from './components/password-input'
+import { signInAction, type AuthError } from '../../actions'
+import { AuthFeedback } from '../common/auth-feedback'
 import { PasswordResetForm } from './password-reset-form'
-import { loginSchema, type LoginFormValues } from './schemas/auth'
+import { loginSchema, type LoginFormValues } from '../../schemas/auth'
 
 interface LoginFormProps {
   status?: string

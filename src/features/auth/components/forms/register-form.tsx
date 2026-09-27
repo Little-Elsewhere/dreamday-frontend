@@ -7,13 +7,13 @@ import { useRef, useState, type ReactElement } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { PasswordInput } from '@/components/ui/password-input'
 import { ROUTES } from '@/constants/routes'
 import { Link, useRouter } from '@/i18n/navigation'
 
-import { signUpAction, type AuthError } from './actions'
-import { AuthFeedback } from './components/auth-feedback'
-import { PasswordInput } from './components/password-input'
-import { registrationSchema, type RegistrationFormValues } from './schemas/auth'
+import { signUpAction, type AuthError } from '../../actions'
+import { AuthFeedback } from '../common/auth-feedback'
+import { registrationSchema, type RegistrationFormValues } from '../../schemas/auth'
 
 export function RegisterForm(): ReactElement {
   const t = useTranslations('auth')

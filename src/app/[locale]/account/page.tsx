@@ -4,7 +4,7 @@ import { getLocale, getTranslations } from 'next-intl/server'
 import { Suspense, type ReactElement } from 'react'
 
 import { ROUTES } from '@/constants/routes'
-import { SignOutButton } from '@/features/auth/components/sign-out-button'
+import { SignOutButton } from '@/features/auth/components/common/sign-out-button'
 import { Link } from '@/i18n/navigation'
 import { createClient } from '@/lib/supabase/server'
 
