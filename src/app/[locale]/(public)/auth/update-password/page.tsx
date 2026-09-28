@@ -15,7 +15,10 @@ type Props = {
 
 export const generateMetadata = async (): Promise<Metadata> => {
   const t = await getTranslations('auth.updatePassword')
-  return { title: t('content.title') }
+  return {
+    title: t('metadata.title'),
+    description: t('metadata.description'),
+  }
 }
 
 async function UpdatePasswordContent({ params }: Props): Promise<ReactElement> {
@@ -23,7 +26,10 @@ async function UpdatePasswordContent({ params }: Props): Promise<ReactElement> {
 
   const supabase = await createClient()
   const { data } = await supabase.auth.getClaims()
-  if (!data?.claims) redirect({ href: ROUTES.PUBLIC.AUTH.LOGIN, locale })
+
+  if (!data?.claims) {
+    redirect({ href: ROUTES.PUBLIC.AUTH.LOGIN, locale })
+  }
 
   return <UpdatePasswordForm />
 }

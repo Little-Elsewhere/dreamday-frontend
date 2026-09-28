@@ -1,14 +1,14 @@
 import Image from 'next/image'
-import type { ReactElement, ReactNode } from 'react'
+import type { ReactElement } from 'react'
 import { getTranslations } from 'next-intl/server'
 
 import { Link } from '@/i18n/navigation'
 
-interface AuthLayoutProps {
-  children: ReactNode
+type Props = {
+  children: ReactElement
 }
 
-export default async function AuthLayout({ children }: AuthLayoutProps): Promise<ReactElement> {
+export default async function AuthLayout({ children }: Props): Promise<ReactElement> {
   const t = await getTranslations('auth')
 
   return (
