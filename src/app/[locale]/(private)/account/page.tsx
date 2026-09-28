@@ -1,14 +1,14 @@
+import type { Metadata } from 'next'
 import Image from 'next/image'
-import { redirect } from 'next/navigation'
 import { getLocale, getTranslations } from 'next-intl/server'
 import { Suspense, type ReactElement } from 'react'
 
 import { ROUTES } from '@/constants/routes'
 import { SignOutButton } from '@/features/auth/components/common/sign-out-button'
-import { Link } from '@/i18n/navigation'
+import { Link, redirect } from '@/i18n/navigation'
 import { createClient } from '@/lib/supabase/server'
 
-export async function generateMetadata(): Promise<{ title: string; description: string }> {
+export const generateMetadata = async (): Promise<Metadata> => {
   const t = await getTranslations('account')
   return { title: t('metadata.title'), description: t('metadata.description') }
 }
@@ -17,13 +17,14 @@ async function AccountContent(): Promise<ReactElement> {
   const locale = await getLocale()
   const supabase = await createClient()
   const { data, error } = await supabase.auth.getClaims()
+  const claims = data?.claims
 
-  if (error || !data?.claims) {
-    redirect(`/${locale}${ROUTES.PUBLIC.AUTH.LOGIN}`)
+  if (error || !claims) {
+    return redirect({ href: ROUTES.PUBLIC.AUTH.LOGIN, locale })
   }
 
   const t = await getTranslations('account')
-  const email = typeof data.claims.email === 'string' ? data.claims.email : null
+  const email = typeof claims.email === 'string' ? claims.email : null
 
   return (
     <main className="bg-surface text-ink min-h-svh antialiased">
