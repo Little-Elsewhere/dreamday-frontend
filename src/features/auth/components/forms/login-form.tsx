@@ -18,28 +18,13 @@ import { AuthFeedback } from '@/features/auth/components/common/auth-feedback'
 import { PasswordResetForm } from './password-reset-form'
 import { loginSchema, type LoginFormValues } from '@/features/auth/schemas/auth'
 
-interface LoginFormProps {
-  status?: string
-}
-
-export const LoginForm = ({ status }: LoginFormProps): ReactElement => {
+export const LoginForm = (): ReactElement => {
   const t = useTranslations('auth')
   const router = useRouter()
   const errorSummary = useRef<HTMLDivElement>(null)
   const [resetDialogOpen, setResetDialogOpen] = useState(false)
   const [resetInitialEmail, setResetInitialEmail] = useState('')
-  const [message, setMessage] = useState<{ text: string; isError: boolean } | null>(
-    status
-      ? {
-          text: t(
-            status === 'recovery-failed'
-              ? 'login.messages.recoveryFailed'
-              : 'login.messages.confirmationFailed',
-          ),
-          isError: true,
-        }
-      : null,
-  )
+  const [message, setMessage] = useState<{ text: string; isError: boolean } | null>(null)
   const loginForm = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: { email: '', password: '' },

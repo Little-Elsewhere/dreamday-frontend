@@ -7,12 +7,7 @@ import { revalidatePath } from 'next/cache'
 import { ROUTES } from '@/constants/routes'
 import { serverEnv } from '@/env/server'
 import { createClient } from '@/lib/supabase/server'
-import {
-  loginSchema,
-  passwordResetSchema,
-  registrationSchema,
-  updatePasswordSchema,
-} from './schemas/auth'
+import { loginSchema, passwordResetSchema, updatePasswordSchema } from './schemas/auth'
 
 export type AuthError =
   | 'invalidInput'
@@ -65,36 +60,6 @@ export const signOutAction = async (): Promise<AuthResult> => {
   } catch (error) {
     logUnexpectedAuthError('sign out', error)
     return { success: false, error: 'signOutFailed' }
-  }
-}
-
-export const signUpAction = async (
-  values: unknown,
-): Promise<AuthResult<{ confirmationRequired: boolean }>> => {
-  const input = registrationSchema.safeParse(values)
-
-  if (!input.success) return { success: false, error: 'invalidInput' }
-
-  const emailRedirectTo = getEmailRedirect(ROUTES.PUBLIC.AUTH.CONFIRM)
-
-  try {
-    const supabase = await createClient()
-    const { data, error } = await supabase.auth.signUp({
-      email: input.data.email,
-      password: input.data.password,
-      options: {
-        data: { full_name: input.data.name },
-        emailRedirectTo,
-      },
-    })
-
-    if (error) return { success: false, error: 'signUpFailed' }
-
-    if (data.session) revalidatePath('/', 'layout')
-    return { success: true, data: { confirmationRequired: !data.session } }
-  } catch (error) {
-    logUnexpectedAuthError('sign up', error)
-    return { success: false, error: 'signUpFailed' }
   }
 }
 
