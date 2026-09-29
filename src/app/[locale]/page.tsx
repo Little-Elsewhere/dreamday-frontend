@@ -1,6 +1,8 @@
 import { ROUTES } from '@/constants/routes'
 import { redirect } from '@/i18n/navigation'
 
+export const instant = false
+
 type Props = {
   params: Promise<{ locale: string }>
 }
