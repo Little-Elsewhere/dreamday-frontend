@@ -21,7 +21,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
   }
 }
 
-async function LoginContent({ searchParams }: Props): Promise<ReactElement> {
+const LoginContent = async ({ searchParams }: Props): Promise<ReactElement> => {
   const supabase = await createClient()
   const { data } = await supabase.auth.getClaims()
 
@@ -35,10 +35,12 @@ async function LoginContent({ searchParams }: Props): Promise<ReactElement> {
   return <LoginForm status={status as string} />
 }
 
-export default function Login({ searchParams }: Props): ReactElement {
+const Login = ({ searchParams }: Props): ReactElement => {
   return (
     <Suspense fallback={<AuthLoading />}>
       <LoginContent searchParams={searchParams} />
     </Suspense>
   )
 }
+
+export default Login

@@ -13,7 +13,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
   return { title: t('metadata.title'), description: t('metadata.description') }
 }
 
-async function AccountContent(): Promise<ReactElement> {
+const AccountContent = async (): Promise<ReactElement> => {
   const locale = await getLocale()
   const supabase = await createClient()
   const { data, error } = await supabase.auth.getClaims()
@@ -77,7 +77,7 @@ async function AccountContent(): Promise<ReactElement> {
   )
 }
 
-export default async function AccountPage(): Promise<ReactElement> {
+const AccountPage = async (): Promise<ReactElement> => {
   const t = await getTranslations('account')
 
   return (
@@ -94,3 +94,5 @@ export default async function AccountPage(): Promise<ReactElement> {
     </Suspense>
   )
 }
+
+export default AccountPage

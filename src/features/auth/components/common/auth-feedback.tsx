@@ -8,7 +8,7 @@ interface AuthFeedbackProps {
   focusRef?: Ref<HTMLDivElement>
 }
 
-export function AuthFeedback({ message, isError, focusRef }: AuthFeedbackProps): ReactElement {
+export const AuthFeedback = ({ message, isError, focusRef }: AuthFeedbackProps): ReactElement => {
   return (
     <div
       className={cn(

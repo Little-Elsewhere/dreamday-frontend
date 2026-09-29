@@ -3,7 +3,7 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 
 import { clientEnv } from '@/env/client'
 
-export function createClient(): SupabaseClient {
+export const createClient = (): SupabaseClient => {
   return createBrowserClient(
     clientEnv.NEXT_PUBLIC_SUPABASE_URL,
     clientEnv.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,

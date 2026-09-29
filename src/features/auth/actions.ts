@@ -25,16 +25,16 @@ export type AuthError =
 
 export type AuthResult<T = null> = { success: true; data: T } | { success: false; error: AuthError }
 
-function logUnexpectedAuthError(operation: string, error: unknown): void {
+const logUnexpectedAuthError = (operation: string, error: unknown): void => {
   console.error(`[auth] ${operation} failed unexpectedly`, error)
 }
 
-function getEmailRedirect(path: string): string {
+const getEmailRedirect = (path: string): string => {
   const origin = new URL(serverEnv.NEXT_PUBLIC_APP_URL).origin
   return new URL(path, origin).toString()
 }
 
-export async function signInAction(values: unknown): Promise<AuthResult> {
+export const signInAction = async (values: unknown): Promise<AuthResult> => {
   const input = loginSchema.safeParse(values)
 
   if (!input.success) return { success: false, error: 'invalidInput' }
@@ -53,7 +53,7 @@ export async function signInAction(values: unknown): Promise<AuthResult> {
   }
 }
 
-export async function signOutAction(): Promise<AuthResult> {
+export const signOutAction = async (): Promise<AuthResult> => {
   try {
     const supabase = await createClient()
     const { error } = await supabase.auth.signOut()
@@ -68,9 +68,9 @@ export async function signOutAction(): Promise<AuthResult> {
   }
 }
 
-export async function signUpAction(
+export const signUpAction = async (
   values: unknown,
-): Promise<AuthResult<{ confirmationRequired: boolean }>> {
+): Promise<AuthResult<{ confirmationRequired: boolean }>> => {
   const input = registrationSchema.safeParse(values)
 
   if (!input.success) return { success: false, error: 'invalidInput' }
@@ -98,7 +98,7 @@ export async function signUpAction(
   }
 }
 
-export async function requestPasswordResetAction(values: unknown): Promise<AuthResult> {
+export const requestPasswordResetAction = async (values: unknown): Promise<AuthResult> => {
   const input = passwordResetSchema.safeParse(values)
 
   if (!input.success) return { success: false, error: 'invalidInput' }
@@ -121,7 +121,7 @@ export async function requestPasswordResetAction(values: unknown): Promise<AuthR
   }
 }
 
-export async function updatePasswordAction(values: unknown): Promise<AuthResult> {
+export const updatePasswordAction = async (values: unknown): Promise<AuthResult> => {
   const input = updatePasswordSchema.safeParse(values)
 
   if (!input.success) return { success: false, error: 'invalidInput' }

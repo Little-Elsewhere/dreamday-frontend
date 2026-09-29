@@ -3,7 +3,7 @@
 import type { ReactElement } from 'react'
 import { useTranslations } from 'next-intl'
 
-export function AuthLoading(): ReactElement {
+export const AuthLoading = (): ReactElement => {
   const t = useTranslations('auth.common')
 
   return (

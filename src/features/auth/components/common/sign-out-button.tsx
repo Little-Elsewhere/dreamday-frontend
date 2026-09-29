@@ -8,13 +8,13 @@ import { ROUTES } from '@/constants/routes'
 import { useRouter } from '@/i18n/navigation'
 import { signOutAction } from '@/features/auth/actions'
 
-export function SignOutButton(): ReactElement {
+export const SignOutButton = (): ReactElement => {
   const t = useTranslations('account')
   const router = useRouter()
   const [pending, setPending] = useState(false)
   const [error, setError] = useState(false)
 
-  async function handleSignOut(): Promise<void> {
+  const handleSignOut = async (): Promise<void> => {
     setPending(true)
     setError(false)
 

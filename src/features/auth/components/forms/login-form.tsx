@@ -22,7 +22,7 @@ interface LoginFormProps {
   status?: string
 }
 
-export function LoginForm({ status }: LoginFormProps): ReactElement {
+export const LoginForm = ({ status }: LoginFormProps): ReactElement => {
   const t = useTranslations('auth')
   const router = useRouter()
   const errorSummary = useRef<HTMLDivElement>(null)
@@ -56,12 +56,12 @@ export function LoginForm({ status }: LoginFormProps): ReactElement {
     sessionExpired: t('common.errors.sessionExpired'),
   }
 
-  function showError(error: AuthError): void {
+  const showError = (error: AuthError): void => {
     setMessage({ text: errorMessages[error], isError: true })
     requestAnimationFrame(() => errorSummary.current?.focus())
   }
 
-  async function handleLogin(values: LoginFormValues): Promise<void> {
+  const handleLogin = async (values: LoginFormValues): Promise<void> => {
     setMessage(null)
 
     try {

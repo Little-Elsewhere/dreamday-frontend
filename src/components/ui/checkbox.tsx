@@ -20,13 +20,13 @@ interface CheckboxProps<TFieldValues extends FieldValues> extends Omit<
   description?: React.ReactNode
 }
 
-function Checkbox<TFieldValues extends FieldValues>({
+const Checkbox = <TFieldValues extends FieldValues>({
   name,
   label,
   description,
   className,
   ...props
-}: CheckboxProps<TFieldValues>): React.ReactElement {
+}: CheckboxProps<TFieldValues>): React.ReactElement => {
   const id = React.useId()
   const descriptionId = `${id}-description`
   const errorId = `${id}-error`
