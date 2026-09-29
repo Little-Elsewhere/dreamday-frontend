@@ -24,16 +24,16 @@ export default getRequestConfig(async () => {
     offline,
     error,
   ] = await Promise.all([
-    import(`../../messages/${locale}/common.json`),
-    import(`../../messages/${locale}/page.json`),
-    import(`../../messages/${locale}/account.json`),
-    import(`../../messages/${locale}/auth/login.json`),
-    import(`../../messages/${locale}/auth/register.json`),
-    import(`../../messages/${locale}/auth/recovery.json`),
-    import(`../../messages/${locale}/auth/update-password.json`),
-    import(`../../messages/${locale}/auth/common.json`),
-    import(`../../messages/${locale}/offline.json`),
-    import(`../../messages/${locale}/error.json`),
+    import(`@messages/${locale}/common.json`),
+    import(`@messages/${locale}/page.json`),
+    import(`@messages/${locale}/account.json`),
+    import(`@messages/${locale}/auth/login.json`),
+    import(`@messages/${locale}/auth/register.json`),
+    import(`@messages/${locale}/auth/recovery.json`),
+    import(`@messages/${locale}/auth/update-password.json`),
+    import(`@messages/${locale}/auth/common.json`),
+    import(`@messages/${locale}/offline.json`),
+    import(`@messages/${locale}/error.json`),
   ])
 
   return {

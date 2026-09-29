@@ -11,9 +11,9 @@ import { PasswordInput } from '@/components/ui/password-input'
 import { ROUTES } from '@/constants/routes'
 import { Link, useRouter } from '@/i18n/navigation'
 
-import { signUpAction, type AuthError } from '../../actions'
-import { AuthFeedback } from '../common/auth-feedback'
-import { registrationSchema, type RegistrationFormValues } from '../../schemas/auth'
+import { signUpAction, type AuthError } from '@/features/auth/actions'
+import { AuthFeedback } from '@/features/auth/components/common/auth-feedback'
+import { registrationSchema, type RegistrationFormValues } from '@/features/auth/schemas/auth'
 
 export function RegisterForm(): ReactElement {
   const t = useTranslations('auth')

@@ -4,10 +4,10 @@ import { notFound } from 'next/navigation'
 import type { Metadata, Viewport } from 'next'
 import { Be_Vietnam_Pro } from 'next/font/google'
 import { ReactNode } from 'react'
-import { SerwistProvider } from '../serwist'
+import { SerwistProvider } from '@/app/serwist'
 import { serverEnv } from '@/env/server'
 import { cn } from '@/utils/cn'
-import '../globals.css'
+import '@/app/globals.css'
 
 const beVietnamPro = Be_Vietnam_Pro({
   variable: '--font-be-vietnam-pro',

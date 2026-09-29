@@ -13,10 +13,10 @@ import { PasswordInput } from '@/components/ui/password-input'
 import { ROUTES } from '@/constants/routes'
 import { Link, useRouter } from '@/i18n/navigation'
 
-import { signInAction, type AuthError } from '../../actions'
-import { AuthFeedback } from '../common/auth-feedback'
+import { signInAction, type AuthError } from '@/features/auth/actions'
+import { AuthFeedback } from '@/features/auth/components/common/auth-feedback'
 import { PasswordResetForm } from './password-reset-form'
-import { loginSchema, type LoginFormValues } from '../../schemas/auth'
+import { loginSchema, type LoginFormValues } from '@/features/auth/schemas/auth'
 
 interface LoginFormProps {
   status?: string
