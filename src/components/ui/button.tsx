@@ -45,7 +45,7 @@ interface ButtonProps extends ButtonPrimitive.Props, VariantProps<typeof buttonV
   loadingLabel?: ReactNode
 }
 
-function Button({
+const Button = ({
   className,
   variant = 'default',
   size = 'default',
@@ -53,7 +53,7 @@ function Button({
   loadingLabel,
   children,
   ...props
-}: ButtonProps) {
+}: ButtonProps) => {
   return (
     <ButtonPrimitive
       {...props}

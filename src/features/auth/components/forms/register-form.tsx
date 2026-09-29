@@ -15,7 +15,7 @@ import { signUpAction, type AuthError } from '@/features/auth/actions'
 import { AuthFeedback } from '@/features/auth/components/common/auth-feedback'
 import { registrationSchema, type RegistrationFormValues } from '@/features/auth/schemas/auth'
 
-export function RegisterForm(): ReactElement {
+export const RegisterForm = (): ReactElement => {
   const t = useTranslations('auth')
   const router = useRouter()
   const errorSummary = useRef<HTMLDivElement>(null)
@@ -35,12 +35,12 @@ export function RegisterForm(): ReactElement {
     sessionExpired: t('common.errors.sessionExpired'),
   }
 
-  function showError(error: AuthError): void {
+  const showError = (error: AuthError): void => {
     setMessage({ text: errorMessages[error], isError: true })
     requestAnimationFrame(() => errorSummary.current?.focus())
   }
 
-  async function handleRegistration(values: RegistrationFormValues): Promise<void> {
+  const handleRegistration = async (values: RegistrationFormValues): Promise<void> => {
     setMessage(null)
 
     const result = await signUpAction(values)

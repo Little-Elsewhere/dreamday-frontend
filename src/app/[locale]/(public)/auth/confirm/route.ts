@@ -8,7 +8,7 @@ import { routing } from '@/i18n/routing'
 import { createClient } from '@/lib/supabase/server'
 import { serverEnv } from '@/env/server'
 
-export async function GET(request: NextRequest): Promise<NextResponse> {
+export const GET = async (request: NextRequest): Promise<NextResponse> => {
   const { searchParams } = request.nextUrl
   const requestedLocale = request.nextUrl.pathname.split('/')[1]
   const locale =

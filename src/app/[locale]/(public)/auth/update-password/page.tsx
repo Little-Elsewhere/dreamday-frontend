@@ -21,7 +21,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
   }
 }
 
-async function UpdatePasswordContent({ params }: Props): Promise<ReactElement> {
+const UpdatePasswordContent = async ({ params }: Props): Promise<ReactElement> => {
   const { locale } = await params
 
   const supabase = await createClient()
@@ -34,10 +34,12 @@ async function UpdatePasswordContent({ params }: Props): Promise<ReactElement> {
   return <UpdatePasswordForm />
 }
 
-export default function UpdatePassword({ params }: Props): ReactElement {
+const UpdatePassword = ({ params }: Props): ReactElement => {
   return (
     <Suspense fallback={<AuthLoading />}>
       <UpdatePasswordContent params={params} />
     </Suspense>
   )
 }
+
+export default UpdatePassword

@@ -6,7 +6,7 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 
 import { serverEnv } from '@/env/server'
 
-export async function createClient(): Promise<SupabaseClient> {
+export const createClient = async (): Promise<SupabaseClient> => {
   const cookieStore = await cookies()
 
   return createServerClient(

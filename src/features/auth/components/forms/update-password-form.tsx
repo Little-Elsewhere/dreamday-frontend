@@ -14,7 +14,7 @@ import { updatePasswordAction, type AuthError } from '@/features/auth/actions'
 import { AuthFeedback } from '@/features/auth/components/common/auth-feedback'
 import { type UpdatePasswordFormValues, updatePasswordSchema } from '@/features/auth/schemas/auth'
 
-export function UpdatePasswordForm(): ReactElement {
+export const UpdatePasswordForm = (): ReactElement => {
   const t = useTranslations('auth')
   const summary = useRef<HTMLDivElement>(null)
   const [message, setMessage] = useState<string | null>(null)
@@ -34,7 +34,7 @@ export function UpdatePasswordForm(): ReactElement {
     sessionExpired: t('common.errors.sessionExpired'),
   }
 
-  async function handleSubmit(values: UpdatePasswordFormValues): Promise<void> {
+  const handleSubmit = async (values: UpdatePasswordFormValues): Promise<void> => {
     setMessage(null)
 
     const result = await updatePasswordAction(values)

@@ -12,6 +12,8 @@ export const generateMetadata = async (): Promise<Metadata> => {
   }
 }
 
-export default function Register(): ReactElement {
+const Register = (): ReactElement => {
   return <RegisterForm />
 }
+
+export default Register
