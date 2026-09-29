@@ -1,11 +1,11 @@
 import Image from 'next/image'
-import type { ReactElement } from 'react'
+import type { ReactElement, ReactNode } from 'react'
 import { getTranslations } from 'next-intl/server'
 
 import { Link } from '@/i18n/navigation'
 
 type Props = {
-  children: ReactElement
+  children: ReactNode
 }
 
 export default async function AuthLayout({ children }: Props): Promise<ReactElement> {

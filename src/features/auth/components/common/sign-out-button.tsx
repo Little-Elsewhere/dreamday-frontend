@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { ROUTES } from '@/constants/routes'
 import { useRouter } from '@/i18n/navigation'
-import { signOutAction } from '../../actions'
+import { signOutAction } from '@/features/auth/actions'
 
 export function SignOutButton(): ReactElement {
   const t = useTranslations('account')

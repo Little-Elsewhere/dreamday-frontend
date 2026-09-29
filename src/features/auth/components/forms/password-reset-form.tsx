@@ -10,9 +10,9 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
-import { requestPasswordResetAction } from '../../actions'
-import { AuthFeedback } from '../common/auth-feedback'
-import { passwordResetSchema, type PasswordResetFormValues } from '../../schemas/auth'
+import { requestPasswordResetAction } from '@/features/auth/actions'
+import { AuthFeedback } from '@/features/auth/components/common/auth-feedback'
+import { passwordResetSchema, type PasswordResetFormValues } from '@/features/auth/schemas/auth'
 
 interface PasswordResetFormProps {
   isOpen: boolean
