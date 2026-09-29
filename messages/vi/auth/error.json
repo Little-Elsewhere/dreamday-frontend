@@ -1,0 +1,19 @@
+{
+  "metadata": {
+    "title": "Không thể xác minh liên kết",
+    "description": "Không thể xác minh liên kết xác thực này."
+  },
+  "content": {
+    "eyebrow": "Chưa thể hoàn tất bước này",
+    "title": "Không thể xác minh liên kết"
+  },
+  "messages": {
+    "generic": "Không thể xác minh liên kết xác thực này. Hãy yêu cầu một liên kết mới rồi thử lại.",
+    "signupFailed": "Không thể xác nhận email bằng liên kết này. Hãy yêu cầu một liên kết mới rồi thử lại.",
+    "recoveryFailed": "Liên kết khôi phục mật khẩu không hợp lệ hoặc đã hết hạn. Hãy yêu cầu liên kết mới."
+  },
+  "actions": {
+    "login": "Quay lại đăng nhập",
+    "register": "Tạo tài khoản"
+  }
+}

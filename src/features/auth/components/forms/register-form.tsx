@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useTranslations } from 'next-intl'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useRef, useState, type ReactElement } from 'react'
+import type { z } from 'zod'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -11,48 +12,43 @@ import { PasswordInput } from '@/components/ui/password-input'
 import { ROUTES } from '@/constants/routes'
 import { Link, useRouter } from '@/i18n/navigation'
 
-import { signUpAction, type AuthError } from '@/features/auth/actions'
+import { signUp } from '@/features/auth/actions/auth'
 import { AuthFeedback } from '@/features/auth/components/common/auth-feedback'
-import { registrationSchema, type RegistrationFormValues } from '@/features/auth/schemas/auth'
+import { signUpSchema, type SignUpPayload } from '@/features/auth/schemas/auth_new'
+
+type RegisterFormValues = z.input<typeof signUpSchema>
 
 export const RegisterForm = (): ReactElement => {
   const t = useTranslations('auth')
   const router = useRouter()
   const errorSummary = useRef<HTMLDivElement>(null)
   const [message, setMessage] = useState<{ text: string; isError: boolean } | null>(null)
-  const form = useForm<RegistrationFormValues>({
-    resolver: zodResolver(registrationSchema),
+  const form = useForm<RegisterFormValues, unknown, SignUpPayload>({
+    resolver: zodResolver(signUpSchema),
     defaultValues: { name: '', email: '', password: '', confirmPassword: '' },
   })
 
-  const errorMessages: Record<AuthError, string> = {
-    invalidInput: t('common.errors.invalidInput'),
-    signInFailed: t('common.errors.signInFailed'),
-    signUpFailed: t('common.errors.signUpFailed'),
-    resetFailed: t('common.errors.resetFailed'),
-    updateFailed: t('common.errors.updateFailed'),
-    signOutFailed: t('common.errors.signOutFailed'),
-    sessionExpired: t('common.errors.sessionExpired'),
-  }
-
-  const showError = (error: AuthError): void => {
-    setMessage({ text: errorMessages[error], isError: true })
+  const showError = (): void => {
+    setMessage({ text: t('common.errors.signUpFailed'), isError: true })
     requestAnimationFrame(() => errorSummary.current?.focus())
   }
 
-  const handleRegistration = async (values: RegistrationFormValues): Promise<void> => {
+  const handleRegistration = async (values: SignUpPayload): Promise<void> => {
     setMessage(null)
 
-    const result = await signUpAction(values)
-    if (!result.success) return showError(result.error)
+    try {
+      const data = await signUp(values)
 
-    if (!result.data.confirmationRequired) {
-      router.replace(ROUTES.PRIVATE.ACCOUNT)
-      router.refresh()
-      return
+      if (data.session) {
+        router.replace(ROUTES.PRIVATE.ACCOUNT)
+        router.refresh()
+        return
+      }
+
+      setMessage({ text: t('register.messages.confirmEmail'), isError: false })
+    } catch {
+      showError()
     }
-
-    setMessage({ text: t('register.messages.confirmEmail'), isError: false })
   }
 
   return (
@@ -108,7 +104,7 @@ export const RegisterForm = (): ReactElement => {
             required
             maxLength={254}
           />
-          <PasswordInput<RegistrationFormValues>
+          <PasswordInput<RegisterFormValues>
             name="password"
             id="register-password"
             label={t('register.labels.password')}
@@ -122,7 +118,7 @@ export const RegisterForm = (): ReactElement => {
             showLabel={t('common.actions.showPassword')}
             hideLabel={t('common.actions.hidePassword')}
           />
-          <PasswordInput<RegistrationFormValues>
+          <PasswordInput<RegisterFormValues>
             name="confirmPassword"
             id="confirm-password"
             label={t('register.labels.confirmPassword')}

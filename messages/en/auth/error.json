@@ -1,0 +1,19 @@
+{
+  "metadata": {
+    "title": "Link verification failed",
+    "description": "This authentication link could not be verified."
+  },
+  "content": {
+    "eyebrow": "We couldn’t finish that step",
+    "title": "This link couldn’t be verified"
+  },
+  "messages": {
+    "generic": "This authentication link could not be verified. Request a new link and try again.",
+    "signupFailed": "We couldn’t confirm that email link. Request a new link and try again.",
+    "recoveryFailed": "This password recovery link is invalid or has expired. Request a new link."
+  },
+  "actions": {
+    "login": "Return to sign in",
+    "register": "Create an account"
+  }
+}

@@ -18,10 +18,6 @@
     "email": "you@example.com",
     "password": "Enter your password"
   },
-  "messages": {
-    "confirmationFailed": "We couldn’t confirm that email link. Request a new link and try again.",
-    "recoveryFailed": "This password recovery link is invalid or has expired. Request a new link."
-  },
   "prompts": {
     "noAccount": "New to dream day?"
   },

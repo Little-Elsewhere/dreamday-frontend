@@ -1,43 +1,34 @@
-import { NextResponse, type NextRequest } from 'next/server'
-
-import { HTTP_STATUS } from '@/constants/httpStatuses'
+import { type NextRequest } from 'next/server'
 import { ROUTES } from '@/constants/routes'
-import { AuthCallbackType } from '@/features/auth/constants/auth-callback-type'
 import { confirmationSchema } from '@/features/auth/schemas/callback'
+import { redirect } from '@/i18n/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { serverEnv } from '@/env/server'
-import { EmailOtpType } from '@supabase/supabase-js'
 
-export const GET = async (request: NextRequest): Promise<NextResponse> => {
+export const GET = async (
+  request: NextRequest,
+  { params }: RouteContext<'/[locale]/auth/confirm'>,
+) => {
+  const { locale } = await params
   const { searchParams } = new URL(request.url)
+
   const parsed = confirmationSchema.safeParse({
     token_hash: searchParams.get('token_hash'),
-    type: searchParams.get('type') as EmailOtpType,
+    type: searchParams.get('type'),
     next: searchParams.get('next'),
   })
 
-  if (parsed.success) {
-    try {
-      const supabase = await createClient()
-      const { error } = await supabase.auth.verifyOtp(parsed.data)
-
-      if (!error) {
-        const destinationUrl = new URL(parsed.data.next, serverEnv.NEXT_PUBLIC_APP_URL)
-        return NextResponse.redirect(destinationUrl, {
-          status: HTTP_STATUS.FOUND,
-        })
-      }
-    } catch (error) {
-      console.error('[auth] email confirmation failed unexpectedly', error)
-    }
+  if (!parsed.success) {
+    return redirect({ href: ROUTES.PUBLIC.AUTH.ERROR, locale })
   }
 
-  const failureUrl = new URL(ROUTES.PUBLIC.AUTH.LOGIN, serverEnv.NEXT_PUBLIC_APP_URL)
-  failureUrl.searchParams.set(
-    'status',
-    searchParams.get('type') === AuthCallbackType.Recovery
-      ? 'recovery-failed'
-      : 'confirmation-failed',
-  )
-  return NextResponse.redirect(failureUrl, { status: HTTP_STATUS.FOUND })
+  const { token_hash, type, next } = parsed.data
+
+  const supabase = await createClient()
+  const { error } = await supabase.auth.verifyOtp({ token_hash, type })
+
+  if (!error) {
+    redirect({ href: next, locale })
+  }
+
+  return redirect({ href: `${ROUTES.PUBLIC.AUTH.ERROR}?type=${type}`, locale })
 }

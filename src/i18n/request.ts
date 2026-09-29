@@ -21,6 +21,7 @@ export default getRequestConfig(async () => {
     recovery,
     updatePassword,
     authCommon,
+    authError,
     offline,
     error,
   ] = await Promise.all([
@@ -32,6 +33,7 @@ export default getRequestConfig(async () => {
     import(`@messages/${locale}/auth/recovery.json`),
     import(`@messages/${locale}/auth/update-password.json`),
     import(`@messages/${locale}/auth/common.json`),
+    import(`@messages/${locale}/auth/error.json`),
     import(`@messages/${locale}/offline.json`),
     import(`@messages/${locale}/error.json`),
   ])
@@ -48,6 +50,7 @@ export default getRequestConfig(async () => {
         recovery: recovery.default,
         updatePassword: updatePassword.default,
         common: authCommon.default,
+        error: authError.default,
       },
       offline: offline.default,
       error: error.default,
