@@ -3,12 +3,13 @@ import type { ReactElement, ReactNode } from 'react'
 import { getTranslations } from 'next-intl/server'
 
 import { Link } from '@/i18n/navigation'
+import { ROUTES } from '@/constants/routes'
 
 type Props = {
   children: ReactNode
 }
 
-export default async function AuthLayout({ children }: Props): Promise<ReactElement> {
+const AuthLayout = async ({ children }: Props): Promise<ReactElement> => {
   const t = await getTranslations('auth')
 
   return (
@@ -41,7 +42,7 @@ export default async function AuthLayout({ children }: Props): Promise<ReactElem
       >
         <Link
           className="text-primary focus-visible:outline-focus inline-flex shrink-0 items-center gap-3 self-start leading-none font-semibold tracking-[-0.03em] no-underline focus-visible:outline-2 focus-visible:outline-offset-3"
-          href="/"
+          href={ROUTES.PUBLIC.ROOT}
           aria-label={t('common.labels.brandHome')}
         >
           <span
@@ -72,3 +73,5 @@ export default async function AuthLayout({ children }: Props): Promise<ReactElem
     </main>
   )
 }
+
+export default AuthLayout

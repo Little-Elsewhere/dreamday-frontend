@@ -6,7 +6,7 @@ import { updateSession } from '@/lib/supabase/proxy'
 
 const intlMiddleware = createMiddleware(routing)
 
-export async function proxy(request: NextRequest): Promise<NextResponse> {
+export const proxy = async (request: NextRequest): Promise<NextResponse> => {
   const supabaseResponse = await updateSession(request)
   const response = intlMiddleware(request)
 

@@ -17,11 +17,11 @@ interface PasswordInputProps<T extends FieldValues> extends Omit<
   hideLabel: string
 }
 
-export function PasswordInput<T extends FieldValues>({
+export const PasswordInput = <T extends FieldValues>({
   showLabel,
   hideLabel,
   ...props
-}: PasswordInputProps<T>): ReactElement {
+}: PasswordInputProps<T>): ReactElement => {
   const [shown, setShown] = useState(false)
 
   return (

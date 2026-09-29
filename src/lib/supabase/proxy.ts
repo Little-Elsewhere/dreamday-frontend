@@ -2,7 +2,7 @@ import { serverEnv } from '@/env/server'
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
-export async function updateSession(request: NextRequest): Promise<NextResponse> {
+export const updateSession = async (request: NextRequest): Promise<NextResponse> => {
   let supabaseResponse = NextResponse.next({ request })
 
   const supabase = createServerClient(

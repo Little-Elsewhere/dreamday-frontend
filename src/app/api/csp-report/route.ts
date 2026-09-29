@@ -13,7 +13,7 @@ const reportSchema = z.object({
   'csp-report': cspReportSchema,
 })
 
-export async function POST(request: Request) {
+export const POST = async (request: Request) => {
   const payload = await request.json().catch(() => null)
   const result = reportSchema.safeParse(payload)
 

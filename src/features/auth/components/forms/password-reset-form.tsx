@@ -21,12 +21,12 @@ interface PasswordResetFormProps {
   onResetSent: () => void
 }
 
-export function PasswordResetForm({
+export const PasswordResetForm = ({
   isOpen,
   initialEmail,
   onOpenChange,
   onResetSent,
-}: PasswordResetFormProps): ReactElement {
+}: PasswordResetFormProps): ReactElement => {
   const t = useTranslations('auth')
   const dialogRef = useRef<HTMLDialogElement>(null)
   const errorSummaryRef = useRef<HTMLDivElement>(null)
@@ -51,7 +51,7 @@ export function PasswordResetForm({
     if (dialog.open) dialog.close()
   }, [initialEmail, isOpen, reset])
 
-  async function handlePasswordReset(values: PasswordResetFormValues): Promise<void> {
+  const handlePasswordReset = async (values: PasswordResetFormValues): Promise<void> => {
     setRecoveryError(null)
 
     const result = await requestPasswordResetAction(values)
@@ -69,7 +69,7 @@ export function PasswordResetForm({
     onResetSent()
   }
 
-  function closeDialog(): void {
+  const closeDialog = (): void => {
     setRecoveryError(null)
     onOpenChange(false)
   }

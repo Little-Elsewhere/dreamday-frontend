@@ -21,7 +21,7 @@ export interface InputProps<TFieldValues extends FieldValues> extends Omit<
   endAdornment?: React.ReactNode
 }
 
-function Input<TFieldValues extends FieldValues>({
+const Input = <TFieldValues extends FieldValues>({
   name,
   label,
   description,
@@ -30,7 +30,7 @@ function Input<TFieldValues extends FieldValues>({
   endAdornment,
   id,
   ...props
-}: InputProps<TFieldValues>): React.ReactElement {
+}: InputProps<TFieldValues>): React.ReactElement => {
   const generatedId = React.useId()
   const inputId = id ?? generatedId
   const descriptionId = `${inputId}-description`
