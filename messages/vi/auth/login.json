@@ -18,10 +18,6 @@
     "email": "tenban@example.com",
     "password": "Nhập mật khẩu của bạn"
   },
-  "messages": {
-    "confirmationFailed": "Không thể xác nhận email bằng liên kết này. Hãy yêu cầu một liên kết mới rồi thử lại.",
-    "recoveryFailed": "Liên kết khôi phục mật khẩu không hợp lệ hoặc đã hết hạn. Hãy yêu cầu liên kết mới."
-  },
   "prompts": {
     "noAccount": "Chưa có tài khoản?"
   },
