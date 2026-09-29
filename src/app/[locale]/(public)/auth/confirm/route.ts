@@ -4,20 +4,16 @@ import { HTTP_STATUS } from '@/constants/httpStatuses'
 import { ROUTES } from '@/constants/routes'
 import { AuthCallbackType } from '@/features/auth/constants/auth-callback-type'
 import { confirmationSchema } from '@/features/auth/schemas/callback'
-import { getPathname } from '@/i18n/navigation'
-import { routing } from '@/i18n/routing'
 import { createClient } from '@/lib/supabase/server'
 import { serverEnv } from '@/env/server'
+import { EmailOtpType } from '@supabase/supabase-js'
 
 export const GET = async (request: NextRequest): Promise<NextResponse> => {
-  const { searchParams } = request.nextUrl
-  const requestedLocale = request.nextUrl.pathname.split('/')[1]
-  const locale =
-    routing.locales.find((candidate) => candidate === requestedLocale) ?? routing.defaultLocale
-  const origin = new URL(serverEnv.NEXT_PUBLIC_APP_URL).origin
+  const { searchParams } = new URL(request.url)
   const parsed = confirmationSchema.safeParse({
     token_hash: searchParams.get('token_hash'),
-    type: searchParams.get('type'),
+    type: searchParams.get('type') as EmailOtpType,
+    next: searchParams.get('next'),
   })
 
   if (parsed.success) {
@@ -26,11 +22,7 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
       const { error } = await supabase.auth.verifyOtp(parsed.data)
 
       if (!error) {
-        const destination =
-          parsed.data.type === AuthCallbackType.Recovery
-            ? ROUTES.PUBLIC.AUTH.UPDATE_PASSWORD
-            : ROUTES.PRIVATE.ACCOUNT
-        const destinationUrl = new URL(getPathname({ locale, href: destination }), origin)
+        const destinationUrl = new URL(parsed.data.next, serverEnv.NEXT_PUBLIC_APP_URL)
         return NextResponse.redirect(destinationUrl, {
           status: HTTP_STATUS.FOUND,
         })
@@ -40,7 +32,7 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
     }
   }
 
-  const failureUrl = new URL(getPathname({ locale, href: ROUTES.PUBLIC.AUTH.LOGIN }), origin)
+  const failureUrl = new URL(ROUTES.PUBLIC.AUTH.LOGIN, serverEnv.NEXT_PUBLIC_APP_URL)
   failureUrl.searchParams.set(
     'status',
     searchParams.get('type') === AuthCallbackType.Recovery
