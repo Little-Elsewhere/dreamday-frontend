@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 
 import { HTTP_STATUS } from '@/constants/httpStatuses'
 import { ROUTES } from '@/constants/routes'
+import { AuthCallbackType } from '@/features/auth/constants/auth-callback-type'
 import { confirmationSchema } from '@/features/auth/schemas/callback'
 import { getPathname } from '@/i18n/navigation'
 import { routing } from '@/i18n/routing'
@@ -26,7 +27,7 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
 
       if (!error) {
         const destination =
-          parsed.data.type === 'recovery'
+          parsed.data.type === AuthCallbackType.Recovery
             ? ROUTES.PUBLIC.AUTH.UPDATE_PASSWORD
             : ROUTES.PRIVATE.ACCOUNT
         const destinationUrl = new URL(getPathname({ locale, href: destination }), origin)
@@ -42,7 +43,9 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
   const failureUrl = new URL(getPathname({ locale, href: ROUTES.PUBLIC.AUTH.LOGIN }), origin)
   failureUrl.searchParams.set(
     'status',
-    searchParams.get('type') === 'recovery' ? 'recovery-failed' : 'confirmation-failed',
+    searchParams.get('type') === AuthCallbackType.Recovery
+      ? 'recovery-failed'
+      : 'confirmation-failed',
   )
   return NextResponse.redirect(failureUrl, { status: HTTP_STATUS.FOUND })
 }
