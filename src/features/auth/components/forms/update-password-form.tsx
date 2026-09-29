@@ -10,9 +10,9 @@ import { Button } from '@/components/ui/button'
 import { PasswordInput } from '@/components/ui/password-input'
 import { ROUTES } from '@/constants/routes'
 
-import { updatePasswordAction, type AuthError } from '../../actions'
-import { AuthFeedback } from '../common/auth-feedback'
-import { type UpdatePasswordFormValues, updatePasswordSchema } from '../../schemas/auth'
+import { updatePasswordAction, type AuthError } from '@/features/auth/actions'
+import { AuthFeedback } from '@/features/auth/components/common/auth-feedback'
+import { type UpdatePasswordFormValues, updatePasswordSchema } from '@/features/auth/schemas/auth'
 
 export function UpdatePasswordForm(): ReactElement {
   const t = useTranslations('auth')
