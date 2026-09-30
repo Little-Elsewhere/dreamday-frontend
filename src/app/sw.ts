@@ -5,7 +5,7 @@ import { PAGES_CACHE_NAME, defaultCache } from '@serwist/turbopack/worker'
 import type { PrecacheEntry, SerwistGlobalConfig } from 'serwist'
 import { NetworkOnly, Serwist } from 'serwist'
 
-import { isPrivateRoute } from '@/features/auth/utils/private-route'
+import { isPrivateRoute } from '@/features/auth/utils/route'
 
 declare global {
   interface WorkerGlobalScope extends SerwistGlobalConfig {

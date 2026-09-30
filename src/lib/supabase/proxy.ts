@@ -2,7 +2,12 @@ import { serverEnv } from '@/env/server'
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
-export const updateSession = async (request: NextRequest): Promise<NextResponse> => {
+interface UpdateSessionResult {
+  response: NextResponse
+  isAuthenticated: boolean
+}
+
+export const updateSession = async (request: NextRequest): Promise<UpdateSessionResult> => {
   let supabaseResponse = NextResponse.next({ request })
 
   const supabase = createServerClient(
@@ -27,9 +32,10 @@ export const updateSession = async (request: NextRequest): Promise<NextResponse>
     },
   )
 
-  // Refresh the session before Server Components read the request cookies.
-  // Route authorization belongs to private routes; the current app routes are public.
-  await supabase.auth.getClaims()
+  const { data, error } = await supabase.auth.getClaims()
 
-  return supabaseResponse
+  return {
+    response: supabaseResponse,
+    isAuthenticated: !error && Boolean(data?.claims),
+  }
 }
