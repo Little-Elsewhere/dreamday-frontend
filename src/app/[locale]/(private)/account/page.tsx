@@ -1,33 +1,19 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
-import { connection } from 'next/server'
-import { getLocale, getTranslations } from 'next-intl/server'
-import { Suspense, type ReactElement } from 'react'
+import { getTranslations } from 'next-intl/server'
+import type { ReactElement } from 'react'
 
 import { ROUTES } from '@/constants/routes'
 import { SignOutButton } from '@/features/auth/components/common/sign-out-button'
-import { Link, redirect } from '@/i18n/navigation'
-import { createClient } from '@/lib/supabase/server'
+import { Link } from '@/i18n/navigation'
 
 export const generateMetadata = async (): Promise<Metadata> => {
   const t = await getTranslations('account')
   return { title: t('metadata.title'), description: t('metadata.description') }
 }
 
-const AccountContent = async (): Promise<ReactElement> => {
-  await connection()
-
-  const locale = await getLocale()
-  const supabase = await createClient()
-  const { data, error } = await supabase.auth.getClaims()
-  const claims = data?.claims
-
-  if (error || !claims) {
-    return redirect({ href: ROUTES.PUBLIC.AUTH.LOGIN, locale })
-  }
-
+const AccountPage = async (): Promise<ReactElement> => {
   const t = await getTranslations('account')
-  const email = typeof claims.email === 'string' ? claims.email : null
 
   return (
     <main className="bg-surface text-ink min-h-svh antialiased">
@@ -57,7 +43,7 @@ const AccountContent = async (): Promise<ReactElement> => {
             <div className="border-line mt-10 border-t pt-7">
               <p className="text-ink-soft text-sm">{t('labels.signedInAs')}</p>
               <p className="text-primary mt-1 font-medium break-all">
-                {email ?? t('labels.verifiedAccount')}
+                {t('labels.verifiedAccount')}
               </p>
               <div className="mt-7">
                 <SignOutButton />
@@ -79,24 +65,6 @@ const AccountContent = async (): Promise<ReactElement> => {
         </div>
       </div>
     </main>
-  )
-}
-
-const AccountPage = async (): Promise<ReactElement> => {
-  const t = await getTranslations('account')
-
-  return (
-    <Suspense
-      fallback={
-        <main className="bg-surface text-ink grid min-h-svh place-items-center px-6">
-          <p role="status" className="text-ink-soft text-sm">
-            {t('messages.loading')}
-          </p>
-        </main>
-      }
-    >
-      <AccountContent />
-    </Suspense>
   )
 }
 
