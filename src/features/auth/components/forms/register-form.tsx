@@ -4,7 +4,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useTranslations } from 'next-intl'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useRef, useState, type ReactElement } from 'react'
-import type { z } from 'zod'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -14,17 +13,15 @@ import { Link, useRouter } from '@/i18n/navigation'
 
 import { signUp } from '@/features/auth/actions/auth'
 import { AuthFeedback } from '@/features/auth/components/common/auth-feedback'
-import { signUpSchema, type SignUpPayload } from '@/features/auth/schemas/auth_new'
-
-type RegisterFormValues = z.input<typeof signUpSchema>
+import { registrationSchema, type RegistrationFormValues } from '@/features/auth/schemas/auth'
 
 export const RegisterForm = (): ReactElement => {
   const t = useTranslations('auth')
   const router = useRouter()
   const errorSummary = useRef<HTMLDivElement>(null)
   const [message, setMessage] = useState<{ text: string; isError: boolean } | null>(null)
-  const form = useForm<RegisterFormValues, unknown, SignUpPayload>({
-    resolver: zodResolver(signUpSchema),
+  const form = useForm<RegistrationFormValues>({
+    resolver: zodResolver(registrationSchema),
     defaultValues: { name: '', email: '', password: '', confirmPassword: '' },
   })
 
@@ -33,7 +30,7 @@ export const RegisterForm = (): ReactElement => {
     requestAnimationFrame(() => errorSummary.current?.focus())
   }
 
-  const handleRegistration = async (values: SignUpPayload): Promise<void> => {
+  const handleRegistration = async (values: RegistrationFormValues): Promise<void> => {
     setMessage(null)
 
     try {
@@ -41,7 +38,6 @@ export const RegisterForm = (): ReactElement => {
 
       if (data.session) {
         router.replace(ROUTES.PRIVATE.ACCOUNT)
-        router.refresh()
         return
       }
 
@@ -104,7 +100,7 @@ export const RegisterForm = (): ReactElement => {
             required
             maxLength={254}
           />
-          <PasswordInput<RegisterFormValues>
+          <PasswordInput<RegistrationFormValues>
             name="password"
             id="register-password"
             label={t('register.labels.password')}
@@ -118,7 +114,7 @@ export const RegisterForm = (): ReactElement => {
             showLabel={t('common.actions.showPassword')}
             hideLabel={t('common.actions.hidePassword')}
           />
-          <PasswordInput<RegisterFormValues>
+          <PasswordInput<RegistrationFormValues>
             name="confirmPassword"
             id="confirm-password"
             label={t('register.labels.confirmPassword')}
