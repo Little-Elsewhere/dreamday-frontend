@@ -56,10 +56,12 @@ Install and authenticate the Doppler CLI before running it. `pnpm build:dev` and
 `pnpm start` reads its production runtime variables from `.env.local`; copy
 `.env.example` when configuring that command locally.
 
-The GitHub Actions `dev` and `prod` environments each need a `DOPPLER_TOKEN`
-secret. Use read-only Doppler Service Tokens scoped to `dreamday/dev` and
-`dreamday/prod`, respectively. CI fetches application variables from Doppler;
-GitHub does not store or pass the application's env values to the build.
+Set a repository-level GitHub Actions secret named `DOPPLER_TOKEN`. Both build
+workflows read this secret directly, so they do not need a GitHub Environment
+selection. Use a read-only Doppler Service Token that can read the `dreamday/dev`
+and `dreamday/prod` configs used by the workflows. CI fetches application
+variables from Doppler; GitHub stores the Doppler access token, not the
+application env values passed to the build.
 
 | Variable                               | Required | Description                                           |
 | :------------------------------------- | :------: | :---------------------------------------------------- |

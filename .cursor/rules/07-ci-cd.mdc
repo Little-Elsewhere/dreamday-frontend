@@ -23,17 +23,18 @@ Jobs:
 - **Type Check**: `pnpm tsc --noEmit`
 - **Build**: `pnpm build:dev` using Doppler `dreamday/dev`
 
-The GitHub `dev` environment supplies a read-only `DOPPLER_TOKEN` scoped to
-`dreamday/dev`. Application environment values are fetched from Doppler, not
-stored in GitHub Actions variables.
+The repository-level GitHub Actions secret `DOPPLER_TOKEN` is read by the build
+workflow without selecting an Environment. It must be a read-only Doppler token
+that can read `dreamday/dev`. Application environment values are fetched from
+Doppler, not stored in GitHub Actions variables.
 
 ### 2. cd.yml (Production Build)
 
 Runs on: **pull requests to `main`**
 
 Purpose: Validate the production Next.js build with `pnpm build:prod` and
-Doppler `dreamday/prod`. The GitHub `prod` environment supplies a read-only
-`DOPPLER_TOKEN` scoped to that config.
+Doppler `dreamday/prod`. The build reads the same repository-level
+`DOPPLER_TOKEN`, which must also be allowed to read that config.
 
 ---
 

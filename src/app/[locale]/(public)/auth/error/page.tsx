@@ -1,8 +1,10 @@
 import type { Metadata } from 'next'
 import type { ReactElement } from 'react'
+import { Suspense } from 'react'
 import { getTranslations } from 'next-intl/server'
 
 import { ROUTES } from '@/constants/routes'
+import { AuthLoading } from '@/features/auth/components/common/auth-loading'
 import { AuthEmailOtpType } from '@/features/auth/constants/email-otp-type'
 import { Link } from '@/i18n/navigation'
 
@@ -19,7 +21,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
   }
 }
 
-const AuthErrorPage = async ({ searchParams }: Props): Promise<ReactElement> => {
+const AuthErrorContent = async ({ searchParams }: Props): Promise<ReactElement> => {
   const t = await getTranslations('auth.error')
   const { type } = await searchParams
   let message = t('messages.generic')
@@ -65,5 +67,11 @@ const AuthErrorPage = async ({ searchParams }: Props): Promise<ReactElement> => 
     </section>
   )
 }
+
+const AuthErrorPage = ({ searchParams }: Props): ReactElement => (
+  <Suspense fallback={<AuthLoading />}>
+    <AuthErrorContent searchParams={searchParams} />
+  </Suspense>
+)
 
 export default AuthErrorPage

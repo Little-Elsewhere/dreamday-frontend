@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
+import { connection } from 'next/server'
 import { getLocale, getTranslations } from 'next-intl/server'
 import { Suspense, type ReactElement } from 'react'
 
@@ -14,6 +15,8 @@ export const generateMetadata = async (): Promise<Metadata> => {
 }
 
 const AccountContent = async (): Promise<ReactElement> => {
+  await connection()
+
   const locale = await getLocale()
   const supabase = await createClient()
   const { data, error } = await supabase.auth.getClaims()
@@ -69,6 +72,8 @@ const AccountContent = async (): Promise<ReactElement> => {
               fill
               sizes="(min-width: 1024px) 40vw, 0px"
               className="object-cover"
+              priority
+              loading="eager"
             />
           </div>
         </div>

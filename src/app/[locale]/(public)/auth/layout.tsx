@@ -25,6 +25,7 @@ const AuthLayout = async ({ children }: Props): Promise<ReactElement> => {
           fill
           sizes="(min-width: 1440px) 52vw, (min-width: 1024px) 46vw, 0px"
           priority
+          loading="eager"
         />
         <div className="bg-shade/25 absolute inset-0" aria-hidden="true" />
         <div className="relative z-10 mt-auto w-full p-10 text-white lg:p-[clamp(40px,6vw,88px)]">

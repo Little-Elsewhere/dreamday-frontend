@@ -1,9 +1,11 @@
 /// <reference no-default-lib="true" />
 /// <reference lib="esnext" />
 /// <reference lib="webworker" />
-import { defaultCache } from '@serwist/turbopack/worker'
+import { PAGES_CACHE_NAME, defaultCache } from '@serwist/turbopack/worker'
 import type { PrecacheEntry, SerwistGlobalConfig } from 'serwist'
 import { NetworkOnly, Serwist } from 'serwist'
+
+import { isPrivateRoute } from '@/features/auth/utils/private-route'
 
 declare global {
   interface WorkerGlobalScope extends SerwistGlobalConfig {
@@ -21,12 +23,31 @@ const serwist = new Serwist({
   runtimeCaching: [
     {
       matcher: ({ sameOrigin, url }) =>
-        sameOrigin && /^\/(?:[a-z]{2}\/)?auth(?:\/|$)/.test(url.pathname),
+        sameOrigin &&
+        (/^\/(?:[a-z]{2}\/)?auth(?:\/|$)/.test(url.pathname) || isPrivateRoute(url.pathname)),
       handler: new NetworkOnly(),
     },
     ...defaultCache,
   ],
 })
+
+const purgeCachedPrivatePages = async (): Promise<void> => {
+  const existingCacheNames = new Set(await caches.keys())
+
+  await Promise.all(
+    Object.values(PAGES_CACHE_NAME)
+      .filter((cacheName) => existingCacheNames.has(cacheName))
+      .map(async (cacheName) => {
+        const cache = await caches.open(cacheName)
+        const cachedRequests = await cache.keys()
+        const privateRequests = cachedRequests.filter((request) =>
+          isPrivateRoute(new URL(request.url).pathname),
+        )
+
+        await Promise.all(privateRequests.map((request) => cache.delete(request)))
+      }),
+  )
+}
 
 serwist.setCatchHandler(async ({ request, url }) => {
   if (request.destination === 'document') {
@@ -35,6 +56,10 @@ serwist.setCatchHandler(async ({ request, url }) => {
     if (offlineResponse) return offlineResponse
   }
   return Response.error()
+})
+
+self.addEventListener('activate', (event): void => {
+  event.waitUntil(purgeCachedPrivatePages())
 })
 
 serwist.addEventListeners()
