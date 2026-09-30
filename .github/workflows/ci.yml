@@ -102,7 +102,7 @@ jobs:
         run: HUSKY=0 pnpm install --frozen-lockfile
 
       - name: Type check
-        run: pnpm tsc --noEmit
+        run: pnpm typecheck
 
   build:
     name: Build
