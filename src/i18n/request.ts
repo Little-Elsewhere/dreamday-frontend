@@ -54,6 +54,11 @@ export default getRequestConfig(async () => {
       },
       offline: offline.default,
       error: error.default,
+      common: (await import(`../../messages/${locale}/common.json`)).default,
+      page: (await import(`../../messages/${locale}/page.json`)).default,
+      trips: (await import(`../../messages/${locale}/trips.json`)).default,
+      offline: (await import(`../../messages/${locale}/offline.json`)).default,
+      error: (await import(`../../messages/${locale}/error.json`)).default,
     },
   }
 })

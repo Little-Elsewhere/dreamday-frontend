@@ -1,0 +1,177 @@
+{
+  "tripList": {
+    "metadata": {
+      "title": "Chuyến đi của tôi",
+      "description": "Theo dõi những chuyến đi sắp tới, tiếp tục lên kế hoạch và xem lại các hành trình đã qua."
+    },
+    "loading": "Đang tải chuyến đi",
+    "brand": "dream day",
+    "content": {
+      "eyebrow": "Hành trình của tôi",
+      "title": "Những ngày đang chờ bạn",
+      "intro": "Theo dõi các chuyến đi sắp tới, tiếp tục hoàn thiện kế hoạch và nhìn lại những nơi bạn đã qua."
+    },
+    "actions": {
+      "createTrip": "Tạo chuyến đi",
+      "viewDetails": "Xem chi tiết",
+      "loadMore": "Tải thêm chuyến đi"
+    },
+    "filters": {
+      "label": "Bộ lọc chuyến đi",
+      "searchLabel": "Tìm chuyến đi",
+      "searchPlaceholder": "Tìm theo điểm đến",
+      "statusLabel": "Lọc trạng thái",
+      "statuses": {
+        "all": "Tất cả",
+        "upcoming": "Sắp tới",
+        "planning": "Đang lên kế hoạch",
+        "past": "Đã qua"
+      }
+    },
+    "list": {
+      "title": "Danh sách chuyến đi",
+      "count": "{count, plural, =0 {Chưa có chuyến đi nào} other {# chuyến đi}}"
+    },
+    "trips": {
+      "daLatOctober": {
+        "title": "Đà Lạt mùa thông",
+        "place": "Đà Lạt",
+        "duration": "4 ngày · 3 đêm",
+        "summary": "Một kỳ nghỉ chậm giữa rừng thông, quán cà phê và những buổi sáng se lạnh."
+      },
+      "hoiAnAutumn": {
+        "title": "Hội An cuối thu",
+        "place": "Hội An",
+        "duration": "4 ngày · 3 đêm",
+        "summary": "Dạo phố cổ, thưởng thức ẩm thực địa phương và đón hoàng hôn bên sông Hoài."
+      },
+      "lanHaJuly": {
+        "title": "Vịnh Lan Hạ",
+        "place": "Vịnh Lan Hạ",
+        "duration": "3 ngày · 2 đêm",
+        "summary": "Ba ngày trên mặt vịnh yên tĩnh, chèo kayak và khám phá những làng chài nhỏ."
+      },
+      "daLatYearEnd": {
+        "title": "Đà Lạt cuối năm",
+        "place": "Đà Lạt",
+        "duration": "4 ngày · 3 đêm",
+        "summary": "Những con dốc nhỏ, vườn hoa và một bữa tối ấm cúng trong mùa cuối năm."
+      },
+      "hoiAnRiverside": {
+        "title": "Hội An bên sông",
+        "place": "Hội An",
+        "duration": "4 ngày · 3 đêm",
+        "summary": "Nhịp sống chậm bên sông Hoài với những buổi sáng trong phố và chiều ở làng quê."
+      },
+      "lanHaNewYear": {
+        "title": "Lan Hạ đầu năm",
+        "place": "Vịnh Lan Hạ",
+        "duration": "4 ngày · 3 đêm",
+        "summary": "Một hành trình mùa đông yên tĩnh, ưu tiên nghỉ ngơi và ngắm vịnh lúc sớm mai."
+      }
+    },
+    "empty": {
+      "title": "Chưa tìm thấy chuyến đi",
+      "description": "Thử một điểm đến khác hoặc xóa bộ lọc để xem lại toàn bộ hành trình.",
+      "clearFilters": "Xóa tìm kiếm và bộ lọc"
+    }
+  },
+  "tripDetail": {
+    "brand": "dream day",
+    "imageAlt": "Rừng thông Đà Lạt",
+    "imageCaption": "Lâm Viên · 2026",
+    "trip": {
+      "name": "Đà Lạt mùa thông",
+      "destination": "Đà Lạt",
+      "region": "Cao nguyên Lâm Viên",
+      "status": "Đang lên kế hoạch",
+      "duration": "4 ngày · 3 đêm",
+      "summary": "Một kỳ nghỉ chậm giữa rừng thông, quán cà phê và những buổi sáng se lạnh.",
+      "note": "Lịch trình tập trung vào hồ Tuyền Lâm, những cung đường thông và các quán cà phê yên tĩnh.",
+      "summaryLabel": "Thông tin chính của chuyến đi",
+      "departureDate": "Ngày đi",
+      "durationLabel": "Thời lượng"
+    },
+    "actions": {
+      "backToTrips": "Chuyến đi của tôi",
+      "edit": "Chỉnh sửa",
+      "closeEditing": "Đóng chỉnh sửa",
+      "cancel": "Hủy",
+      "saveChanges": "Lưu thay đổi",
+      "saveNote": "Lưu ghi chú"
+    },
+    "form": {
+      "tripName": "Tên chuyến đi",
+      "destination": "Điểm đến",
+      "pace": "Nhịp chuyến đi"
+    },
+    "paces": {
+      "relaxed": "Thong thả",
+      "balanced": "Cân bằng",
+      "active": "Năng động"
+    },
+    "schedule": {
+      "title": "Lịch trình theo ngày",
+      "intro": "Bốn ngày được sắp theo cùng một nhịp để dễ đối chiếu di chuyển, nghỉ ngơi và ăn uống.",
+      "day": "Ngày {day}",
+      "date": "{day} tháng 10",
+      "types": {
+        "explore": "Khám phá",
+        "meal": "Ẩm thực",
+        "travel": "Di chuyển",
+        "stay": "Lưu trú"
+      },
+      "items": {
+        "arrival": {
+          "title": "Nhận phòng và nghỉ ngơi",
+          "description": "Bắt đầu chuyến đi thật chậm tại nơi lưu trú."
+        },
+        "lake": {
+          "title": "Đi bộ quanh hồ Xuân Hương",
+          "description": "Đón ánh chiều bên mặt hồ và những hàng cây."
+        },
+        "coffee": {
+          "title": "Hồ Tuyền Lâm",
+          "description": "Một buổi sáng giữa mặt nước yên và rừng thông."
+        },
+        "lunch": {
+          "title": "Bữa trưa địa phương",
+          "description": "Dùng bữa nhẹ trước khi tiếp tục cung đường ngoại ô."
+        },
+        "pineRoad": {
+          "title": "Cung đường thông",
+          "description": "Dừng chân ở một quán cà phê nhỏ trong rừng."
+        },
+        "market": {
+          "title": "Dạo chợ sớm",
+          "description": "Thưởng thức bữa sáng và nhịp sống địa phương."
+        },
+        "garden": {
+          "title": "Vườn cây theo mùa",
+          "description": "Một khoảng thời gian xanh và thong thả."
+        },
+        "free": {
+          "title": "Khoảng thời gian tự do",
+          "description": "Chọn một góc yên tĩnh để nghỉ hoặc viết lại hành trình."
+        },
+        "departure": {
+          "title": "Trả phòng và trở về",
+          "description": "Kết thúc chuyến đi bằng một buổi sáng không vội."
+        }
+      }
+    },
+    "notes": {
+      "title": "Ghi chú chuyến đi",
+      "inputLabel": "Ghi chú chuyến đi",
+      "saved": "Đã lưu",
+      "unsaved": "Chưa lưu",
+      "counter": "{count}/1000 ký tự"
+    },
+    "details": {
+      "additionalInfoLabel": "Thông tin bổ sung",
+      "title": "Thông tin hành trình",
+      "region": "Khu vực",
+      "status": "Trạng thái"
+    }
+  }
+}

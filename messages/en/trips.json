@@ -1,0 +1,177 @@
+{
+  "tripList": {
+    "metadata": {
+      "title": "My Trips",
+      "description": "Browse upcoming trips, continue planning, and revisit your past journeys."
+    },
+    "loading": "Loading trips",
+    "brand": "dream day",
+    "content": {
+      "eyebrow": "My journeys",
+      "title": "Days waiting to be discovered",
+      "intro": "Keep track of upcoming trips, finish planning, and revisit the places you have been."
+    },
+    "actions": {
+      "createTrip": "Create a trip",
+      "viewDetails": "View details",
+      "loadMore": "Load more trips"
+    },
+    "filters": {
+      "label": "Trip filters",
+      "searchLabel": "Search trips",
+      "searchPlaceholder": "Search by destination",
+      "statusLabel": "Filter by status",
+      "statuses": {
+        "all": "All",
+        "upcoming": "Upcoming",
+        "planning": "Planning",
+        "past": "Past"
+      }
+    },
+    "list": {
+      "title": "Your trips",
+      "count": "{count, plural, =0 {No trips} one {# trip} other {# trips}}"
+    },
+    "trips": {
+      "daLatOctober": {
+        "title": "Da Lat in the pine season",
+        "place": "Da Lat",
+        "duration": "4 days · 3 nights",
+        "summary": "A slow holiday among pine forests, coffee shops, and chilly mornings."
+      },
+      "hoiAnAutumn": {
+        "title": "Late autumn in Hoi An",
+        "place": "Hoi An",
+        "duration": "4 days · 3 nights",
+        "summary": "Wander the old town, sample local food, and watch the sunset over the Hoai River."
+      },
+      "lanHaJuly": {
+        "title": "Lan Ha Bay",
+        "place": "Lan Ha Bay",
+        "duration": "3 days · 2 nights",
+        "summary": "Three days on a quiet bay, kayaking, and visiting small fishing villages."
+      },
+      "daLatYearEnd": {
+        "title": "Da Lat at year-end",
+        "place": "Da Lat",
+        "duration": "4 days · 3 nights",
+        "summary": "Small hillside roads, flower gardens, and a cozy dinner in the year-end season."
+      },
+      "hoiAnRiverside": {
+        "title": "Hoi An by the river",
+        "place": "Hoi An",
+        "duration": "4 days · 3 nights",
+        "summary": "A slower pace by the Hoai River, with mornings in town and afternoons in the countryside."
+      },
+      "lanHaNewYear": {
+        "title": "Lan Ha Bay in the new year",
+        "place": "Lan Ha Bay",
+        "duration": "4 days · 3 nights",
+        "summary": "A quiet winter escape focused on rest and watching the bay at dawn."
+      }
+    },
+    "empty": {
+      "title": "No trips found",
+      "description": "Try another destination or clear the filters to see all your journeys.",
+      "clearFilters": "Clear search and filters"
+    }
+  },
+  "tripDetail": {
+    "brand": "dream day",
+    "imageAlt": "A pine forest in Da Lat",
+    "imageCaption": "Lam Vien · 2026",
+    "trip": {
+      "name": "Da Lat in the pine season",
+      "destination": "Da Lat",
+      "region": "Lam Vien Plateau",
+      "status": "Planning",
+      "duration": "4 days · 3 nights",
+      "summary": "A slow holiday among pine forests, coffee shops, and chilly mornings.",
+      "note": "The itinerary centers on Tuyen Lam Lake, pine-lined roads, and quiet coffee shops.",
+      "summaryLabel": "Trip overview",
+      "departureDate": "Dates",
+      "durationLabel": "Duration"
+    },
+    "actions": {
+      "backToTrips": "My trips",
+      "edit": "Edit trip",
+      "closeEditing": "Close editor",
+      "cancel": "Cancel",
+      "saveChanges": "Save changes",
+      "saveNote": "Save note"
+    },
+    "form": {
+      "tripName": "Trip name",
+      "destination": "Destination",
+      "pace": "Trip pace"
+    },
+    "paces": {
+      "relaxed": "Relaxed",
+      "balanced": "Balanced",
+      "active": "Active"
+    },
+    "schedule": {
+      "title": "Day-by-day itinerary",
+      "intro": "Four days follow a steady rhythm, making it easy to balance travel, rest, and meals.",
+      "day": "Day {day}",
+      "date": "October {day}",
+      "types": {
+        "explore": "Explore",
+        "meal": "Dining",
+        "travel": "Travel",
+        "stay": "Stay"
+      },
+      "items": {
+        "arrival": {
+          "title": "Check in and unwind",
+          "description": "Ease into the trip at your accommodation."
+        },
+        "lake": {
+          "title": "Walk around Xuan Huong Lake",
+          "description": "Take in the sunset by the water and tree-lined paths."
+        },
+        "coffee": {
+          "title": "Tuyen Lam Lake",
+          "description": "A quiet morning beside still water and pine forest."
+        },
+        "lunch": {
+          "title": "Local lunch",
+          "description": "Enjoy a light meal before heading beyond the city."
+        },
+        "pineRoad": {
+          "title": "Pine-lined road",
+          "description": "Stop at a small coffee shop tucked into the forest."
+        },
+        "market": {
+          "title": "Explore the morning market",
+          "description": "Enjoy breakfast and a glimpse of local life."
+        },
+        "garden": {
+          "title": "Seasonal garden",
+          "description": "Spend an unhurried moment surrounded by greenery."
+        },
+        "free": {
+          "title": "Free time",
+          "description": "Find a quiet corner to rest or write about the trip."
+        },
+        "departure": {
+          "title": "Check out and head home",
+          "description": "Wrap up the trip with a leisurely morning."
+        }
+      }
+    },
+    "notes": {
+      "title": "Trip notes",
+      "inputLabel": "Trip notes",
+      "saved": "Saved",
+      "unsaved": "Unsaved changes",
+      "counter": "{count}/1000 characters"
+    },
+    "details": {
+      "additionalInfoLabel": "Additional trip information",
+      "title": "Trip details",
+      "region": "Region",
+      "status": "Status"
+    }
+  }
+}
