@@ -246,8 +246,10 @@ Every PR must pass all checks before merge:
 - ✅ Type check
 - ✅ Build with env from Doppler (`dev` for CI, `prod` for production)
 
-GitHub Actions stores only read-only Doppler Service Tokens in the `dev` and
-`prod` environments. The application env values are loaded from Doppler.
+GitHub Actions reads the repository-level `DOPPLER_TOKEN` secret in its build
+jobs. It must be a read-only Doppler Service Token with access to the `dev` and
+`prod` configs used by those jobs. The application env values are loaded from
+Doppler.
 
 ### Version Bump (release-please)
 
