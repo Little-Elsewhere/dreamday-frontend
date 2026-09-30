@@ -1,15 +1,29 @@
 import createMiddleware from 'next-intl/middleware'
 import { NextResponse, type NextRequest } from 'next/server'
 
-import { isPrivateRoute } from '@/features/auth/utils/private-route'
+import { ROUTES } from '@/constants/routes'
+import { isLoginRoute, isPrivateRoute } from '@/features/auth/utils/route'
 import { routing } from '@/i18n/routing'
 import { updateSession } from '@/lib/supabase/proxy'
+import { getLocaleFromPathname } from '@/utils/locale'
 
 const intlMiddleware = createMiddleware(routing)
 
 export const proxy = async (request: NextRequest): Promise<NextResponse> => {
-  const supabaseResponse = await updateSession(request)
-  const response = intlMiddleware(request)
+  const { response: supabaseResponse, isAuthenticated } = await updateSession(request)
+  const pathname = request.nextUrl.pathname
+  const isPrivate = isPrivateRoute(pathname)
+  const isLogin = isLoginRoute(pathname)
+  const locale = getLocaleFromPathname(pathname)
+  let response = intlMiddleware(request)
+
+  if (!isAuthenticated && isPrivate) {
+    const loginPathname = `/${locale}${ROUTES.PUBLIC.AUTH.LOGIN}`
+    response = NextResponse.redirect(new URL(loginPathname, request.url))
+  } else if (isAuthenticated && isLogin) {
+    const accountPathname = `/${locale}${ROUTES.PRIVATE.ACCOUNT}`
+    response = NextResponse.redirect(new URL(accountPathname, request.url))
+  }
 
   supabaseResponse.cookies.getAll().forEach((cookie) => response.cookies.set(cookie))
   for (const header of ['cache-control', 'expires', 'pragma']) {
@@ -17,7 +31,7 @@ export const proxy = async (request: NextRequest): Promise<NextResponse> => {
     if (value) response.headers.set(header, value)
   }
 
-  if (isPrivateRoute(request.nextUrl.pathname)) {
+  if (isPrivate || isLogin) {
     response.headers.set('Cache-Control', 'private, no-store')
   }
 

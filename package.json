@@ -9,7 +9,7 @@
     "dev": "doppler run --project dreamday --config dev -- next dev",
     "build:dev": "doppler run --project dreamday --config dev -- next build",
     "build:prod": "doppler run --project dreamday --config prod -- next build",
-    "start": "next start",
+    "start": "doppler run --project dreamday --config dev next start",
     "supabase:start": "supabase start",
     "supabase:stop": "supabase stop",
     "supabase:status": "supabase status",
