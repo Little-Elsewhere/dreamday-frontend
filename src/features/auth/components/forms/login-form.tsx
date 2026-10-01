@@ -4,8 +4,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useTranslations } from 'next-intl'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useRef, useState, type ReactElement } from 'react'
-import { LockKeyIcon } from '@hugeicons/core-free-icons'
-import { HugeiconsIcon } from '@hugeicons/react'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -62,7 +60,7 @@ export const LoginForm = (): ReactElement => {
 
   return (
     <>
-      <p className="text-champagne-ink mb-3 text-[13px] font-semibold tracking-[0.16em] uppercase">
+      <p className="text-champagne-ink mb-3 text-sm font-semibold tracking-[0.16em] uppercase">
         {t('login.content.eyebrow')}
       </p>
       <h1
@@ -114,11 +112,7 @@ export const LoginForm = (): ReactElement => {
             showLabel={t('common.actions.showPassword')}
             hideLabel={t('common.actions.hidePassword')}
           />
-          <div className="flex items-center justify-between gap-4 text-sm max-[420px]:flex-col max-[420px]:items-start max-[420px]:gap-1">
-            <span className="text-ink-soft [&_svg]:text-champagne inline-flex items-center gap-2 [&_svg]:shrink-0">
-              <HugeiconsIcon icon={LockKeyIcon} size={17} strokeWidth={1.7} aria-hidden="true" />
-              {t('login.labels.secureSignIn')}
-            </span>
+          <div className="flex items-center justify-end gap-4 text-sm max-[420px]:flex-col max-[420px]:items-start max-[420px]:gap-1">
             <Button
               variant="link"
               className="px-0 decoration-transparent hover:decoration-current"
@@ -152,11 +146,6 @@ export const LoginForm = (): ReactElement => {
         >
           {t('login.actions.register')}
         </Link>
-      </p>
-
-      <p className="text-ink-soft [&_svg]:text-champagne mt-8 flex items-start gap-3 text-[13px] leading-[1.55] [&_svg]:mt-px [&_svg]:shrink-0">
-        <HugeiconsIcon icon={LockKeyIcon} size={18} strokeWidth={1.7} aria-hidden="true" />
-        <span>{t('login.content.securityNote')}</span>
       </p>
 
       <PasswordResetForm

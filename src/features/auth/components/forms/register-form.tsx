@@ -49,7 +49,7 @@ export const RegisterForm = (): ReactElement => {
 
   return (
     <>
-      <p className="text-champagne-ink mb-3 text-[13px] font-semibold tracking-[0.16em] uppercase">
+      <p className="text-champagne-ink mb-3 text-sm font-semibold tracking-[0.16em] uppercase">
         {t('register.content.eyebrow')}
       </p>
       <h1

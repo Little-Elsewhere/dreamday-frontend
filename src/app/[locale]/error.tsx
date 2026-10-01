@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { useTranslations } from 'next-intl'
 
 const Error = ({ reset }: { reset: () => void }) => {
-  const t = useTranslations('error')
+  const t = useTranslations('common.error')
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center">

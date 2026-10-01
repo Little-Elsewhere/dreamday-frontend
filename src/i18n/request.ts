@@ -13,8 +13,7 @@ export default getRequestConfig(async () => {
 
   const locale = requested
   const [
-    common,
-    page,
+    commonFooter,
     account,
     login,
     register,
@@ -22,11 +21,10 @@ export default getRequestConfig(async () => {
     updatePassword,
     authCommon,
     authError,
-    offline,
-    error,
+    commonError,
+    commonOffline,
   ] = await Promise.all([
-    import(`@messages/${locale}/common.json`),
-    import(`@messages/${locale}/page.json`),
+    import(`@messages/${locale}/common/footer.json`),
     import(`@messages/${locale}/account.json`),
     import(`@messages/${locale}/auth/login.json`),
     import(`@messages/${locale}/auth/register.json`),
@@ -34,15 +32,18 @@ export default getRequestConfig(async () => {
     import(`@messages/${locale}/auth/update-password.json`),
     import(`@messages/${locale}/auth/common.json`),
     import(`@messages/${locale}/auth/error.json`),
-    import(`@messages/${locale}/offline.json`),
-    import(`@messages/${locale}/error.json`),
+    import(`@messages/${locale}/common/error.json`),
+    import(`@messages/${locale}/common/offline.json`),
   ])
 
   return {
     locale,
     messages: {
-      common: common.default,
-      page: page.default,
+      common: {
+        footer: commonFooter.default,
+        error: commonError.default,
+        offline: commonOffline.default,
+      },
       account: account.default,
       auth: {
         login: login.default,
@@ -52,8 +53,6 @@ export default getRequestConfig(async () => {
         common: authCommon.default,
         error: authError.default,
       },
-      offline: offline.default,
-      error: error.default,
     },
   }
 })
