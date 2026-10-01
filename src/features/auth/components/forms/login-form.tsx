@@ -13,7 +13,7 @@ import { Link, useRouter } from '@/i18n/navigation'
 
 import { signIn } from '@/features/auth/actions/auth'
 import { AuthFeedback } from '@/features/auth/components/common/auth-feedback'
-import { PasswordResetForm } from './password-reset-form'
+import { ForgotPasswordForm } from './forgot-password-form'
 import { loginSchema, type LoginFormValues } from '@/features/auth/schemas/auth'
 
 export const LoginForm = (): ReactElement => {
@@ -27,12 +27,6 @@ export const LoginForm = (): ReactElement => {
     resolver: zodResolver(loginSchema),
     defaultValues: { email: '', password: '' },
   })
-  const pending = loginForm.formState.isSubmitting
-
-  const showError = (): void => {
-    setMessage({ text: t('common.errors.signInFailed'), isError: true })
-    requestAnimationFrame(() => errorSummary.current?.focus())
-  }
 
   const handleLogin = async (values: LoginFormValues): Promise<void> => {
     setMessage(null)
@@ -42,7 +36,8 @@ export const LoginForm = (): ReactElement => {
       router.replace(ROUTES.PRIVATE.ACCOUNT)
       router.refresh()
     } catch {
-      showError()
+      setMessage({ text: t('common.errors.signInFailed'), isError: true })
+      requestAnimationFrame(() => errorSummary.current?.focus())
     }
   }
 
@@ -105,7 +100,7 @@ export const LoginForm = (): ReactElement => {
               variant="link"
               className="px-0 decoration-transparent hover:decoration-current"
               type="button"
-              disabled={pending}
+              disabled={loginForm.formState.isSubmitting}
               onClick={() => {
                 setMessage(null)
                 setResetInitialEmail(loginForm.getValues('email'))
@@ -136,14 +131,9 @@ export const LoginForm = (): ReactElement => {
         </Link>
       </p>
 
-      <PasswordResetForm
-        isOpen={resetDialogOpen}
-        initialEmail={resetInitialEmail}
-        onOpenChange={setResetDialogOpen}
-        onResetSent={() =>
-          setMessage({ text: t('recovery.messages.resetEmailSent'), isError: false })
-        }
-      />
+      {resetDialogOpen && (
+        <ForgotPasswordForm initialEmail={resetInitialEmail} show={setResetDialogOpen} />
+      )}
     </>
   )
 }
