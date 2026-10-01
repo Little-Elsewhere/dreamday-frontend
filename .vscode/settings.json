@@ -9,6 +9,7 @@
   "editor.guides.bracketPairs": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit"
+    "source.fixAll.eslint": "explicit",
+    "source.removeUnusedImports": "explicit"
   }
 }

@@ -1,14 +1,14 @@
 import { getTranslations } from 'next-intl/server'
 
 export const generateMetadata = async () => {
-  const t = await getTranslations('offline')
+  const t = await getTranslations('common.offline')
   return {
     title: t('title'),
   }
 }
 
 const OfflinePage = async () => {
-  const t = await getTranslations('offline')
+  const t = await getTranslations('common.offline')
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-4 p-8 text-center">
