@@ -1,21 +1,14 @@
 {
   "metadata": {
     "title": "Đăng nhập",
-    "description": "Đăng nhập dream day để tiếp tục lên kế hoạch cho hành trình sắp tới."
+    "description": "Đăng nhập DreamDay để tiếp tục lên kế hoạch cho hành trình sắp tới."
   },
   "content": {
     "eyebrow": "Chào mừng trở lại",
     "title": "Tiếp tục hành trình của bạn",
-    "intro": "Đăng nhập để xem lại lịch trình, lưu những điểm đến yêu thích và hoàn thiện chuyến đi sắp tới.",
-    "securityNote": "Thông tin đăng nhập được bảo vệ an toàn và chỉ dùng để truy cập tài khoản của bạn."
-  },
-  "labels": {
-    "email": "Email",
-    "password": "Mật khẩu",
-    "secureSignIn": "Đăng nhập an toàn"
+    "intro": "Đăng nhập để xem lại lịch trình, lưu những điểm đến yêu thích và hoàn thiện chuyến đi sắp tới."
   },
   "placeholders": {
-    "email": "tenban@example.com",
     "password": "Nhập mật khẩu của bạn"
   },
   "prompts": {
@@ -24,7 +17,9 @@
   "actions": {
     "forgotPassword": "Quên mật khẩu?",
     "submit": "Đăng nhập",
-    "submitting": "Đang đăng nhập…",
-    "register": "Tạo tài khoản"
+    "submitting": "Đang đăng nhập…"
+  },
+  "errors": {
+    "signInFailed": "Không thể đăng nhập bằng thông tin này. Hãy kiểm tra email và mật khẩu."
   }
 }

@@ -8,22 +8,15 @@
     "intro": "Enter the email address on your account. We’ll send instructions to choose a new password."
   },
   "confirmation": {
-    "eyebrow": "One last step",
-    "title": "Check your email",
-    "description": "If an account uses this email, password reset instructions are on the way.",
-    "helper": "If you don’t see an email, check your spam folder."
-  },
-  "labels": {
-    "email": "Email"
-  },
-  "placeholders": {
-    "email": "you@example.com"
+    "description": "If an account uses this email, password reset instructions are on the way."
   },
   "actions": {
     "close": "Close password reset dialog",
     "cancel": "Cancel",
     "submit": "Send instructions",
-    "submitting": "Sending…",
-    "login": "Sign in"
+    "submitting": "Sending…"
+  },
+  "errors": {
+    "resetFailed": "We couldn’t send password reset instructions. Please try again."
   }
 }

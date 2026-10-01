@@ -20,7 +20,6 @@
     "signingOut": "Signing out…"
   },
   "messages": {
-    "loading": "Loading your account…",
     "signOutFailed": "We couldn’t sign you out. Please try again."
   }
 }

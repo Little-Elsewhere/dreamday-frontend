@@ -22,7 +22,10 @@ export const generateMetadata = async (): Promise<Metadata> => {
 }
 
 const AuthErrorContent = async ({ searchParams }: Props): Promise<ReactElement> => {
-  const t = await getTranslations('auth.error')
+  const [t, commonT] = await Promise.all([
+    getTranslations('auth.error'),
+    getTranslations('auth.common'),
+  ])
   const { type } = await searchParams
   let message = t('messages.generic')
 
@@ -61,7 +64,7 @@ const AuthErrorContent = async ({ searchParams }: Props): Promise<ReactElement> 
           className="focus-visible:outline-focus rounded-auth border-line-strong bg-surface text-primary hover:border-primary hover:bg-paper inline-flex min-h-11 items-center justify-center border px-4 py-2 text-sm leading-5 font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
           href={ROUTES.PUBLIC.AUTH.REGISTER}
         >
-          {t('actions.register')}
+          {commonT('actions.register')}
         </Link>
       </div>
     </section>
