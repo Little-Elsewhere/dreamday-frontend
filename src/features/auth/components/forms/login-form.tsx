@@ -11,7 +11,7 @@ import { PasswordInput } from '@/components/ui/password-input'
 import { ROUTES } from '@/constants/routes'
 import { Link, useRouter } from '@/i18n/navigation'
 
-import { signInAction, type AuthError } from '@/features/auth/actions'
+import { signIn } from '@/features/auth/actions/auth'
 import { AuthFeedback } from '@/features/auth/components/common/auth-feedback'
 import { PasswordResetForm } from './password-reset-form'
 import { loginSchema, type LoginFormValues } from '@/features/auth/schemas/auth'
@@ -29,18 +29,8 @@ export const LoginForm = (): ReactElement => {
   })
   const pending = loginForm.formState.isSubmitting
 
-  const errorMessages: Record<AuthError, string> = {
-    invalidInput: t('common.errors.invalidInput'),
-    signInFailed: t('common.errors.signInFailed'),
-    signUpFailed: t('common.errors.signUpFailed'),
-    resetFailed: t('common.errors.resetFailed'),
-    updateFailed: t('common.errors.updateFailed'),
-    signOutFailed: t('common.errors.signOutFailed'),
-    sessionExpired: t('common.errors.sessionExpired'),
-  }
-
-  const showError = (error: AuthError): void => {
-    setMessage({ text: errorMessages[error], isError: true })
+  const showError = (): void => {
+    setMessage({ text: t('common.errors.signInFailed'), isError: true })
     requestAnimationFrame(() => errorSummary.current?.focus())
   }
 
@@ -48,13 +38,11 @@ export const LoginForm = (): ReactElement => {
     setMessage(null)
 
     try {
-      const result = await signInAction(values)
-      if (!result.success) return showError(result.error)
-
+      await signIn(values)
       router.replace(ROUTES.PRIVATE.ACCOUNT)
       router.refresh()
     } catch {
-      showError('signInFailed')
+      showError()
     }
   }
 

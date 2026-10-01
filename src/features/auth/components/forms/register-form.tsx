@@ -25,25 +25,15 @@ export const RegisterForm = (): ReactElement => {
     defaultValues: { name: '', email: '', password: '', confirmPassword: '' },
   })
 
-  const showError = (): void => {
-    setMessage({ text: t('common.errors.signUpFailed'), isError: true })
-    requestAnimationFrame(() => errorSummary.current?.focus())
-  }
-
   const handleRegistration = async (values: RegistrationFormValues): Promise<void> => {
     setMessage(null)
 
     try {
-      const data = await signUp(values)
-
-      if (data.session) {
-        router.replace(ROUTES.PRIVATE.ACCOUNT)
-        return
-      }
-
-      setMessage({ text: t('register.messages.confirmEmail'), isError: false })
+      await signUp(values)
+      router.replace(ROUTES.PUBLIC.AUTH.REGISTER_SUCCESS)
     } catch {
-      showError()
+      setMessage({ text: t('common.errors.signUpFailed'), isError: true })
+      requestAnimationFrame(() => errorSummary.current?.focus())
     }
   }
 

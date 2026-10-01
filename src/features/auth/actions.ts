@@ -7,7 +7,7 @@ import { revalidatePath } from 'next/cache'
 import { ROUTES } from '@/constants/routes'
 import { serverEnv } from '@/env/server'
 import { createClient } from '@/lib/supabase/server'
-import { loginSchema, passwordResetSchema, updatePasswordSchema } from './schemas/auth'
+import { passwordResetSchema, updatePasswordSchema } from './schemas/auth'
 
 export type AuthError =
   | 'invalidInput'
@@ -27,25 +27,6 @@ const logUnexpectedAuthError = (operation: string, error: unknown): void => {
 const getEmailRedirect = (path: string): string => {
   const origin = new URL(serverEnv.NEXT_PUBLIC_APP_URL).origin
   return new URL(path, origin).toString()
-}
-
-export const signInAction = async (values: unknown): Promise<AuthResult> => {
-  const input = loginSchema.safeParse(values)
-
-  if (!input.success) return { success: false, error: 'invalidInput' }
-
-  try {
-    const supabase = await createClient()
-    const { data, error } = await supabase.auth.signInWithPassword(input.data)
-
-    if (error || !data.session) return { success: false, error: 'signInFailed' }
-
-    revalidatePath('/', 'layout')
-    return { success: true, data: null }
-  } catch (error) {
-    logUnexpectedAuthError('sign in', error)
-    return { success: false, error: 'signInFailed' }
-  }
 }
 
 export const signOutAction = async (): Promise<AuthResult> => {
