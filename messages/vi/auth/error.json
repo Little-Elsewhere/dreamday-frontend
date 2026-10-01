@@ -13,7 +13,6 @@
     "recoveryFailed": "Liên kết khôi phục mật khẩu không hợp lệ hoặc đã hết hạn. Hãy yêu cầu liên kết mới."
   },
   "actions": {
-    "login": "Quay lại đăng nhập",
-    "register": "Tạo tài khoản"
+    "login": "Quay lại đăng nhập"
   }
 }

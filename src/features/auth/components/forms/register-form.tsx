@@ -32,7 +32,7 @@ export const RegisterForm = (): ReactElement => {
       await signUp(values)
       router.replace(ROUTES.PUBLIC.AUTH.REGISTER_SUCCESS)
     } catch {
-      setMessage({ text: t('common.errors.signUpFailed'), isError: true })
+      setMessage({ text: t('register.errors.signUpFailed'), isError: true })
       requestAnimationFrame(() => errorSummary.current?.focus())
     }
   }
@@ -81,19 +81,19 @@ export const RegisterForm = (): ReactElement => {
           <Input
             name="email"
             id="register-email"
-            label={t('register.labels.email')}
+            label={t('common.labels.email')}
             labelClassName="text-ink"
             type="email"
             autoComplete="email"
             inputMode="email"
-            placeholder={t('register.placeholders.email')}
+            placeholder={t('common.placeholders.email')}
             required
             maxLength={254}
           />
           <PasswordInput<RegistrationFormValues>
             name="password"
             id="register-password"
-            label={t('register.labels.password')}
+            label={t('common.labels.password')}
             labelClassName="text-ink"
             autoComplete="new-password"
             placeholder={t('register.placeholders.password')}
@@ -134,7 +134,7 @@ export const RegisterForm = (): ReactElement => {
           className="text-primary focus-visible:outline-focus inline-flex min-h-9 cursor-pointer items-center rounded-md bg-transparent p-0 text-sm font-medium underline decoration-transparent underline-offset-4 transition-colors hover:decoration-current focus-visible:outline-2 focus-visible:outline-offset-2"
           href={ROUTES.PUBLIC.AUTH.LOGIN}
         >
-          {t('register.actions.login')}
+          {t('common.actions.login')}
         </Link>
       </p>
     </>

@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button'
 import { PasswordInput } from '@/components/ui/password-input'
 import { ROUTES } from '@/constants/routes'
 
-import { updatePasswordAction, type AuthError } from '@/features/auth/actions'
+import { updatePasswordAction } from '@/features/auth/actions/auth'
 import { AuthFeedback } from '@/features/auth/components/common/auth-feedback'
 import { type UpdatePasswordFormValues, updatePasswordSchema } from '@/features/auth/schemas/auth'
 
@@ -24,28 +24,17 @@ export const UpdatePasswordForm = (): ReactElement => {
     defaultValues: { password: '', confirmPassword: '' },
   })
 
-  const errorMessages: Record<AuthError, string> = {
-    invalidInput: t('common.errors.invalidInput'),
-    signInFailed: t('common.errors.signInFailed'),
-    signUpFailed: t('common.errors.signUpFailed'),
-    resetFailed: t('common.errors.resetFailed'),
-    updateFailed: t('common.errors.updateFailed'),
-    signOutFailed: t('common.errors.signOutFailed'),
-    sessionExpired: t('common.errors.sessionExpired'),
-  }
-
   const handleSubmit = async (values: UpdatePasswordFormValues): Promise<void> => {
     setMessage(null)
 
-    const result = await updatePasswordAction(values)
-    if (!result.success) {
-      setMessage(errorMessages[result.error])
+    try {
+      await updatePasswordAction(values)
+      form.reset()
+      setUpdated(true)
+    } catch {
+      setMessage(t('updatePassword.errors.updateFailed'))
       requestAnimationFrame(() => summary.current?.focus())
-      return
     }
-
-    form.reset()
-    setUpdated(true)
   }
 
   return (

@@ -11,28 +11,26 @@
   },
   "labels": {
     "name": "Full name",
-    "email": "Email",
-    "password": "Password",
     "confirmPassword": "Confirm password"
   },
   "placeholders": {
     "name": "Your name",
-    "email": "you@example.com",
     "password": "At least 8 characters",
     "confirmPassword": "Enter your password again"
   },
   "confirmation": {
-    "eyebrow": "One last step",
-    "title": "Check your email",
-    "description": "If we can create an account with this email address, we’ll send a confirmation link.",
-    "helper": "If you don’t see it, check your spam folder."
+    "description": "If we can create an account with this email address, we’ll send a confirmation link."
   },
   "prompts": {
     "hasAccount": "Already have an account?"
   },
   "actions": {
     "submit": "Create account",
-    "submitting": "Creating account…",
-    "login": "Sign in"
+    "submitting": "Creating account…"
+  },
+  "errors": {
+    "nameTooShort": "Enter at least 2 characters for your name.",
+    "nameTooLong": "Name must be 80 characters or fewer.",
+    "signUpFailed": "We couldn’t create your account. Check the details and try again."
   }
 }
