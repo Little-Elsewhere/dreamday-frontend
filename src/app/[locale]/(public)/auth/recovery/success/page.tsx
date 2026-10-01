@@ -5,16 +5,16 @@ import { getTranslations } from 'next-intl/server'
 import { AuthEmailSuccess } from '@/features/auth/components/common/auth-email-success'
 
 export const generateMetadata = async (): Promise<Metadata> => {
-  const t = await getTranslations('auth.register')
+  const t = await getTranslations('auth.recovery')
 
   return {
-    title: t('confirmation.title'),
-    description: t('confirmation.description'),
+    title: t('metadata.title'),
+    description: t('metadata.description'),
   }
 }
 
-const RegisterSuccessPage = async (): Promise<ReactElement> => {
-  const t = await getTranslations('auth.register')
+const RecoverySuccessPage = async (): Promise<ReactElement> => {
+  const t = await getTranslations('auth.recovery')
 
   return (
     <AuthEmailSuccess
@@ -27,4 +27,4 @@ const RegisterSuccessPage = async (): Promise<ReactElement> => {
   )
 }
 
-export default RegisterSuccessPage
+export default RecoverySuccessPage

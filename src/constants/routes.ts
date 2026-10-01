@@ -5,6 +5,7 @@ export const ROUTES = {
       LOGIN: '/auth/login',
       REGISTER: '/auth/register',
       REGISTER_SUCCESS: '/auth/register/success',
+      RECOVERY_SUCCESS: '/auth/recovery/success',
       CONFIRM: '/auth/confirm',
       ERROR: '/auth/error',
       UPDATE_PASSWORD: '/auth/update-password',
