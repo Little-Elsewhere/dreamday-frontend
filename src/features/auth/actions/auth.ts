@@ -1,8 +1,23 @@
 'use server'
 
-import { createClient } from '@/lib/supabase/server'
-import type { RegistrationFormValues } from '@/features/auth/schemas/auth'
+import { revalidatePath } from 'next/cache'
+
 import { ROUTES } from '@/constants/routes'
+import {
+  loginSchema,
+  type LoginFormValues,
+  type RegistrationFormValues,
+} from '@/features/auth/schemas/auth'
+import { createClient } from '@/lib/supabase/server'
+
+export const signIn = async (values: LoginFormValues): Promise<void> => {
+  const supabase = await createClient()
+  const { error } = await supabase.auth.signInWithPassword(loginSchema.parse(values))
+
+  if (error) throw new Error(error.message)
+
+  revalidatePath('/', 'layout')
+}
 
 export const signUp = async (values: RegistrationFormValues) => {
   const supabase = await createClient()

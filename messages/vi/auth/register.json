@@ -21,8 +21,11 @@
     "password": "Tối thiểu 8 ký tự",
     "confirmPassword": "Nhập lại mật khẩu"
   },
-  "messages": {
-    "confirmEmail": "Tài khoản đã được tạo. Hãy kiểm tra hộp thư và xác nhận email trước khi đăng nhập."
+  "confirmation": {
+    "eyebrow": "Một bước cuối",
+    "title": "Hãy kiểm tra email",
+    "description": "Nếu tạo được tài khoản bằng email này, chúng tôi sẽ gửi liên kết xác nhận.",
+    "helper": "Nếu chưa thấy email, hãy kiểm tra thư mục spam."
   },
   "prompts": {
     "hasAccount": "Đã có tài khoản?"
