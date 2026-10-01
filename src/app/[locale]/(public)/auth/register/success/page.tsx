@@ -5,24 +5,30 @@ import { getTranslations } from 'next-intl/server'
 import { AuthEmailSuccess } from '@/features/auth/components/common/auth-email-success'
 
 export const generateMetadata = async (): Promise<Metadata> => {
-  const t = await getTranslations('auth.register')
+  const [commonT, registerT] = await Promise.all([
+    getTranslations('auth.common'),
+    getTranslations('auth.register'),
+  ])
 
   return {
-    title: t('confirmation.title'),
-    description: t('confirmation.description'),
+    title: commonT('confirmation.title'),
+    description: registerT('confirmation.description'),
   }
 }
 
 const RegisterSuccessPage = async (): Promise<ReactElement> => {
-  const t = await getTranslations('auth.register')
+  const [commonT, registerT] = await Promise.all([
+    getTranslations('auth.common'),
+    getTranslations('auth.register'),
+  ])
 
   return (
     <AuthEmailSuccess
-      eyebrow={t('confirmation.eyebrow')}
-      title={t('confirmation.title')}
-      description={t('confirmation.description')}
-      helper={t('confirmation.helper')}
-      actionLabel={t('actions.login')}
+      eyebrow={commonT('confirmation.eyebrow')}
+      title={commonT('confirmation.title')}
+      description={registerT('confirmation.description')}
+      helper={commonT('confirmation.helper')}
+      actionLabel={commonT('actions.login')}
     />
   )
 }

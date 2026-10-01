@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { ROUTES } from '@/constants/routes'
 import { useRouter } from '@/i18n/navigation'
-import { signOutAction } from '@/features/auth/actions'
+import { signOut } from '@/features/auth/actions/auth'
 
 export const SignOutButton = (): ReactElement => {
   const t = useTranslations('account')
@@ -19,14 +19,8 @@ export const SignOutButton = (): ReactElement => {
     setError(false)
 
     try {
-      const result = await signOutAction()
-      if (!result.success) {
-        setError(true)
-        return
-      }
-
+      await signOut()
       router.replace(ROUTES.PUBLIC.AUTH.LOGIN)
-      router.refresh()
     } catch {
       setError(true)
     } finally {

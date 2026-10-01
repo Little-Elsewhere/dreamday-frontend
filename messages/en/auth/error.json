@@ -13,7 +13,6 @@
     "recoveryFailed": "This password recovery link is invalid or has expired. Request a new link."
   },
   "actions": {
-    "login": "Return to sign in",
-    "register": "Create an account"
+    "login": "Return to sign in"
   }
 }

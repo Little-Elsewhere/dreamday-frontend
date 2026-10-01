@@ -1,40 +1,41 @@
 {
   "content": {
     "visualQuote": "Every beautiful journey begins with a day you dreamed of.",
-    "visualMeta": "Lan Ha Bay, Vietnam",
-    "footer": "© {year} DreamDay"
+    "visualMeta": "Lan Ha Bay, Vietnam"
+  },
+  "confirmation": {
+    "eyebrow": "One last step",
+    "title": "Check your email",
+    "helper": "If you don’t see an email, check your spam folder."
   },
   "labels": {
-    "brandHome": "dream day home",
+    "email": "Email",
+    "password": "Password",
     "visualSection": "A little inspiration for your next journey"
+  },
+  "placeholders": {
+    "email": "you@example.com"
   },
   "descriptions": {
     "visualImageAlt": "Limestone islands reflected in the calm water of Lan Ha Bay"
   },
   "actions": {
     "showPassword": "Show password",
-    "hidePassword": "Hide password"
+    "hidePassword": "Hide password",
+    "login": "Sign in",
+    "register": "Create an account"
   },
   "messages": {
     "loading": "Loading authentication form"
   },
   "errors": {
-    "invalidInput": "Check the information you entered and try again.",
     "emailInvalid": "Enter a valid email address.",
     "emailTooLong": "Email must be 254 characters or fewer.",
-    "nameTooShort": "Enter at least 2 characters for your name.",
-    "nameTooLong": "Name must be 80 characters or fewer.",
     "passwordRequired": "Enter your password.",
     "passwordTooShort": "Use at least 8 characters for your password.",
     "passwordTooLong": "Password must be 72 characters or fewer.",
     "confirmPasswordRequired": "Confirm your password.",
     "confirmPasswordTooLong": "Password confirmation must be 72 characters or fewer.",
-    "passwordMismatch": "The passwords do not match.",
-    "signInFailed": "We couldn’t sign you in with those details. Check your email and password.",
-    "signUpFailed": "We couldn’t create your account. Check the details and try again.",
-    "resetFailed": "We couldn’t send password reset instructions. Please try again.",
-    "updateFailed": "We couldn’t update your password. Please try again.",
-    "signOutFailed": "We couldn’t sign you out. Please try again.",
-    "sessionExpired": "This password reset link has expired. Request a new one to continue."
+    "passwordMismatch": "The passwords do not match."
   }
 }

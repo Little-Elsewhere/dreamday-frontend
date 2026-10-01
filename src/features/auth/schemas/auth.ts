@@ -39,8 +39,8 @@ export const registrationSchema = z
       .pipe(
         z
           .string()
-          .min(2, { error: 'auth.common.errors.nameTooShort' })
-          .max(80, { error: 'auth.common.errors.nameTooLong' }),
+          .min(2, { error: 'auth.register.errors.nameTooShort' })
+          .max(80, { error: 'auth.register.errors.nameTooLong' }),
       ),
     email: emailSchema,
     password: newPasswordSchema,

@@ -20,7 +20,7 @@ import { Input } from '@/components/ui/input'
 import { ROUTES } from '@/constants/routes'
 import { useRouter } from '@/i18n/navigation'
 
-import { requestPasswordResetAction } from '@/features/auth/actions'
+import { forgotPassword } from '@/features/auth/actions/auth'
 import { AuthFeedback } from '@/features/auth/components/common/auth-feedback'
 import { passwordResetSchema, type PasswordResetFormValues } from '@/features/auth/schemas/auth'
 
@@ -44,17 +44,15 @@ export const ForgotPasswordForm = ({ initialEmail, show }: Props): ReactElement 
   const handlePasswordReset = async (values: PasswordResetFormValues): Promise<void> => {
     setRecoveryError(null)
 
-    const result = await requestPasswordResetAction(values)
-    if (!result.success) {
-      setRecoveryError(
-        result.error === 'invalidInput'
-          ? t('common.errors.invalidInput')
-          : t('common.errors.resetFailed'),
-      )
+    try {
+      await forgotPassword(values)
+    } catch {
+      setRecoveryError(t('recovery.errors.resetFailed'))
       requestAnimationFrame(() => errorSummaryRef.current?.focus())
       return
     }
 
+    show(false)
     router.replace(ROUTES.PUBLIC.AUTH.RECOVERY_SUCCESS)
   }
 
@@ -107,12 +105,12 @@ export const ForgotPasswordForm = ({ initialEmail, show }: Props): ReactElement 
               <Input
                 name="email"
                 id="reset-email"
-                label={t('recovery.labels.email')}
+                label={t('common.labels.email')}
                 labelClassName="text-ink"
                 type="email"
                 autoComplete="email"
                 inputMode="email"
-                placeholder={t('recovery.placeholders.email')}
+                placeholder={t('common.placeholders.email')}
                 required
                 maxLength={254}
               />

@@ -11,28 +11,26 @@
   },
   "labels": {
     "name": "Họ và tên",
-    "email": "Email",
-    "password": "Mật khẩu",
     "confirmPassword": "Xác nhận mật khẩu"
   },
   "placeholders": {
     "name": "Tên của bạn",
-    "email": "tenban@example.com",
     "password": "Tối thiểu 8 ký tự",
     "confirmPassword": "Nhập lại mật khẩu"
   },
   "confirmation": {
-    "eyebrow": "Một bước cuối",
-    "title": "Hãy kiểm tra email",
-    "description": "Nếu tạo được tài khoản bằng email này, chúng tôi sẽ gửi liên kết xác nhận.",
-    "helper": "Nếu chưa thấy email, hãy kiểm tra thư mục spam."
+    "description": "Nếu tạo được tài khoản bằng email này, chúng tôi sẽ gửi liên kết xác nhận."
   },
   "prompts": {
     "hasAccount": "Đã có tài khoản?"
   },
   "actions": {
     "submit": "Tạo tài khoản",
-    "submitting": "Đang tạo tài khoản…",
-    "login": "Đăng nhập"
+    "submitting": "Đang tạo tài khoản…"
+  },
+  "errors": {
+    "nameTooShort": "Họ và tên cần có ít nhất 2 ký tự.",
+    "nameTooLong": "Họ và tên không được dài quá 80 ký tự.",
+    "signUpFailed": "Không thể tạo tài khoản. Hãy kiểm tra thông tin rồi thử lại."
   }
 }

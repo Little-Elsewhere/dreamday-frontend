@@ -14,15 +14,18 @@ export const generateMetadata = async (): Promise<Metadata> => {
 }
 
 const RecoverySuccessPage = async (): Promise<ReactElement> => {
-  const t = await getTranslations('auth.recovery')
+  const [commonT, recoveryT] = await Promise.all([
+    getTranslations('auth.common'),
+    getTranslations('auth.recovery'),
+  ])
 
   return (
     <AuthEmailSuccess
-      eyebrow={t('confirmation.eyebrow')}
-      title={t('confirmation.title')}
-      description={t('confirmation.description')}
-      helper={t('confirmation.helper')}
-      actionLabel={t('actions.login')}
+      eyebrow={commonT('confirmation.eyebrow')}
+      title={commonT('confirmation.title')}
+      description={recoveryT('confirmation.description')}
+      helper={commonT('confirmation.helper')}
+      actionLabel={commonT('actions.login')}
     />
   )
 }

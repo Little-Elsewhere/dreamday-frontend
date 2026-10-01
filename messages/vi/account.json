@@ -20,7 +20,6 @@
     "signingOut": "Đang đăng xuất…"
   },
   "messages": {
-    "loading": "Đang tải tài khoản…",
     "signOutFailed": "Không thể đăng xuất. Vui lòng thử lại."
   }
 }
