@@ -50,7 +50,7 @@ export const UpdatePasswordForm = (): ReactElement => {
 
   return (
     <>
-      <p className="text-champagne-ink mb-3 text-[13px] font-semibold tracking-[0.16em] uppercase">
+      <p className="text-champagne-ink mb-3 text-sm font-semibold tracking-[0.16em] uppercase">
         {t('updatePassword.content.eyebrow')}
       </p>
       <h1
