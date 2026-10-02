@@ -7,7 +7,7 @@ import { AuthLoading } from '@/features/auth/components/common/auth-loading'
 import { RequireSession } from '@/features/auth/components/common/require-session'
 import { UpdatePasswordForm } from '@/features/auth/components/forms/update-password-form'
 
-interface UpdatePasswordPageProps {
+type Props = {
   params: Promise<{ locale: string }>
 }
 
@@ -19,8 +19,8 @@ export const generateMetadata = async (): Promise<Metadata> => {
   }
 }
 
-const UpdatePasswordPage = ({ params }: UpdatePasswordPageProps): ReactElement => (
-  <Suspense fallback={<AuthLoading />}>
+const UpdatePasswordPage = ({ params }: Props): ReactElement => (
+  <Suspense fallback={<AuthLoading variant="update-password" />}>
     <RequireSession params={params}>
       <UpdatePasswordForm />
     </RequireSession>
