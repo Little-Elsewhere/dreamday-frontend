@@ -56,7 +56,7 @@ export const UpdatePasswordForm = (): ReactElement => {
           <AuthFeedback message={t('updatePassword.messages.success')} isError={false} />
           <Link
             className="bg-primary text-primary-foreground focus-visible:outline-focus rounded-auth inline-flex min-h-11 items-center justify-center px-4 py-2 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2"
-            href={ROUTES.PUBLIC.ROOT}
+            href={ROUTES.PRIVATE.ACCOUNT}
           >
             {t('updatePassword.actions.continue')}
           </Link>
@@ -76,6 +76,7 @@ export const UpdatePasswordForm = (): ReactElement => {
               label={t('updatePassword.labels.password')}
               labelClassName="text-ink"
               autoComplete="new-password"
+              placeholder={t('updatePassword.placeholders.password')}
               required
               minLength={8}
               maxLength={72}
@@ -88,6 +89,7 @@ export const UpdatePasswordForm = (): ReactElement => {
               label={t('updatePassword.labels.confirmPassword')}
               labelClassName="text-ink"
               autoComplete="new-password"
+              placeholder={t('updatePassword.placeholders.confirmPassword')}
               required
               minLength={8}
               maxLength={72}

@@ -8,10 +8,10 @@ export const ROUTES = {
       RECOVERY_SUCCESS: '/auth/recovery/success',
       CONFIRM: '/auth/confirm',
       ERROR: '/auth/error',
-      UPDATE_PASSWORD: '/auth/update-password',
     },
   },
   PRIVATE: {
     ACCOUNT: '/account',
+    UPDATE_PASSWORD: '/auth/update-password',
   },
 } as const

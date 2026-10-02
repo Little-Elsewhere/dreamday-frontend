@@ -12,6 +12,7 @@ import {
   type UpdatePasswordFormValues,
 } from '@/features/auth/schemas/auth'
 import { createClient } from '@/lib/supabase/server'
+import { getRedirectPathname } from '@/features/auth/utils/route'
 
 export const signIn = async (values: LoginFormValues): Promise<void> => {
   const supabase = await createClient()
@@ -29,7 +30,7 @@ export const signUp = async (values: RegistrationFormValues): Promise<void> => {
     password,
     options: {
       data: { full_name: name },
-      emailRedirectTo: ROUTES.PRIVATE.ACCOUNT,
+      emailRedirectTo: getRedirectPathname(ROUTES.PRIVATE.ACCOUNT),
     },
   })
 
@@ -40,7 +41,7 @@ export const forgotPassword = async (values: PasswordResetFormValues): Promise<v
   const { email } = passwordResetSchema.parse(values)
   const supabase = await createClient()
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: ROUTES.PUBLIC.AUTH.UPDATE_PASSWORD,
+    redirectTo: getRedirectPathname(ROUTES.PRIVATE.UPDATE_PASSWORD),
   })
 
   if (error) throw new Error(error.message)
