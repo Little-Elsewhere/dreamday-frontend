@@ -38,11 +38,12 @@ npm install --global pnpm
 
 ```bash
 pnpm install
+make setup
 pnpm dev
 ```
 
-Open [http://localhost:3000/en](http://localhost:3000/en) or
-[http://localhost:3000/vi](http://localhost:3000/vi).
+Open [http://localhost:4000/en](http://localhost:4000/en) or
+[http://localhost:4000/vi](http://localhost:4000/vi).
 
 The application uses locale-based routing. The default locale is `en`; supported
 locales are defined in `src/i18n/routing.ts`.
@@ -50,11 +51,11 @@ locales are defined in `src/i18n/routing.ts`.
 ## Environment Variables
 
 The application uses Supabase Auth for email/password sign-in, registration, and
-password recovery. `pnpm dev` loads app variables from Doppler `dreamday/dev`.
-Install and authenticate the Doppler CLI before running it. `pnpm build:dev` and
-`pnpm build:prod` load `dreamday/dev` and `dreamday/prod`, respectively.
-`pnpm start` reads its production runtime variables from `.env.local`; copy
-`.env.example` when configuring that command locally.
+password recovery. Run `make setup` to create `.env.local` from Doppler
+`dreamday/dev` and override its Supabase values with the local stack's status.
+Then `pnpm dev` starts Next.js using that file. Install and authenticate the
+Doppler CLI before setup. `pnpm start`, `pnpm build:dev`, and `pnpm build:prod`
+continue to load their variables from Doppler.
 
 Set a repository-level GitHub Actions secret named `DOPPLER_TOKEN`. Both build
 workflows read this secret directly, so they do not need a GitHub Environment
@@ -107,18 +108,23 @@ email provider for reliable delivery.
 
 ## Local Supabase
 
-The Supabase CLI runs an isolated local stack in Docker. Its local SMTP service
-captures Auth emails in Mailpit instead of delivering them. Start the stack and
-inspect its local URLs and keys with:
+The Supabase CLI runs the configuration in `supabase/config.toml` as a local
+stack in Docker. Its local SMTP service captures Auth emails in Mailpit instead
+of delivering them. `make setup` starts the stack, downloads the
+`dreamday/dev` Doppler config, and generates `.env.local`. The generator
+overrides `NEXT_PUBLIC_SUPABASE_URL`,
+`NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, and `DATABASE_PASSWORD` with values from
+`supabase status -o json`. Other variables come directly from Doppler. Running
+the target again refreshes the file from the current Doppler config.
 
 ```bash
-pnpm supabase:start
+make setup
+pnpm dev
 pnpm supabase:status
 ```
 
 Mailpit is available at `http://127.0.0.1:54324`; Supabase Studio is at
-`http://127.0.0.1:54323`. `pnpm dev` uses the Supabase values from Doppler
-`dreamday/dev`; starting this local stack does not change that connection.
+`http://127.0.0.1:54323`. Local Auth URLs are configured for port `4000`.
 
 Use `pnpm supabase:reset:local` to reset only the local database and replay
 migrations and seed data. This repository does not yet contain application
@@ -134,10 +140,11 @@ pnpm supabase:stop
 ## Scripts
 
 ```bash
-pnpm dev                 # Start with Doppler dreamday/dev environment
+pnpm dev                 # Start Next.js using .env.local
 pnpm build:dev           # CI/CD build with Doppler dreamday/dev
 pnpm build:prod          # CI/CD build with Doppler dreamday/prod
-pnpm start               # Start production build with env from .env.local
+pnpm start               # Start production build with Doppler dreamday/dev
+make setup               # Start local Supabase and generate .env.local
 pnpm supabase:start      # Start local Supabase and Mailpit
 pnpm supabase:status     # Show local Supabase URLs and keys
 pnpm supabase:stop       # Stop local Supabase
