@@ -1,15 +1,13 @@
 import type { Metadata } from 'next'
-import { Suspense } from 'react'
 import type { ReactElement } from 'react'
+import { Suspense } from 'react'
 import { getTranslations } from 'next-intl/server'
 
-import { redirect } from '@/i18n/navigation'
 import { AuthLoading } from '@/features/auth/components/common/auth-loading'
+import { RequireSession } from '@/features/auth/components/common/require-session'
 import { UpdatePasswordForm } from '@/features/auth/components/forms/update-password-form'
-import { ROUTES } from '@/constants/routes'
-import { createClient } from '@/lib/supabase/server'
 
-type Props = {
+interface UpdatePasswordPageProps {
   params: Promise<{ locale: string }>
 }
 
@@ -21,25 +19,12 @@ export const generateMetadata = async (): Promise<Metadata> => {
   }
 }
 
-const UpdatePasswordContent = async ({ params }: Props): Promise<ReactElement> => {
-  const { locale } = await params
+const UpdatePasswordPage = ({ params }: UpdatePasswordPageProps): ReactElement => (
+  <Suspense fallback={<AuthLoading />}>
+    <RequireSession params={params}>
+      <UpdatePasswordForm />
+    </RequireSession>
+  </Suspense>
+)
 
-  const supabase = await createClient()
-  const { data } = await supabase.auth.getClaims()
-
-  if (!data?.claims) {
-    redirect({ href: ROUTES.PUBLIC.AUTH.LOGIN, locale })
-  }
-
-  return <UpdatePasswordForm />
-}
-
-const UpdatePassword = ({ params }: Props): ReactElement => {
-  return (
-    <Suspense fallback={<AuthLoading />}>
-      <UpdatePasswordContent params={params} />
-    </Suspense>
-  )
-}
-
-export default UpdatePassword
+export default UpdatePasswordPage
