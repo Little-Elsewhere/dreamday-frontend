@@ -4,6 +4,7 @@ allowBuilds:
   core-js: true
   esbuild: true
   unrs-resolver: true
+  workerd: true
 
 minimumReleaseAgeExclude:
   - '@posthog/types@1.404.0'
