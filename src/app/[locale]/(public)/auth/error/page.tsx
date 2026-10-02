@@ -72,7 +72,7 @@ const AuthErrorContent = async ({ searchParams }: Props): Promise<ReactElement> 
 }
 
 const AuthErrorPage = ({ searchParams }: Props): ReactElement => (
-  <Suspense fallback={<AuthLoading />}>
+  <Suspense fallback={<AuthLoading variant="error" />}>
     <AuthErrorContent searchParams={searchParams} />
   </Suspense>
 )

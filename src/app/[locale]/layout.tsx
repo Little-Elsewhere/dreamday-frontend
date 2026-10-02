@@ -5,9 +5,9 @@ import type { Metadata, Viewport } from 'next'
 import { Be_Vietnam_Pro } from 'next/font/google'
 import { ReactNode } from 'react'
 import { SerwistProvider } from '@/app/serwist'
-import { serverEnv } from '@/env/server'
 import { cn } from '@/utils/cn'
 import '@/app/globals.css'
+import { serverEnv } from '@/env/server'
 
 const beVietnamPro = Be_Vietnam_Pro({
   variable: '--font-be-vietnam-pro',

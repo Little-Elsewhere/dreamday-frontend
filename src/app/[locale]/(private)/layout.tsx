@@ -1,8 +1,8 @@
 import type { ReactElement, ReactNode } from 'react'
 import { Suspense } from 'react'
 
-import { AuthLoading } from '@/features/auth/components/common/auth-loading'
 import { RequireSession } from '@/features/auth/components/common/require-session'
+import { AccountLoading } from './account-loading'
 
 interface PrivateLayoutProps {
   children: ReactNode
@@ -10,7 +10,7 @@ interface PrivateLayoutProps {
 }
 
 const PrivateLayout = ({ children, params }: PrivateLayoutProps): ReactElement => (
-  <Suspense fallback={<AuthLoading />}>
+  <Suspense fallback={<AccountLoading />}>
     <RequireSession params={params}>{children}</RequireSession>
   </Suspense>
 )

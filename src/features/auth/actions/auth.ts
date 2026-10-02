@@ -12,7 +12,7 @@ import {
   type UpdatePasswordFormValues,
 } from '@/features/auth/schemas/auth'
 import { createClient } from '@/lib/supabase/server'
-import { getRedirectPathname } from '@/features/auth/utils/route'
+import { getRedirectPathname } from '@/features/auth/utils/common'
 
 export const signIn = async (values: LoginFormValues): Promise<void> => {
   const supabase = await createClient()
