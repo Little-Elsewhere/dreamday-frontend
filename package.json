@@ -6,7 +6,7 @@
     "node": ">=22.22.1"
   },
   "scripts": {
-    "dev": "doppler run --project dreamday --config dev -- next dev",
+    "dev": "doppler run --project dreamday --config dev -- next dev --port 4000",
     "build:dev": "doppler run --project dreamday --config dev -- next build",
     "build:prod": "doppler run --project dreamday --config prod -- next build",
     "start": "doppler run --project dreamday --config dev next start",

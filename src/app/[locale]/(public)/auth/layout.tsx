@@ -40,7 +40,7 @@ const AuthLayout = async ({ children }: Props): Promise<ReactElement> => {
         className="auth-wide:pl-[clamp(72px,8vw,136px)] auth-wide:pr-[clamp(72px,8vw,136px)] flex min-w-0 flex-col pt-[max(24px,env(safe-area-inset-top))] pr-[max(20px,env(safe-area-inset-right))] pb-[max(24px,env(safe-area-inset-bottom))] pl-[max(20px,env(safe-area-inset-left))] md:pt-8 md:pr-[clamp(32px,7vw,80px)] md:pb-8 md:pl-[clamp(32px,7vw,80px)] lg:min-h-svh"
         aria-labelledby="auth-title"
       >
-        <div className="flex w-full flex-1 items-center self-center py-12 md:py-16">
+        <div className="flex w-full flex-1 items-center self-center">
           <div className="animate-auth-enter w-full motion-reduce:animate-none">{children}</div>
         </div>
 
