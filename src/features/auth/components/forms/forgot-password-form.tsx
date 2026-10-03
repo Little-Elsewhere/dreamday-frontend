@@ -3,7 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Cancel01Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { useRef, useState, type ReactElement } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
@@ -31,6 +31,7 @@ type Props = {
 
 export const ForgotPasswordForm = ({ initialEmail, show }: Props): ReactElement => {
   const t = useTranslations('auth')
+  const locale = useLocale()
   const router = useRouter()
   const errorSummaryRef = useRef<HTMLDivElement>(null)
   const [recoveryError, setRecoveryError] = useState<string | null>(null)
@@ -45,7 +46,7 @@ export const ForgotPasswordForm = ({ initialEmail, show }: Props): ReactElement 
     setRecoveryError(null)
 
     try {
-      await forgotPassword(values)
+      await forgotPassword(values, locale)
     } catch {
       setRecoveryError(t('recovery.errors.resetFailed'))
       requestAnimationFrame(() => errorSummaryRef.current?.focus())

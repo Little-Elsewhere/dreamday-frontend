@@ -90,21 +90,23 @@ Doppler config.
 Set `NEXT_PUBLIC_APP_URL` to the canonical origin in the respective Doppler
 config. Auth email links do not depend on a request-supplied `Origin` header.
 
-In Supabase Auth, enable the Email provider, set **URL Configuration → Site URL**
-to the canonical app origin, and add the local and production callback URL
-(`/auth/confirm`) to **Redirect URLs**. The email templates use `{{ .SiteURL }}`
-to build the callback link. The callback URL sent to Supabase is locale-neutral.
-`next-intl` selects the locale
-from the `NEXT_LOCALE` cookie, then the browser's `Accept-Language` header, and
-finally falls back to `en`; it routes the callback to `/{locale}/auth/confirm`.
+In Supabase Auth, enable the Email provider, set **URL Configuration → Site
+URL** to the canonical app origin, and allow the app's Auth redirect
+destinations.
+Registration stores the selected locale in user metadata, which selects the
+email subject and body. Signup and password recovery pass a locale-prefixed
+confirmation callback; recovery uses the locale of the forgot-password form.
+Locale-specific confirmation and recovery source templates live in
+`supabase/templates/{en,vi}/`; the template builder combines them into the Go
+templates referenced by `supabase/config.toml`. `pnpm supabase:start` and
+`make setup` build those files before starting Supabase. Users without locale
+metadata receive the English template.
 
-The **Confirm signup** and **Reset password** email templates use direct
-`token_hash` links to `/auth/confirm`, with `type=email` and `type=recovery`,
-respectively. The callback verifies the token with `verifyOtp` and chooses the
-destination from `type`: signup goes to the account page; recovery goes to
-`/auth/update-password`. The callback intentionally ignores the templates'
-`next` parameter; do not use it to control redirects. Configure a production
-email provider for reliable delivery.
+The localized **Confirm signup** and **Reset password** templates use direct
+`token_hash` links to `/{locale}/auth/confirm`, with `type=email` and
+`type=recovery`, respectively. The callback verifies the token with `verifyOtp`
+and selects a fixed destination from the verified email type. Configure a
+production email provider for reliable delivery.
 
 ## Local Supabase
 
@@ -145,10 +147,11 @@ pnpm build:dev           # CI/CD build with Doppler dreamday/dev
 pnpm build:prod          # CI/CD build with Doppler dreamday/prod
 pnpm start               # Start production build with Doppler dreamday/dev
 make setup               # Start local Supabase and generate .env.local
-pnpm supabase:start      # Start local Supabase and Mailpit
+pnpm supabase:templates  # Build generated Auth templates from en/ and vi/
+pnpm supabase:start      # Build templates, then start Supabase and Mailpit
 pnpm supabase:status     # Show local Supabase URLs and keys
 pnpm supabase:stop       # Stop local Supabase
-pnpm supabase:reset:local # Reset only the local Supabase database
+pnpm supabase:reset:local # Build templates, then reset the local database
 pnpm lint                # Run ESLint
 pnpm typecheck           # Run TypeScript checks
 pnpm format              # Format the project with Prettier

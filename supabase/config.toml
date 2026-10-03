@@ -242,13 +242,15 @@ otp_expiry = 3600
 # admin_email = "admin@email.com"
 # sender_name = "Admin"
 
+# Auth accepts one content_path per email type. Build the locale-aware Go
+# templates from supabase/templates/{en,vi}/ before starting the local stack.
 [auth.email.template.confirmation]
-subject = "Dreamday | Xác nhận email / Confirm your email"
-content_path = "./supabase/templates/confirmation.html"
+subject = '{{ if eq .Data.locale "vi" }}Xác nhận email Dreamday{{ else }}Confirm your Dreamday email{{ end }}'
+content_path = "./supabase/templates/generated/confirmation.html"
 
 [auth.email.template.recovery]
-subject = "Dreamday | Đặt lại mật khẩu / Reset your password"
-content_path = "./supabase/templates/recovery.html"
+subject = '{{ if eq .Data.locale "vi" }}Đặt lại mật khẩu Dreamday{{ else }}Reset your Dreamday password{{ end }}'
+content_path = "./supabase/templates/generated/recovery.html"
 
 # Uncomment to customize notification email template
 # [auth.email.notification.password_changed]

@@ -5,7 +5,7 @@ DOPPLER_CONFIG ?= dev
 SUPABASE := $(PNPM) exec supabase
 
 .DEFAULT_GOAL := help
-.PHONY: help setup supabase-start supabase-status supabase-stop supabase-reset-local env-local
+.PHONY: help setup supabase-templates supabase-start supabase-status supabase-stop supabase-reset-local env-local
 
 help: ## Show available local development commands
 	@grep -E '^[a-zA-Z0-9_-]+:.*## ' $(MAKEFILE_LIST) | \
@@ -15,7 +15,10 @@ setup: ## Start the configured local Supabase stack and generate .env.local
 	$(MAKE) supabase-start
 	$(MAKE) env-local
 
-supabase-start: ## Start Supabase services from supabase/config.toml
+supabase-templates: ## Build locale-aware Auth templates from per-locale HTML files
+	node scripts/build-supabase-email-templates.mjs
+
+supabase-start: supabase-templates ## Start Supabase services from supabase/config.toml
 	$(SUPABASE) start
 
 supabase-status: ## Show local Supabase URLs and keys
@@ -24,7 +27,7 @@ supabase-status: ## Show local Supabase URLs and keys
 supabase-stop: ## Stop this project's local Supabase stack and keep its data
 	$(SUPABASE) stop
 
-supabase-reset-local: ## Reset only the local database and replay migrations and seed data
+supabase-reset-local: supabase-templates ## Reset only the local database and replay migrations and seed data
 	$(SUPABASE) db reset --local
 
 env-local: ## Download Doppler env and override Supabase values with local status

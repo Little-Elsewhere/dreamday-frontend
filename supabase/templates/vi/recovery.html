@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Đặt lại mật khẩu</title>
+  </head>
+  <body>
+    <main>
+      <h1>Đặt lại mật khẩu Dreamday</h1>
+      <p>Chúng tôi nhận được yêu cầu đặt lại mật khẩu cho {{ .Email }}.</p>
+      <p>Hãy nhấn vào liên kết bên dưới để tạo mật khẩu mới.</p>
+      <p>
+        <a
+          href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=recovery&next={{ .RedirectTo }}"
+        >
+          Đặt lại mật khẩu
+        </a>
+      </p>
+      <p>Nếu bạn không yêu cầu đặt lại mật khẩu, hãy bỏ qua email này.</p>
+    </main>
+  </body>
+</html>
