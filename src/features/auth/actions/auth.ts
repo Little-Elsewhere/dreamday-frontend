@@ -1,6 +1,6 @@
 'use server'
 
-import { ROUTES } from '@/constants/routes'
+import { Locale } from '@/constants/locale'
 import {
   loginSchema,
   passwordResetSchema,
@@ -13,6 +13,7 @@ import {
 } from '@/features/auth/schemas/auth'
 import { createClient } from '@/lib/supabase/server'
 import { getRedirectPathname } from '@/features/auth/utils/common'
+import { ROUTES } from '@/constants/routes'
 
 export const signIn = async (values: LoginFormValues): Promise<void> => {
   const supabase = await createClient()
@@ -21,7 +22,7 @@ export const signIn = async (values: LoginFormValues): Promise<void> => {
   if (error) throw new Error(error.message)
 }
 
-export const signUp = async (values: RegistrationFormValues): Promise<void> => {
+export const signUp = async (values: RegistrationFormValues, locale: Locale): Promise<void> => {
   const { name, email, password } = registrationSchema.parse(values)
   const supabase = await createClient()
 
@@ -29,19 +30,22 @@ export const signUp = async (values: RegistrationFormValues): Promise<void> => {
     email,
     password,
     options: {
-      data: { full_name: name },
-      emailRedirectTo: getRedirectPathname(ROUTES.PRIVATE.ACCOUNT),
+      data: { full_name: name, locale: locale },
+      emailRedirectTo: getRedirectPathname(ROUTES.PRIVATE.ACCOUNT, locale),
     },
   })
 
   if (error) throw new Error(error.message)
 }
 
-export const forgotPassword = async (values: PasswordResetFormValues): Promise<void> => {
+export const forgotPassword = async (
+  values: PasswordResetFormValues,
+  locale: Locale,
+): Promise<void> => {
   const { email } = passwordResetSchema.parse(values)
   const supabase = await createClient()
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: getRedirectPathname(ROUTES.PRIVATE.UPDATE_PASSWORD),
+    redirectTo: getRedirectPathname(ROUTES.PRIVATE.UPDATE_PASSWORD, locale),
   })
 
   if (error) throw new Error(error.message)

@@ -1,0 +1,49 @@
+{{ if eq .Data.locale "vi" }}
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Xác nhận email</title>
+  </head>
+  <body>
+    <main>
+      <h1>Xác nhận email</h1>
+      <p>Xin chào {{ .Data.full_name }},</p>
+      <p>Hãy xác nhận địa chỉ email để hoàn tất đăng ký tài khoản Dreamday.</p>
+      <p>
+        <a
+          href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email&next={{ .RedirectTo }}"
+        >
+          Xác nhận email
+        </a>
+      </p>
+      <p>Nếu bạn không tạo tài khoản Dreamday, hãy bỏ qua email này.</p>
+    </main>
+  </body>
+</html>
+{{ else }}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Confirm your email</title>
+  </head>
+  <body>
+    <main>
+      <h1>Confirm your email</h1>
+      <p>Hello {{ .Data.full_name }},</p>
+      <p>Confirm your email address to finish creating your Dreamday account.</p>
+      <p>
+        <a
+          href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email&next={{ .RedirectTo }}"
+        >
+          Confirm email
+        </a>
+      </p>
+      <p>If you did not create a Dreamday account, you can ignore this email.</p>
+    </main>
+  </body>
+</html>
+{{ end }}
