@@ -1,7 +1,7 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useRef, useState, type ReactElement } from 'react'
 
@@ -17,6 +17,7 @@ import { registrationSchema, type RegistrationFormValues } from '@/features/auth
 
 export const RegisterForm = (): ReactElement => {
   const t = useTranslations('auth')
+  const locale = useLocale()
   const router = useRouter()
   const errorSummary = useRef<HTMLDivElement>(null)
   const [message, setMessage] = useState<{ text: string; isError: boolean } | null>(null)
@@ -29,7 +30,7 @@ export const RegisterForm = (): ReactElement => {
     setMessage(null)
 
     try {
-      await signUp(values)
+      await signUp(values, locale)
       router.replace(ROUTES.PUBLIC.AUTH.REGISTER_SUCCESS)
     } catch {
       setMessage({ text: t('register.errors.signUpFailed'), isError: true })
