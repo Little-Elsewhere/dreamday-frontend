@@ -11,7 +11,7 @@ alwaysApply: true
 
 - NEVER swallow errors with empty `catch` blocks.
 - ALWAYS distinguish between **expected errors** (validation, not found) and **unexpected errors** (bugs, network down).
-- Expected errors: return to UI, let user fix or retry.
+- Expected domain and service errors: return to UI, let user fix or retry. Invalid Server Action form values are the project exception: `schema.parse(...)` throws `ZodError` before handling other errors.
 - Unexpected errors: log, show generic fallback, alert team.
 
 ## 2. Error Boundaries (React + App Router)
@@ -81,12 +81,11 @@ export default function GlobalError({ reset }: GlobalErrorProps): JSX.Element {
 }
 ```
 
-## 3. Server Actions — Type-Safe Errors
+## 3. Server Actions — Form Validation and Type-Safe Results
 
-- NEVER let Server Actions throw raw errors to the client.
-- ALWAYS return a discriminated union: { success: true, data: T } | { success: false, error: string }.
-- Validate inputs with Zod. Return Zod issues in a user-friendly shape.
-- NEVER leak internal details (stack traces, SQL errors, file paths).
+- Validate form values with `schema.parse(...)` as the first operation, outside `try/catch`. Invalid values MUST throw `ZodError` immediately; do not turn them into an Action result.
+- After form validation succeeds, return a discriminated union for handled outcomes: { success: true, data: T } | { success: false, error: string }.
+- NEVER expose raw values, secrets, internal paths, SQL errors, or stack traces to the client. Client-side form validation provides field-level feedback during normal use.
 
 ```tsx
 // src/lib/actions.ts
@@ -107,7 +106,6 @@ interface ActionSuccess<T> {
 interface ActionError {
   success: false
   error: string
-  fieldErrors?: Record<string, string[]>
 }
 
 type ActionResult<T> = ActionSuccess<T> | ActionError
@@ -115,26 +113,13 @@ type ActionResult<T> = ActionSuccess<T> | ActionError
 export async function submitAnswer(
   formData: FormData,
 ): Promise<ActionResult<{ correct: boolean; xp: number }>> {
+  const validated = submitAnswerSchema.parse(Object.fromEntries(formData))
+
   try {
-    const raw = Object.fromEntries(formData)
-    const parsed = submitAnswerSchema.safeParse(raw)
-
-    if (!parsed.success) {
-      return {
-        success: false,
-        error: 'Invalid input',
-        fieldErrors: parsed.error.flatten().fieldErrors,
-      }
-    }
-
-    // Business logic...
-    const result = await gradeExercise(parsed.data)
+    const result = await gradeExercise(validated)
 
     return { success: true, data: result }
-  } catch (err) {
-    // Log to monitoring (server-side only)
-    console.error('submitAnswer failed:', err)
-
+  } catch {
     return {
       success: false,
       error: 'Unable to submit answer. Please try again.',
@@ -146,7 +131,7 @@ export async function submitAnswer(
 ## 4. Client-side Error Handling
 
 - ALWAYS check result.success before using result.data.
-- Display field errors next to inputs. Display general errors in a toast or banner.
+- Display client-side validation errors next to inputs. Display handled server errors in a toast or banner.
 - Use useActionState (React 19) to handle Server Action results declaratively.
 
 ```tsx
@@ -159,9 +144,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
 type ActionState =
-  | { success: true; data: { xp: number } }
-  | { success: false; error: string; fieldErrors?: Record<string, string[]> }
-  | null
+  { success: true; data: { xp: number } } | { success: false; error: string } | null
 
 export function ExerciseForm(): JSX.Element {
   const t = useTranslations('ExerciseForm')
@@ -175,13 +158,7 @@ export function ExerciseForm(): JSX.Element {
   return (
     <form action={formAction} className="flex flex-col gap-2">
       <Input name="answer" />
-      {state?.success === false && state.fieldErrors?.answer && (
-        <p className="text-destructive text-sm">{state.fieldErrors.answer[0]}</p>
-      )}
-
-      {state?.success === false && !state.fieldErrors && (
-        <p className="text-destructive text-sm">{state.error}</p>
-      )}
+      {state?.success === false && <p className="text-destructive text-sm">{state.error}</p>}
 
       <Button type="submit" disabled={isPending}>
         {isPending ? t('submitting') : t('submit')}
@@ -254,7 +231,8 @@ export default async function LessonPage({ params }: LessonPageProps): Promise<J
 
 ## 8. UX Guidelines for Errors
 
-- Expected errors (validation, network timeout): show inline messages, allow retry.
+- Client-side validation errors: show inline messages and preserve input. A server-thrown `ZodError` follows the caller or framework error path.
+- Expected service errors (for example, a network timeout): show a retryable message.
 - Unexpected errors (500, crashes): show friendly fallback, "Try again" button, optional "Contact support" link.
 - Loading failures (images, audio): show placeholder, do NOT block the entire UI.
 - Form submission failures: preserve user input so they don't have to retype.
@@ -287,7 +265,7 @@ export async function submitAnswer(formData: FormData) {
 ## 10. Example - GOOD
 
 ```tsx
-// Good: discriminated union, Zod validation, user-friendly messages, no leak
+// Good: invalid form values throw ZodError before handled results are returned
 'use server'
 
 import { z } from 'zod'
@@ -296,21 +274,11 @@ const schema = z.object({ answer: z.string().min(1, 'Answer is required') })
 
 export async function submitAnswer(
   formData: FormData,
-): Promise<
-  | { success: true; data: { correct: boolean } }
-  | { success: false; error: string; fieldErrors?: Record<string, string[]> }
-> {
-  const parsed = schema.safeParse(Object.fromEntries(formData))
-  if (!parsed.success) {
-    return {
-      success: false,
-      error: 'Please check your answer',
-      fieldErrors: parsed.error.flatten().fieldErrors,
-    }
-  }
+): Promise<{ success: true; data: { correct: boolean } } | { success: false; error: string }> {
+  const validated = schema.parse(Object.fromEntries(formData))
 
   try {
-    const result = await gradeExercise(parsed.data)
+    const result = await gradeExercise(validated)
     return { success: true, data: result }
   } catch {
     return { success: false, error: 'Unable to grade answer. Please retry.' }

@@ -5,19 +5,22 @@ import { getTranslations } from 'next-intl/server'
 
 import { ROUTES } from '@/constants/routes'
 import { AuthLoading } from '@/features/auth/components/common/auth-loading'
-import { AuthEmailOtpType } from '@/features/auth/constants/email-otp-type'
+import { AuthEmailOtpType } from '@/features/auth/constants/auth'
+import { ActionErrorKind } from '@/types/action-result'
 import { Link } from '@/i18n/navigation'
 
 type Props = {
   searchParams: Promise<Record<string, string | string[] | undefined>>
 }
 
-export const generateMetadata = async (): Promise<Metadata> => {
+export const generateMetadata = async ({ searchParams }: Props): Promise<Metadata> => {
   const t = await getTranslations('auth.error')
+  const { type } = await searchParams
+  const metadataKey = type === ActionErrorKind.System ? 'systemError' : 'authError'
 
   return {
-    title: t('metadata.title'),
-    description: t('metadata.description'),
+    title: t(`metadata.${metadataKey}.title`),
+    description: t(`metadata.${metadataKey}.description`),
   }
 }
 
@@ -30,6 +33,9 @@ const AuthErrorContent = async ({ searchParams }: Props): Promise<ReactElement> 
   let message = t('messages.generic')
 
   switch (type) {
+    case ActionErrorKind.System:
+      message = t('messages.system')
+      break
     case AuthEmailOtpType.Signup:
       message = t('messages.signupFailed')
       break
@@ -47,7 +53,7 @@ const AuthErrorContent = async ({ searchParams }: Props): Promise<ReactElement> 
         className="text-primary m-0 max-w-[14ch] text-[clamp(2rem,8vw,3.5rem)] leading-[1.12] font-medium tracking-[-0.055em]"
         id="auth-title"
       >
-        {t('content.title')}
+        {type === ActionErrorKind.System ? t('content.systemTitle') : t('content.title')}
       </h1>
       <p className="text-ink-soft mt-4 max-w-[42ch]" role="alert">
         {message}

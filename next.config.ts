@@ -88,6 +88,13 @@ const nextConfig: NextConfig = {
     turbopackLocalPostcssConfig: true,
     useOffline: true,
   },
+  logging: {
+    fetches: {
+      fullUrl: true,
+      hmrRefreshes: true,
+    },
+    browserToTerminal: true,
+  },
   crossOrigin: 'anonymous',
   cacheComponents: true,
   partialPrefetching: true,

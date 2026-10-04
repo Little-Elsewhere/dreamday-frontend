@@ -36,6 +36,9 @@
     "passwordTooLong": "Password must be 72 characters or fewer.",
     "confirmPasswordRequired": "Confirm your password.",
     "confirmPasswordTooLong": "Password confirmation must be 72 characters or fewer.",
-    "passwordMismatch": "The passwords do not match."
+    "passwordMismatch": "The passwords do not match.",
+    "weakPassword": "Choose a stronger password.",
+    "rateLimited": "Too many attempts. Please wait a few minutes and try again.",
+    "invalidInput": "Check the information you entered and try again."
   }
 }

@@ -1,28 +1,36 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useRef, useState, type ReactElement } from 'react'
 
 import { Button } from '@/components/ui/button'
+import { FeedbackMessage } from '@/components/common/feedback-message'
 import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/ui/password-input'
 import { ROUTES } from '@/constants/routes'
 import { Link, useRouter } from '@/i18n/navigation'
 
 import { signIn } from '@/features/auth/actions/auth'
-import { AuthFeedback } from '@/features/auth/components/common/auth-feedback'
+import { AuthField } from '@/features/auth/constants/auth'
+import { generateLocalizedUrl } from '@/features/auth/utils/common'
 import { ForgotPasswordForm } from './forgot-password-form'
 import { loginSchema, type LoginFormValues } from '@/features/auth/schemas/auth'
+import { ActionErrorKind } from '@/types/action-result'
+import { handleFormActionError } from '@/utils/form-action-error'
 
 export const LoginForm = (): ReactElement => {
   const t = useTranslations('auth')
+  const locale = useLocale()
   const router = useRouter()
+  const systemErrorUrl = generateLocalizedUrl(locale, ROUTES.PUBLIC.AUTH.ERROR, {
+    queryParams: new URLSearchParams({ type: ActionErrorKind.System }),
+  })
   const errorSummary = useRef<HTMLDivElement>(null)
   const [resetDialogOpen, setResetDialogOpen] = useState(false)
   const [resetInitialEmail, setResetInitialEmail] = useState('')
-  const [message, setMessage] = useState<{ text: string; isError: boolean } | null>(null)
+  const [message, setMessage] = useState<string | null>(null)
   const loginForm = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: { email: '', password: '' },
@@ -32,11 +40,22 @@ export const LoginForm = (): ReactElement => {
     setMessage(null)
 
     try {
-      await signIn(values)
-      router.replace(ROUTES.PRIVATE.ACCOUNT)
+      const result = await signIn(values)
+      if (result.success) {
+        router.replace(ROUTES.PRIVATE.ACCOUNT)
+      } else {
+        handleFormActionError(result.error, {
+          fields: [AuthField.Email, AuthField.Password],
+          setError: loginForm.setError,
+          onMessage: (key) => {
+            setMessage(t(key))
+            requestAnimationFrame(() => errorSummary.current?.focus())
+          },
+          onSystemError: () => router.replace(systemErrorUrl),
+        })
+      }
     } catch {
-      setMessage({ text: t('login.errors.signInFailed'), isError: true })
-      requestAnimationFrame(() => errorSummary.current?.focus())
+      router.replace(systemErrorUrl)
     }
   }
 
@@ -54,13 +73,7 @@ export const LoginForm = (): ReactElement => {
       </h1>
       <p className="text-ink-soft mt-4 max-w-[42ch]">{t('login.content.intro')}</p>
 
-      {message && (
-        <AuthFeedback
-          message={message.text}
-          isError={message.isError}
-          focusRef={message.isError ? errorSummary : undefined}
-        />
-      )}
+      {message && <FeedbackMessage message={message} isError focusRef={errorSummary} />}
 
       <FormProvider {...loginForm}>
         <form

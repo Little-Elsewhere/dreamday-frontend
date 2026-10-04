@@ -1,16 +1,24 @@
 {
   "metadata": {
-    "title": "Không thể xác minh liên kết",
-    "description": "Không thể xác minh liên kết xác thực này."
+    "authError": {
+      "title": "Không thể xác minh liên kết",
+      "description": "Không thể xác minh liên kết xác thực này."
+    },
+    "systemError": {
+      "title": "Lỗi xác thực",
+      "description": "Đã xảy ra lỗi khi xử lý yêu cầu xác thực."
+    }
   },
   "content": {
     "eyebrow": "Chưa thể hoàn tất bước này",
-    "title": "Không thể xác minh liên kết"
+    "title": "Không thể xác minh liên kết",
+    "systemTitle": "Đã xảy ra lỗi"
   },
   "messages": {
     "generic": "Không thể xác minh liên kết xác thực này. Hãy yêu cầu một liên kết mới rồi thử lại.",
     "signupFailed": "Không thể xác nhận email bằng liên kết này. Hãy yêu cầu một liên kết mới rồi thử lại.",
-    "recoveryFailed": "Liên kết khôi phục mật khẩu không hợp lệ hoặc đã hết hạn. Hãy yêu cầu liên kết mới."
+    "recoveryFailed": "Liên kết khôi phục mật khẩu không hợp lệ hoặc đã hết hạn. Hãy yêu cầu liên kết mới.",
+    "system": "Đã xảy ra lỗi khi xử lý yêu cầu. Vui lòng thử lại sau."
   },
   "actions": {
     "login": "Quay lại đăng nhập"

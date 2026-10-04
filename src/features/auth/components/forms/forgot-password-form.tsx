@@ -8,6 +8,7 @@ import { useRef, useState, type ReactElement } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
 import { Button } from '@/components/ui/button'
+import { FeedbackMessage } from '@/components/common/feedback-message'
 import {
   Dialog,
   DialogClose,
@@ -21,8 +22,11 @@ import { ROUTES } from '@/constants/routes'
 import { useRouter } from '@/i18n/navigation'
 
 import { forgotPassword } from '@/features/auth/actions/auth'
-import { AuthFeedback } from '@/features/auth/components/common/auth-feedback'
+import { AuthField } from '@/features/auth/constants/auth'
+import { generateLocalizedUrl } from '@/features/auth/utils/common'
 import { passwordResetSchema, type PasswordResetFormValues } from '@/features/auth/schemas/auth'
+import { ActionErrorKind } from '@/types/action-result'
+import { handleFormActionError } from '@/utils/form-action-error'
 
 type Props = {
   initialEmail: string
@@ -33,6 +37,9 @@ export const ForgotPasswordForm = ({ initialEmail, show }: Props): ReactElement 
   const t = useTranslations('auth')
   const locale = useLocale()
   const router = useRouter()
+  const systemErrorUrl = generateLocalizedUrl(locale, ROUTES.PUBLIC.AUTH.ERROR, {
+    queryParams: new URLSearchParams({ type: ActionErrorKind.System }),
+  })
   const errorSummaryRef = useRef<HTMLDivElement>(null)
   const [recoveryError, setRecoveryError] = useState<string | null>(null)
   const form = useForm<PasswordResetFormValues>({
@@ -46,10 +53,21 @@ export const ForgotPasswordForm = ({ initialEmail, show }: Props): ReactElement 
     setRecoveryError(null)
 
     try {
-      await forgotPassword(values, locale)
+      const result = await forgotPassword(values, locale)
+      if (!result.success) {
+        handleFormActionError(result.error, {
+          fields: [AuthField.Email],
+          setError: form.setError,
+          onMessage: (key) => {
+            setRecoveryError(t(key))
+            requestAnimationFrame(() => errorSummaryRef.current?.focus())
+          },
+          onSystemError: () => router.replace(systemErrorUrl),
+        })
+        return
+      }
     } catch {
-      setRecoveryError(t('recovery.errors.resetFailed'))
-      requestAnimationFrame(() => errorSummaryRef.current?.focus())
+      router.replace(systemErrorUrl)
       return
     }
 
@@ -101,7 +119,7 @@ export const ForgotPasswordForm = ({ initialEmail, show }: Props): ReactElement 
               }}
             >
               {recoveryError && (
-                <AuthFeedback message={recoveryError} isError focusRef={errorSummaryRef} />
+                <FeedbackMessage message={recoveryError} isError focusRef={errorSummaryRef} />
               )}
               <Input
                 name="email"
