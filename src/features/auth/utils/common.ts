@@ -1,7 +1,26 @@
-import 'server-only'
+import { clientEnv } from '@/env/client'
+import { routing } from '@/i18n/routing'
 
-import { serverEnv } from '@/env/server'
-import { Locale } from '@/constants/locale'
+type UrlOptions = {
+  queryParams?: URLSearchParams
+  fullUrl?: boolean
+  includeLocale?: boolean
+}
 
-export const getRedirectPathname = (pathname: string, locale: Locale): string =>
-  serverEnv.NEXT_PUBLIC_APP_URL.concat(`/${locale}`).concat(pathname)
+export function generateLocalizedUrl(
+  locale: string,
+  pathname: string,
+  options: UrlOptions = {},
+): string {
+  const validLocale = routing.locales.find((candidate) => candidate === locale)
+  if (!validLocale) throw new Error('Unsupported locale')
+
+  const path = options.includeLocale ? `/${validLocale}${pathname}` : pathname
+  const url = new URL(path, clientEnv.NEXT_PUBLIC_APP_URL)
+
+  if (options.queryParams) {
+    url.search = options.queryParams.toString()
+  }
+
+  return options.fullUrl ? url.toString() : `${url.pathname}${url.search}${url.hash}`
+}

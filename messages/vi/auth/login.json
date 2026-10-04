@@ -20,6 +20,7 @@
     "submitting": "Đang đăng nhập…"
   },
   "errors": {
-    "signInFailed": "Không thể đăng nhập bằng thông tin này. Hãy kiểm tra email và mật khẩu."
+    "signInFailed": "Không thể đăng nhập bằng thông tin này. Hãy kiểm tra email và mật khẩu.",
+    "emailNotConfirmed": "Vui lòng xác nhận địa chỉ email trước khi đăng nhập."
   }
 }

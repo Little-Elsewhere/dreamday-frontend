@@ -78,12 +78,14 @@ When working on this codebase, adopt the appropriate agent persona based on the 
 **Responsibilities**:
 
 - Validate ALL external inputs with Zod
-- Ensure Server Actions return discriminated unions (`{success: true, data} | {success: false, error}`)
+- Validate form values with `schema.parse()` at the start of each Server Action; invalid values throw `ZodError` immediately
+- Return discriminated unions (`{success: true, data} | {success: false, error}`) for outcomes after form validation
 - Protect secrets — only `NEXT_PUBLIC_*` vars reach client
 - Implement proper error boundaries (`error.tsx`, `global-error.tsx`)
 
 **Constraints**:
 
+- NEVER catch or convert a form-value `ZodError` into an Action result
 - NEVER expose `DATABASE_URL`, `API_SECRET`, or stack traces to client
 - NEVER import `src/env/server.ts` into Client Components
 - MUST use `server-only` package for server-only modules

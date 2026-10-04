@@ -1,16 +1,23 @@
 'use client'
 
 import { useState, type ReactElement } from 'react'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 
 import { Button } from '@/components/ui/button'
+import { FeedbackMessage } from '@/components/common/feedback-message'
 import { ROUTES } from '@/constants/routes'
 import { useRouter } from '@/i18n/navigation'
 import { signOut } from '@/features/auth/actions/auth'
+import { generateLocalizedUrl } from '@/features/auth/utils/common'
+import { ActionErrorKind } from '@/types/action-result'
 
 export const SignOutButton = (): ReactElement => {
   const t = useTranslations('account')
+  const locale = useLocale()
   const router = useRouter()
+  const systemErrorUrl = generateLocalizedUrl(locale, ROUTES.PUBLIC.AUTH.ERROR, {
+    queryParams: new URLSearchParams({ type: ActionErrorKind.System }),
+  })
   const [pending, setPending] = useState(false)
   const [error, setError] = useState(false)
 
@@ -19,10 +26,16 @@ export const SignOutButton = (): ReactElement => {
     setError(false)
 
     try {
-      await signOut()
-      router.replace(ROUTES.PUBLIC.AUTH.LOGIN)
+      const result = await signOut()
+      if (result.success) {
+        router.replace(ROUTES.PUBLIC.AUTH.LOGIN)
+      } else if (result.error.kind === ActionErrorKind.System) {
+        router.replace(systemErrorUrl)
+      } else {
+        setError(true)
+      }
     } catch {
-      setError(true)
+      router.replace(systemErrorUrl)
     } finally {
       setPending(false)
     }
@@ -39,11 +52,7 @@ export const SignOutButton = (): ReactElement => {
       >
         {t('actions.signOut')}
       </Button>
-      {error && (
-        <p role="alert" className="text-error-text text-sm">
-          {t('messages.signOutFailed')}
-        </p>
-      )}
+      {error && <FeedbackMessage message={t('messages.signOutFailed')} isError />}
     </div>
   )
 }

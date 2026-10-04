@@ -31,6 +31,7 @@
   "errors": {
     "nameTooShort": "Họ và tên cần có ít nhất 2 ký tự.",
     "nameTooLong": "Họ và tên không được dài quá 80 ký tự.",
-    "signUpFailed": "Không thể tạo tài khoản. Hãy kiểm tra thông tin rồi thử lại."
+    "signUpFailed": "Không thể tạo tài khoản. Hãy kiểm tra thông tin rồi thử lại.",
+    "emailExists": "Địa chỉ email này đã được sử dụng."
   }
 }

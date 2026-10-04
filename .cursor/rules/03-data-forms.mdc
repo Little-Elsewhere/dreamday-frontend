@@ -12,6 +12,8 @@ alwaysApply: true
 - Fetch data in Server Components using async/await.
 - Use Server Actions for ALL mutations (forms, writes, deletes). Server Actions live in src/app/actions.ts or co-located as actions.ts inside feature folders.
 - Validate ALL inputs in Server Actions using Zod.
+- Validate form values with `schema.parse(...)` immediately when a Server Action starts, before its `try/catch`. Invalid form values MUST throw `ZodError`; do not use `safeParse()` or convert that error to an Action result.
+- After form validation succeeds, handle domain and service failures with the Action result contract. Validate non-form inputs according to their own boundary requirements.
 - Use revalidatePath() or revalidateTag() after mutations to clear cache.
 - NEVER fetch initial page data inside useEffect.
 
@@ -42,7 +44,7 @@ export async function createPost(formData: FormData): Promise<void> {
 - Use Server Actions for form submission.
 - Use useActionState (React 19) for form state management.
 - Use Zod for schema validation.
-- Display validation errors next to fields.
+- Display client-side validation errors next to fields. Server-side `ZodError` is an exception for invalid submitted values and must propagate to the caller or framework error handler; it is not a field-error Action result.
 
 ```tsx
 'use client'
