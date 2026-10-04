@@ -48,8 +48,9 @@ request -> đọc/verify claims bằng flow auth hiện có -> actor userId
 ## Server Actions và DTO
 
 - Action là entry point public có thể bị gọi trực tiếp; tự parse Zod, auth và gọi service.
-- Theo AGENTS.md, trả discriminated union `{ success: true, data } | { success: false, error, fieldErrors? }`. Error code nội bộ có thể được map sang localized message ở UI; không trả SQL error/stack.
-- Validation error nên có field-level mapping để giữ input; lỗi quyền/không tồn tại và lỗi xung đột được xử lý riêng.
+- Form values phải được kiểm tra bằng `schema.parse(...)` ngay đầu Server Action, trước `try/catch`; dữ liệu không hợp lệ ném `ZodError` ngay, không chuyển thành Action result.
+- Sau khi form values hợp lệ, trả discriminated union `{ success: true, data } | { success: false, error }` cho kết quả nghiệp vụ. Error code nội bộ có thể được map sang localized message ở UI; không trả SQL error/stack.
+- Lỗi nhập liệu thông thường hiển thị cạnh field nhờ validation ở client. `ZodError` từ Server Action được chuyển cho caller hoặc cơ chế xử lý lỗi của framework; lỗi quyền/không tồn tại và lỗi xung đột được xử lý riêng.
 - DTO chỉ chứa thông tin cần render. Không trả email toàn bộ thành viên, token invite, internal IDs không cần, Prisma relation thừa hay credential.
 - Với số tiền bigint, serialize thành decimal string hoặc integer sau khi kiểm tra `Number.isSafeInteger`; quy định một format thống nhất trước khi UI dùng.
 - Trả timestamp ISO UTC cho instant; kèm timezone trip để UI định dạng đúng. Date-only `start_date/end_date` không chuyển thành instant.

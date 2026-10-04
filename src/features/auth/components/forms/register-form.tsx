@@ -6,21 +6,28 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { useRef, useState, type ReactElement } from 'react'
 
 import { Button } from '@/components/ui/button'
+import { FeedbackMessage } from '@/components/common/feedback-message'
 import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/ui/password-input'
 import { ROUTES } from '@/constants/routes'
 import { Link, useRouter } from '@/i18n/navigation'
 
 import { signUp } from '@/features/auth/actions/auth'
-import { AuthFeedback } from '@/features/auth/components/common/auth-feedback'
+import { AuthField } from '@/features/auth/constants/auth'
+import { generateLocalizedUrl } from '@/features/auth/utils/common'
 import { registrationSchema, type RegistrationFormValues } from '@/features/auth/schemas/auth'
+import { ActionErrorKind } from '@/types/action-result'
+import { handleFormActionError } from '@/utils/form-action-error'
 
 export const RegisterForm = (): ReactElement => {
   const t = useTranslations('auth')
   const locale = useLocale()
   const router = useRouter()
+  const systemErrorUrl = generateLocalizedUrl(locale, ROUTES.PUBLIC.AUTH.ERROR, {
+    queryParams: new URLSearchParams({ type: ActionErrorKind.System }),
+  })
   const errorSummary = useRef<HTMLDivElement>(null)
-  const [message, setMessage] = useState<{ text: string; isError: boolean } | null>(null)
+  const [message, setMessage] = useState<string | null>(null)
   const form = useForm<RegistrationFormValues>({
     resolver: zodResolver(registrationSchema),
     defaultValues: { name: '', email: '', password: '', confirmPassword: '' },
@@ -30,11 +37,22 @@ export const RegisterForm = (): ReactElement => {
     setMessage(null)
 
     try {
-      await signUp(values, locale)
-      router.replace(ROUTES.PUBLIC.AUTH.REGISTER_SUCCESS)
+      const result = await signUp(values, locale)
+      if (result.success) {
+        router.replace(ROUTES.PUBLIC.AUTH.REGISTER_SUCCESS)
+      } else {
+        handleFormActionError(result.error, {
+          fields: [AuthField.Name, AuthField.Email, AuthField.Password, AuthField.ConfirmPassword],
+          setError: form.setError,
+          onMessage: (key) => {
+            setMessage(t(key))
+            requestAnimationFrame(() => errorSummary.current?.focus())
+          },
+          onSystemError: () => router.replace(systemErrorUrl),
+        })
+      }
     } catch {
-      setMessage({ text: t('register.errors.signUpFailed'), isError: true })
-      requestAnimationFrame(() => errorSummary.current?.focus())
+      router.replace(systemErrorUrl)
     }
   }
 
@@ -52,13 +70,7 @@ export const RegisterForm = (): ReactElement => {
       </h1>
       <p className="text-ink-soft mt-4 max-w-[42ch]">{t('register.content.intro')}</p>
 
-      {message && (
-        <AuthFeedback
-          message={message.text}
-          isError={message.isError}
-          focusRef={message.isError ? errorSummary : undefined}
-        />
-      )}
+      {message && <FeedbackMessage message={message} isError focusRef={errorSummary} />}
 
       <FormProvider {...form}>
         <form

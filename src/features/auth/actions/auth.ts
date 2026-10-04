@@ -1,6 +1,10 @@
 'use server'
 
+import { z } from 'zod'
+
 import { Locale } from '@/constants/locale'
+import { ROUTES } from '@/constants/routes'
+import { AuthAction } from '@/features/auth/constants/auth'
 import {
   loginSchema,
   passwordResetSchema,
@@ -11,60 +15,103 @@ import {
   type RegistrationFormValues,
   type UpdatePasswordFormValues,
 } from '@/features/auth/schemas/auth'
+import type { AuthResult } from '@/features/auth/types/auth-result'
+import { authError } from '@/features/auth/utils/auth-error'
+import { generateLocalizedUrl } from '@/features/auth/utils/common'
+import { isMissingSession } from '@/features/auth/utils/session-error'
 import { createClient } from '@/lib/supabase/server'
-import { getRedirectPathname } from '@/features/auth/utils/common'
-import { ROUTES } from '@/constants/routes'
+import { messageError, systemError } from '@/utils/action-result'
 
-export const signIn = async (values: LoginFormValues): Promise<void> => {
-  const supabase = await createClient()
-  const { error } = await supabase.auth.signInWithPassword(loginSchema.parse(values))
+export const signIn = async (values: LoginFormValues): Promise<AuthResult> => {
+  const validated = loginSchema.parse(values)
 
-  if (error) throw new Error(error.message)
+  try {
+    const supabase = await createClient()
+    const { error } = await supabase.auth.signInWithPassword(validated)
+    return error ? authError(error, AuthAction.SignIn) : { success: true, data: null }
+  } catch {
+    return systemError()
+  }
 }
 
-export const signUp = async (values: RegistrationFormValues, locale: Locale): Promise<void> => {
-  const { name, email, password } = registrationSchema.parse(values)
-  const supabase = await createClient()
+export const signUp = async (
+  values: RegistrationFormValues,
+  locale: string,
+): Promise<AuthResult> => {
+  const validated = registrationSchema.parse(values)
+  const parsedLocale = z.enum(Locale).safeParse(locale)
+  if (!parsedLocale.success) return systemError()
 
-  const { error } = await supabase.auth.signUp({
-    email,
-    password,
-    options: {
-      data: { full_name: name, locale: locale },
-      emailRedirectTo: getRedirectPathname(ROUTES.PRIVATE.ACCOUNT, locale),
-    },
-  })
+  const { name, email, password } = validated
 
-  if (error) throw new Error(error.message)
+  try {
+    const supabase = await createClient()
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { full_name: name, locale: parsedLocale.data },
+        emailRedirectTo: generateLocalizedUrl(parsedLocale.data, ROUTES.PRIVATE.ACCOUNT, {
+          fullUrl: true,
+          includeLocale: true,
+        }),
+      },
+    })
+    return error ? authError(error, AuthAction.SignUp) : { success: true, data: null }
+  } catch {
+    return systemError()
+  }
 }
 
 export const forgotPassword = async (
   values: PasswordResetFormValues,
-  locale: Locale,
-): Promise<void> => {
-  const { email } = passwordResetSchema.parse(values)
-  const supabase = await createClient()
-  const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: getRedirectPathname(ROUTES.PRIVATE.UPDATE_PASSWORD, locale),
-  })
+  locale: string,
+): Promise<AuthResult> => {
+  const validated = passwordResetSchema.parse(values)
+  const parsedLocale = z.enum(Locale).safeParse(locale)
+  if (!parsedLocale.success) return systemError()
 
-  if (error) throw new Error(error.message)
+  try {
+    const supabase = await createClient()
+    const { error } = await supabase.auth.resetPasswordForEmail(validated.email, {
+      redirectTo: generateLocalizedUrl(parsedLocale.data, ROUTES.PRIVATE.UPDATE_PASSWORD, {
+        fullUrl: true,
+        includeLocale: true,
+      }),
+    })
+    return error ? authError(error, AuthAction.ForgotPassword) : { success: true, data: null }
+  } catch {
+    return systemError()
+  }
 }
 
-export const signOut = async (): Promise<void> => {
-  const supabase = await createClient()
-  const { error } = await supabase.auth.signOut()
-
-  if (error) throw new Error(error.message)
+export const signOut = async (): Promise<AuthResult> => {
+  try {
+    const supabase = await createClient()
+    const { error } = await supabase.auth.signOut()
+    return error ? authError(error, AuthAction.SignOut) : { success: true, data: null }
+  } catch {
+    return systemError()
+  }
 }
 
-export const updatePasswordAction = async (values: UpdatePasswordFormValues): Promise<void> => {
-  const { password } = updatePasswordSchema.parse(values)
-  const supabase = await createClient()
-  const { data } = await supabase.auth.getClaims()
+export const updatePassword = async (values: UpdatePasswordFormValues): Promise<AuthResult> => {
+  const validated = updatePasswordSchema.parse(values)
 
-  if (!data?.claims) throw new Error('Password reset session is expired')
+  try {
+    const supabase = await createClient()
+    const { data, error: claimsError } = await supabase.auth.getClaims()
+    if (claimsError && isMissingSession(claimsError)) {
+      return messageError('updatePassword.errors.sessionExpired')
+    }
+    if (claimsError) return authError(claimsError, AuthAction.UpdatePassword)
+    if (!data?.claims) {
+      return messageError('updatePassword.errors.sessionExpired')
+    }
 
-  const { error } = await supabase.auth.updateUser({ password })
-  if (error) throw new Error(error.message)
+    const { error } = await supabase.auth.updateUser({ password: validated.password })
+    return error ? authError(error, AuthAction.UpdatePassword) : { success: true, data: null }
+  } catch {
+    return systemError()
+  }
 }

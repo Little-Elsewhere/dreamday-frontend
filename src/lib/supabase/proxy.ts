@@ -1,10 +1,12 @@
 import { serverEnv } from '@/env/server'
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
+import { AuthSessionState } from '@/features/auth/constants/auth'
+import { isMissingSession } from '@/features/auth/utils/session-error'
 
 interface UpdateSessionResult {
   response: NextResponse
-  isAuthenticated: boolean
+  state: AuthSessionState
 }
 
 export const updateSession = async (request: NextRequest): Promise<UpdateSessionResult> => {
@@ -32,10 +34,17 @@ export const updateSession = async (request: NextRequest): Promise<UpdateSession
     },
   )
 
-  const { data, error } = await supabase.auth.getClaims()
+  try {
+    const { data, error } = await supabase.auth.getClaims()
+    if (error && !isMissingSession(error)) {
+      return { response: supabaseResponse, state: AuthSessionState.Error }
+    }
 
-  return {
-    response: supabaseResponse,
-    isAuthenticated: !error && Boolean(data?.claims),
+    return {
+      response: supabaseResponse,
+      state: data?.claims ? AuthSessionState.Authenticated : AuthSessionState.Unauthenticated,
+    }
+  } catch (error) {
+    return { response: supabaseResponse, state: AuthSessionState.Error }
   }
 }

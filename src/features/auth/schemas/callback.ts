@@ -2,7 +2,7 @@ import { z } from 'zod'
 import type { EmailOtpType as SupabaseEmailOtpType } from '@supabase/supabase-js'
 
 import { ROUTES } from '@/constants/routes'
-import { AuthEmailOtpType } from '@/features/auth/constants/email-otp-type'
+import { AuthEmailOtpType } from '@/features/auth/constants/auth'
 
 export const emailOtpTypeSchema = z
   .enum(AuthEmailOtpType)

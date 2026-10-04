@@ -20,6 +20,7 @@
     "submitting": "Signing in…"
   },
   "errors": {
-    "signInFailed": "We couldn’t sign you in with those details. Check your email and password."
+    "signInFailed": "We couldn’t sign you in with those details. Check your email and password.",
+    "emailNotConfirmed": "Confirm your email address before signing in."
   }
 }

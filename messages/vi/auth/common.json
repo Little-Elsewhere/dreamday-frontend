@@ -36,6 +36,9 @@
     "passwordTooLong": "Mật khẩu không được dài quá 72 ký tự.",
     "confirmPasswordRequired": "Vui lòng xác nhận mật khẩu.",
     "confirmPasswordTooLong": "Mật khẩu xác nhận không được dài quá 72 ký tự.",
-    "passwordMismatch": "Mật khẩu xác nhận chưa khớp."
+    "passwordMismatch": "Mật khẩu xác nhận chưa khớp.",
+    "weakPassword": "Hãy chọn mật khẩu mạnh hơn.",
+    "rateLimited": "Bạn đã thử quá nhiều lần. Vui lòng chờ vài phút rồi thử lại.",
+    "invalidInput": "Hãy kiểm tra thông tin đã nhập và thử lại."
   }
 }

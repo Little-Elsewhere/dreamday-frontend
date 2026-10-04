@@ -1,16 +1,24 @@
 {
   "metadata": {
-    "title": "Link verification failed",
-    "description": "This authentication link could not be verified."
+    "authError": {
+      "title": "Link verification failed",
+      "description": "This authentication link could not be verified."
+    },
+    "systemError": {
+      "title": "Authentication error",
+      "description": "Something went wrong while processing your authentication request."
+    }
   },
   "content": {
     "eyebrow": "We couldn’t finish that step",
-    "title": "This link couldn’t be verified"
+    "title": "This link couldn’t be verified",
+    "systemTitle": "Something went wrong"
   },
   "messages": {
     "generic": "This authentication link could not be verified. Request a new link and try again.",
     "signupFailed": "We couldn’t confirm that email link. Request a new link and try again.",
-    "recoveryFailed": "This password recovery link is invalid or has expired. Request a new link."
+    "recoveryFailed": "This password recovery link is invalid or has expired. Request a new link.",
+    "system": "Something went wrong while processing your request. Please try again later."
   },
   "actions": {
     "login": "Return to sign in"

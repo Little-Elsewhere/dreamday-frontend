@@ -2,13 +2,13 @@ import type { ReactElement, Ref } from 'react'
 
 import { cn } from '@/utils/cn'
 
-interface AuthFeedbackProps {
+type Props = {
   message: string
   isError: boolean
   focusRef?: Ref<HTMLDivElement>
 }
 
-export const AuthFeedback = ({ message, isError, focusRef }: AuthFeedbackProps): ReactElement => {
+export const FeedbackMessage = ({ message, isError, focusRef }: Props): ReactElement => {
   return (
     <div
       className={cn(
