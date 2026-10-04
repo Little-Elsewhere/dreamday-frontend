@@ -44,7 +44,7 @@ export const updateSession = async (request: NextRequest): Promise<UpdateSession
       response: supabaseResponse,
       state: data?.claims ? AuthSessionState.Authenticated : AuthSessionState.Unauthenticated,
     }
-  } catch (error) {
+  } catch {
     return { response: supabaseResponse, state: AuthSessionState.Error }
   }
 }
