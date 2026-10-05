@@ -16,7 +16,7 @@ export const authError = (error: SupabaseAuthError, action: AuthAction): AuthRes
     case AuthAction.SignIn:
       switch (error.code) {
         case AuthErrorCode.EmailAddressInvalid:
-          return fieldError(AuthField.Email, 'common.errors.emailInvalid')
+          return fieldError(AuthField.Email, 'auth.common.errors.emailInvalid')
         case AuthErrorCode.InvalidCredentials:
           return messageError('login.errors.signInFailed')
         case AuthErrorCode.EmailNotConfirmed:
@@ -26,26 +26,26 @@ export const authError = (error: SupabaseAuthError, action: AuthAction): AuthRes
     case AuthAction.SignUp:
       switch (error.code) {
         case AuthErrorCode.EmailAddressInvalid:
-          return fieldError(AuthField.Email, 'common.errors.emailInvalid')
+          return fieldError(AuthField.Email, 'auth.common.errors.emailInvalid')
         case AuthErrorCode.EmailExists:
         case AuthErrorCode.UserAlreadyExists:
-          return fieldError(AuthField.Email, 'register.errors.emailExists')
+          return fieldError(AuthField.Email, 'auth.register.errors.emailExists')
         case AuthErrorCode.WeakPassword:
-          return fieldError(AuthField.Password, 'common.errors.weakPassword')
+          return fieldError(AuthField.Password, 'auth.common.errors.weakPassword')
       }
       break
     case AuthAction.ForgotPassword:
       switch (error.code) {
         case AuthErrorCode.EmailAddressInvalid:
-          return fieldError(AuthField.Email, 'common.errors.emailInvalid')
+          return fieldError(AuthField.Email, 'auth.common.errors.emailInvalid')
       }
       break
     case AuthAction.UpdatePassword:
       switch (error.code) {
         case AuthErrorCode.WeakPassword:
-          return fieldError(AuthField.Password, 'common.errors.weakPassword')
+          return fieldError(AuthField.Password, 'auth.common.errors.weakPassword')
         case AuthErrorCode.SamePassword:
-          return fieldError(AuthField.Password, 'updatePassword.errors.samePassword')
+          return fieldError(AuthField.Password, 'auth.updatePassword.errors.samePassword')
         case AuthErrorCode.SessionExpired:
         case AuthErrorCode.SessionNotFound:
         case AuthErrorCode.RefreshTokenNotFound:

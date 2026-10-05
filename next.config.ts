@@ -5,6 +5,20 @@ import { withSerwist } from '@serwist/turbopack'
 const withNextIntl = createNextIntlPlugin()
 const isDevelopment = process.env.DOPPLER_ENVIRONMENT === 'dev'
 const isProduction = process.env.DOPPLER_ENVIRONMENT === 'prod'
+const supabaseConnectionSources = (() => {
+  const value = process.env.NEXT_PUBLIC_SUPABASE_URL
+
+  if (!value) {
+    return []
+  }
+
+  const url = new URL(value)
+  const webSocketProtocol =
+    url.protocol === 'https:' ? 'wss:' : url.protocol === 'http:' ? 'ws:' : null
+
+  return [url.origin, ...(webSocketProtocol ? [`${webSocketProtocol}//${url.host}`] : [])]
+})()
+const connectSources = ["'self'", ...supabaseConnectionSources, 'https://*.posthog.com'].join(' ')
 
 const contentSecurityPolicy = [
   "default-src 'self'",
@@ -12,7 +26,7 @@ const contentSecurityPolicy = [
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' blob: data:",
   "font-src 'self'",
-  "connect-src 'self' https://*.posthog.com",
+  `connect-src ${connectSources}`,
   "media-src 'self'",
   "worker-src 'self' blob: data:",
   "manifest-src 'self'",
@@ -21,7 +35,7 @@ const contentSecurityPolicy = [
   "base-uri 'self'",
   "form-action 'self'",
   "frame-ancestors 'none'",
-  'upgrade-insecure-requests',
+  ...(isDevelopment ? [] : ['upgrade-insecure-requests']),
 ].join('; ')
 
 const contentSecurityPolicyReportOnly = [
@@ -30,7 +44,7 @@ const contentSecurityPolicyReportOnly = [
   "style-src 'self'",
   "img-src 'self' blob: data:",
   "font-src 'self'",
-  "connect-src 'self' https://*.posthog.com",
+  `connect-src ${connectSources}`,
   "media-src 'self'",
   "worker-src 'self' blob: data:",
   "manifest-src 'self'",
@@ -82,6 +96,7 @@ const securityHeaders = [
 ]
 
 const nextConfig: NextConfig = {
+  output: 'standalone',
   reactCompiler: true,
   experimental: {
     turbopackRustReactCompiler: true,

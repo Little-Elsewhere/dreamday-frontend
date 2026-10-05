@@ -1,0 +1,64 @@
+name: dreamday-dev
+
+services:
+  app:
+    build:
+      context: ../..
+      dockerfile: docker/dev/Dockerfile
+      args:
+        NEXT_PUBLIC_APP_PORT: ${NEXT_PUBLIC_APP_PORT:-4000}
+    init: true
+    depends_on:
+      - local-domains
+    env_file:
+      - ../../.env.local
+    ports:
+      - '${NEXT_PUBLIC_APP_PORT:-4000}:${NEXT_PUBLIC_APP_PORT:-4000}'
+    environment:
+      DOPPLER_ENVIRONMENT: dev
+      NEXT_PUBLIC_APP_PORT: ${NEXT_PUBLIC_APP_PORT:-4000}
+      PORT: ${NEXT_PUBLIC_APP_PORT:-4000}
+    secrets:
+      - doppler_token
+    networks:
+      - local
+    volumes:
+      - type: bind
+        source: ../..
+        target: /app
+      - type: volume
+        source: dev_node_modules
+        target: /app/node_modules
+      - type: volume
+        source: dev_next
+        target: /app/.next
+
+  local-domains:
+    image: nginx:alpine
+    restart: unless-stopped
+    ports:
+      - '127.0.0.1:80:80'
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./proxy-headers.conf:/etc/nginx/proxy-headers.conf:ro
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    networks:
+      local:
+        aliases:
+          - supabase.local
+          - studio.supabase.local
+          - mailpit.local
+
+volumes:
+  dev_node_modules:
+  dev_next:
+
+secrets:
+  doppler_token:
+    environment: DOPPLER_TOKEN
+
+networks:
+  local:
+    external: true
+    name: ${SUPABASE_NETWORK:-dreamday-local-network}
