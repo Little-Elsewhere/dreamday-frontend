@@ -1,0 +1,42 @@
+# Version control and editor tooling
+.git
+.github
+.agents
+.claude
+.cursor
+.storybook
+.vscode
+
+# Installed dependencies and generated build output
+node_modules
+**/node_modules
+.pnpm-store
+.next
+**/.next
+out
+
+# Test and Storybook artifacts
+coverage
+test-results
+playwright-report
+blob-report
+storybook-static
+vitest.config.ts
+vitest.shims.d.ts
+
+# Local environment and machine-specific files
+.env*
+*.tsbuildinfo
+*.log
+.DS_Store
+
+# Local-only documentation, Supabase setup, and maintenance files
+documents
+design
+supabase
+README.md
+AGENTS.md
+CLAUDE.md
+CONTRIBUTING.md
+DATABASE_DESIGN_REPORT.md
+Makefile

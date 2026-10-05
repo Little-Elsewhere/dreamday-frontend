@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url'
 
 const projectRoot = fileURLToPath(new URL('../', import.meta.url))
 const localEnvPath = resolve(projectRoot, '.env.local')
+const localSupabaseUrl = 'http://supabase.local'
 const [dopplerPath, statusPath] = process.argv.slice(2)
 
 if (!dopplerPath || !statusPath) {
@@ -39,16 +40,16 @@ const parseDopplerValues = (value) => {
 const values = parseDopplerValues(await parseJsonFile(dopplerPath, 'Doppler'))
 const status = await parseJsonFile(statusPath, 'Supabase status')
 
-const apiUrl = status.API_URL
 const publishableKey = status.PUBLISHABLE_KEY ?? status.ANON_KEY
 const databaseUrl = status.DB_URL
 
 if (
-  typeof apiUrl !== 'string' ||
   typeof publishableKey !== 'string' ||
-  typeof databaseUrl !== 'string'
+  publishableKey.length === 0 ||
+  typeof databaseUrl !== 'string' ||
+  databaseUrl.length === 0
 ) {
-  throw new Error('Supabase status is missing API_URL, PUBLISHABLE_KEY (or ANON_KEY), or DB_URL.')
+  throw new Error('Supabase status is missing a publishable key (or anon key) or DB URL.')
 }
 
 let databasePassword
@@ -70,6 +71,7 @@ const requiredDopplerValues = [
   'NEXT_PUBLIC_APP_TITLE_TEMPLATE',
   'NEXT_PUBLIC_APP_DESCRIPTION',
   'NEXT_PUBLIC_APP_URL',
+  'NEXT_PUBLIC_APP_PORT',
 ]
 
 for (const key of requiredDopplerValues) {
@@ -78,7 +80,15 @@ for (const key of requiredDopplerValues) {
   }
 }
 
-values.set('NEXT_PUBLIC_SUPABASE_URL', apiUrl)
+const appPortValue = values.get('NEXT_PUBLIC_APP_PORT')
+const appPort = Number(appPortValue)
+
+if (!/^\d+$/.test(appPortValue) || !Number.isInteger(appPort) || appPort < 1 || appPort > 65535) {
+  throw new Error('NEXT_PUBLIC_APP_PORT must be an integer between 1 and 65535.')
+}
+
+values.set('NEXT_PUBLIC_APP_PORT', String(appPort))
+values.set('NEXT_PUBLIC_SUPABASE_URL', localSupabaseUrl)
 values.set('NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY', publishableKey)
 values.set('DATABASE_PASSWORD', databasePassword)
 
@@ -88,10 +98,14 @@ if (!values.get('NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN')) {
 
 const escapeEnvValue = (value) => JSON.stringify(value).replaceAll('$', '\\$')
 const output = `${[...values].map(([key, value]) => `${key}=${escapeEnvValue(value)}`).join('\n')}\n`
-const temporaryPath = `${localEnvPath}.tmp-${process.pid}`
 
-await writeFile(temporaryPath, output, { encoding: 'utf8', mode: 0o600 })
-await rename(temporaryPath, localEnvPath)
-await chmod(localEnvPath, 0o600)
+const writeAtomically = async (path, contents) => {
+  const temporaryPath = `${path}.tmp-${process.pid}`
+  await writeFile(temporaryPath, contents, { encoding: 'utf8', mode: 0o600 })
+  await rename(temporaryPath, path)
+  await chmod(path, 0o600)
+}
 
-console.log('Generated .env.local from Doppler and overrode local Supabase values.')
+await writeAtomically(localEnvPath, output)
+
+console.log(`Generated .env.local (app port ${appPort}) from Doppler and local Supabase status.`)

@@ -6,6 +6,7 @@ export const clientEnvSchema = z.object({
   NEXT_PUBLIC_APP_TITLE_TEMPLATE: z.string().min(1),
   NEXT_PUBLIC_APP_DESCRIPTION: z.string().min(1),
   NEXT_PUBLIC_APP_URL: z.url().min(1),
+  NEXT_PUBLIC_APP_PORT: z.coerce.number().int().min(1).max(65535).default(4000),
 
   // Supabase
   NEXT_PUBLIC_SUPABASE_URL: z.url().min(1),

@@ -1,0 +1,25 @@
+name: dreamday-prod
+
+services:
+  app:
+    build:
+      context: ../..
+      dockerfile: docker/prod/Dockerfile
+      args:
+        NEXT_PUBLIC_APP_PORT: ${NEXT_PUBLIC_APP_PORT:-4000}
+      secrets:
+        - doppler_token
+    init: true
+    restart: unless-stopped
+    ports:
+      - '${NEXT_PUBLIC_APP_PORT:-4000}:${NEXT_PUBLIC_APP_PORT:-4000}'
+    environment:
+      DOPPLER_ENVIRONMENT: prod
+      NEXT_PUBLIC_APP_PORT: ${NEXT_PUBLIC_APP_PORT:-4000}
+      PORT: ${NEXT_PUBLIC_APP_PORT:-4000}
+    secrets:
+      - doppler_token
+
+secrets:
+  doppler_token:
+    environment: DOPPLER_TOKEN
