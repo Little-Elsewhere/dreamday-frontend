@@ -2,6 +2,8 @@
 
 import { useState, type ReactElement } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
+import { Logout01Icon } from '@hugeicons/core-free-icons'
+import { HugeiconsIcon } from '@hugeicons/react'
 
 import { Button } from '@/components/ui/button'
 import { FeedbackMessage } from '@/components/common/feedback-message'
@@ -11,7 +13,11 @@ import { signOut } from '@/features/auth/actions/auth'
 import { generateLocalizedUrl } from '@/features/auth/utils/common'
 import { ActionErrorKind } from '@/types/action-result'
 
-export const SignOutButton = (): ReactElement => {
+interface SignOutButtonProps {
+  compactLabel?: boolean
+}
+
+export const SignOutButton = ({ compactLabel = false }: SignOutButtonProps): ReactElement => {
   const t = useTranslations('account')
   const locale = useLocale()
   const router = useRouter()
@@ -46,11 +52,24 @@ export const SignOutButton = (): ReactElement => {
       <Button
         type="button"
         variant="outline"
+        className={compactLabel ? 'min-h-11 gap-2 px-3 sm:px-4' : undefined}
+        aria-label={compactLabel ? t('actions.signOut') : undefined}
         onClick={() => void handleSignOut()}
         loading={pending}
         loadingLabel={t('actions.signingOut')}
       >
-        {t('actions.signOut')}
+        {compactLabel && (
+          <HugeiconsIcon
+            aria-hidden="true"
+            className="size-4"
+            icon={Logout01Icon}
+            size={16}
+            strokeWidth={1.7}
+          />
+        )}
+        <span className={compactLabel ? 'hidden sm:inline' : undefined}>
+          {t('actions.signOut')}
+        </span>
       </Button>
       {error && <FeedbackMessage message={t('messages.signOutFailed')} isError />}
     </div>

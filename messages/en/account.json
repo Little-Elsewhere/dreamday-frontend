@@ -16,6 +16,7 @@
     "imageAlt": "Limestone islands in Lan Ha Bay"
   },
   "actions": {
+    "viewTrips": "Open my trips",
     "signOut": "Sign out",
     "signingOut": "Signing out…"
   },

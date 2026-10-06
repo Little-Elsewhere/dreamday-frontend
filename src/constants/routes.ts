@@ -12,6 +12,7 @@ export const ROUTES = {
   },
   PRIVATE: {
     ACCOUNT: '/account',
+    TRIPS: '/trips',
     UPDATE_PASSWORD: '/auth/update-password',
   },
 } as const
