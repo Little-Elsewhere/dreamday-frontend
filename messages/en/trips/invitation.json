@@ -1,0 +1,13 @@
+{
+  "content": {
+    "title": "You're invited to plan together",
+    "description": "Sign in with the invited email address to join this trip."
+  },
+  "labels": {
+    "link": "Invitation link"
+  },
+  "actions": {
+    "sendEmail": "Send by email",
+    "accept": "Accept invitation"
+  }
+}

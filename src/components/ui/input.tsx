@@ -9,7 +9,7 @@ import { Controller, useFormContext } from 'react-hook-form'
 import { Label } from '@/components/ui/label'
 import { cn } from '@/utils/cn'
 
-export interface InputProps<TFieldValues extends FieldValues> extends Omit<
+export interface InputProps<TFieldValues extends FieldValues = FieldValues> extends Omit<
   React.ComponentProps<'input'>,
   'name' | 'value' | 'defaultValue' | 'onChange' | 'onBlur'
 > {
@@ -21,7 +21,7 @@ export interface InputProps<TFieldValues extends FieldValues> extends Omit<
   endAdornment?: React.ReactNode
 }
 
-const Input = <TFieldValues extends FieldValues>({
+const Input = <TFieldValues extends FieldValues = FieldValues>({
   name,
   label,
   description,

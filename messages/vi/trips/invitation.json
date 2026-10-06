@@ -1,0 +1,13 @@
+{
+  "content": {
+    "title": "Bạn được mời cùng lên kế hoạch",
+    "description": "Đăng nhập bằng đúng địa chỉ email nhận lời mời để tham gia chuyến đi."
+  },
+  "labels": {
+    "link": "Liên kết mời"
+  },
+  "actions": {
+    "sendEmail": "Gửi qua email",
+    "accept": "Chấp nhận lời mời"
+  }
+}

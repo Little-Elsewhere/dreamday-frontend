@@ -1,0 +1,82 @@
+'use client'
+
+import * as React from 'react'
+import { useTranslations } from 'next-intl'
+import type { FieldPath, FieldValues } from 'react-hook-form'
+import { Controller, useFormContext } from 'react-hook-form'
+
+import { Label } from '@/components/ui/label'
+import { cn } from '@/utils/cn'
+
+export interface TextareaProps<TFieldValues extends FieldValues = FieldValues> extends Omit<
+  React.ComponentProps<'textarea'>,
+  'name' | 'value' | 'defaultValue' | 'onChange' | 'onBlur'
+> {
+  name: FieldPath<TFieldValues>
+  label: React.ReactNode
+  description?: React.ReactNode
+  containerClassName?: string
+  labelClassName?: string
+}
+
+const Textarea = <TFieldValues extends FieldValues = FieldValues>({
+  name,
+  label,
+  description,
+  containerClassName,
+  labelClassName,
+  className,
+  id,
+  ...props
+}: TextareaProps<TFieldValues>): React.ReactElement => {
+  const generatedId = React.useId()
+  const textareaId = id ?? generatedId
+  const descriptionId = `${textareaId}-description`
+  const errorId = `${textareaId}-error`
+  const { control } = useFormContext<TFieldValues>()
+  const t = useTranslations()
+
+  return (
+    <Controller
+      control={control}
+      name={name}
+      render={({ field, fieldState }) => (
+        <div className={cn('grid min-w-0 gap-2', containerClassName)}>
+          <Label className={labelClassName} htmlFor={textareaId}>
+            {label}
+          </Label>
+          <textarea
+            {...props}
+            {...field}
+            value={field.value ?? ''}
+            id={textareaId}
+            ref={field.ref}
+            data-slot="textarea"
+            aria-describedby={
+              [description ? descriptionId : null, fieldState.error ? errorId : null]
+                .filter(Boolean)
+                .join(' ') || undefined
+            }
+            aria-invalid={fieldState.invalid}
+            className={cn(
+              'rounded-auth border-line-strong bg-field text-ink placeholder:text-placeholder focus-visible:border-primary focus-visible:ring-primary/10 aria-invalid:border-error aria-invalid:ring-error/20 block min-h-24 w-full min-w-0 border px-3 py-3 font-[inherit] text-base transition-colors outline-none focus-visible:bg-white focus-visible:ring-3 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:ring-3',
+              className,
+            )}
+          />
+          {description && (
+            <p id={descriptionId} className="text-muted-foreground text-sm">
+              {description}
+            </p>
+          )}
+          {fieldState.error?.message && (
+            <p id={errorId} role="alert" className="text-error-text text-sm">
+              {t(fieldState.error.message)}
+            </p>
+          )}
+        </div>
+      )}
+    />
+  )
+}
+
+export { Textarea }

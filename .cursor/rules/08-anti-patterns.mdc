@@ -1,0 +1,30 @@
+---
+description: Component conventions and source file organization
+globs:
+  - 'src/**/*.{ts,tsx}'
+alwaysApply: false
+---
+
+# Component Conventions and Anti-Patterns
+
+## 1. Component Prop Types
+
+- When a component file contains one UI component, declare its props with a local `type Props = { ... }` and use `Props` for the component parameter.
+- This convention does not apply to `src/components/ui/**`. Shared UI components should keep descriptive prop type names such as `InputProps`, `CheckboxProps`, or `SelectFieldProps`.
+- Use descriptive names when a prop type is shared by multiple components or exported as a public contract.
+
+## 2. File and Folder Organization
+
+- Keep feature-specific code under `src/features/<feature>/`. Put code shared across features in the appropriate top-level shared folder only when it is genuinely reused.
+- Keep one exported UI component per file. Use a kebab-case filename that describes the component, and group feature components by role under `components/`, such as `common/` or `forms/`.
+- Keep generic, reusable UI primitives and form fields in `src/components/ui/`; keep app-wide composed components in `src/components/common/`. Do not put feature-specific components in these shared folders.
+- Put feature hooks in `<feature>/hooks/` with `use-*.ts` filenames. Do not keep hooks inside `components/` or `components/forms/`.
+- Put feature-specific constants in `<feature>/constants/`, pure helper functions in `<feature>/utils/`, Zod schemas in `<feature>/schemas/`, Server Actions in `<feature>/actions/`, and feature data access or queries in `<feature>/data/`.
+- Put shared feature types in `<feature>/types/` when they are used across multiple files; keep one-off types near the code that uses them.
+- Avoid catch-all files that combine unrelated components or responsibilities. Give each file a clear purpose and name it after that purpose.
+
+## 3. Import Paths
+
+- Use the configured `@/` alias for imports between files under `src/`, and `@messages/` for imports under `messages/`.
+- Do not traverse parent folders in project imports (`../`, `../../`, and similar paths). Use the matching alias instead.
+- Relative `./` imports are allowed only for files in the same directory.

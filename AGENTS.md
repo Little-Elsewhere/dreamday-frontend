@@ -20,6 +20,7 @@ Additional project conventions are maintained in `.cursor/rules/*.mdc`. Codex do
 - `05-tooling.mdc` — testing, linting, and PWA
 - `06-error-handling.mdc` — error boundaries and error UX
 - `07-ci-cd.mdc` — CI/CD and release conventions
+- `08-anti-patterns.mdc` — component prop type naming conventions
 
 ---
 

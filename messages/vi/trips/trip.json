@@ -1,0 +1,40 @@
+{
+  "metadata": {
+    "title": "Tạo chuyến đi"
+  },
+  "content": {
+    "eyebrow": "MỘT HÀNH TRÌNH MỚI",
+    "title": "Bạn muốn đi đâu?",
+    "description": "Đặt nền cho chuyến đi. Bạn có thể thêm lịch trình, việc cần làm và chi phí sau."
+  },
+  "labels": {
+    "name": "Tên chuyến đi",
+    "destination": "Điểm đến",
+    "description": "Mô tả ngắn",
+    "startsOn": "Ngày bắt đầu",
+    "endsOn": "Ngày kết thúc",
+    "timeZone": "Múi giờ của chuyến đi",
+    "currency": "Tiền tệ của chuyến đi",
+    "status": {
+      "planning": "Đang lên kế hoạch",
+      "upcoming": "Sắp khởi hành",
+      "ongoing": "Đang diễn ra",
+      "past": "Đã kết thúc",
+      "cancelled": "Đã hủy"
+    }
+  },
+  "placeholders": {
+    "name": "Ví dụ: Mùa thu ở Kyoto",
+    "destination": "Ví dụ: Kyoto, Nhật Bản",
+    "description": "Một vài lời về chuyến đi này"
+  },
+  "descriptions": {
+    "timeZone": "Ngày trên lịch sẽ theo múi giờ này. Hãy xác nhận theo điểm đến.",
+    "currency": "Tất cả chi phí của chuyến dùng tiền tệ này; sau khi ghi khoản chi đầu tiên sẽ không đổi được."
+  },
+  "actions": {
+    "create": "Tạo chuyến đi",
+    "save": "Lưu chuyến đi",
+    "edit": "Chỉnh sửa chuyến đi"
+  }
+}

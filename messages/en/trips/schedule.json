@@ -1,0 +1,23 @@
+{
+  "content": {
+    "title": "Upcoming schedule"
+  },
+  "messages": {
+    "empty": "No activities yet. Add your first stop."
+  },
+  "labels": {
+    "title": "Activity name",
+    "location": "Location",
+    "tripDay": "Day on the trip calendar",
+    "startLocal": "Local start time",
+    "endLocal": "Local end time",
+    "startTimeZone": "Start time zone",
+    "endTimeZone": "End time zone",
+    "repeatedStartTime": "Repeated start time",
+    "repeatedEndTime": "Repeated end time",
+    "note": "Note (optional)"
+  },
+  "actions": {
+    "add": "Add activity"
+  }
+}

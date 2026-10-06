@@ -1,0 +1,26 @@
+{
+  "metadata": {
+    "title": "All journeys"
+  },
+  "content": {
+    "eyebrow": "YOUR TRAVEL JOURNAL",
+    "title": "Every journey has a story.",
+    "description": "Save the places you want to visit and plan each moment together."
+  },
+  "labels": {
+    "search": "Search by name or destination",
+    "filters": {
+      "all": "All journeys"
+    }
+  },
+  "messages": {
+    "empty": {
+      "title": "No trips yet",
+      "description": "Begin with somewhere you have always wanted to explore."
+    },
+    "noCover": "No cover image"
+  },
+  "actions": {
+    "view": "View trip"
+  }
+}

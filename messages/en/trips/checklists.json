@@ -1,0 +1,28 @@
+{
+  "content": {
+    "title": "Checklists"
+  },
+  "messages": {
+    "empty": "Add a checklist to organize the work."
+  },
+  "labels": {
+    "defaultTitle": "To do",
+    "newTitle": "New checklist name",
+    "tasks": {
+      "repeatedDueTime": "Repeated due time",
+      "title": "To do",
+      "assignee": "Assignee",
+      "unassigned": "Unassigned",
+      "dueLocal": "Local due time",
+      "dueTimeZone": "Due time zone"
+    }
+  },
+  "actions": {
+    "create": "Create checklist",
+    "tasks": {
+      "add": "Add task",
+      "markDone": "Mark {title} as done",
+      "markUndone": "Mark {title} as not done"
+    }
+  }
+}

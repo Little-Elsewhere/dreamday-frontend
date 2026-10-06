@@ -1,0 +1,19 @@
+{
+  "content": {
+    "title": "Thành viên"
+  },
+  "labels": {
+    "inviteEmail": "Email thành viên",
+    "role": "Vai trò",
+    "roles": {
+      "owner": "Chủ chuyến đi",
+      "editor": "Biên tập",
+      "member": "Thành viên",
+      "viewer": "Chỉ xem"
+    },
+    "pendingInvitations": "Lời mời đang chờ"
+  },
+  "actions": {
+    "invite": "Mời thành viên"
+  }
+}

@@ -193,13 +193,15 @@ the Compose secret. Compose mounts that token as a secret; Doppler CLI loads the
 config again when the container starts.
 `make setup` generates one `.env.local` file with Doppler values and local
 Supabase overrides. Compose reads that file into the dev container; the local
-Supabase URL, publishable key, and database password are preserved when Doppler
-loads the remaining dev secrets.
+Supabase URL, publishable key, database password, and Docker database host are
+preserved when Doppler loads the remaining dev secrets.
 
 The app container and `local-domains` proxy join the `dreamday-local-network`
 created by `make setup`; Supabase CLI joins the same network with
 `--network-id`. The proxy routes both host and container requests through the
-same `http://supabase.local` URL, so no separate server URL is needed. Open
+same `http://supabase.local` URL for HTTP APIs. Prisma connects to the local
+Postgres port through `host.docker.internal:54322`; the host-run fallback uses
+`127.0.0.1:54322`. Open
 `http://localhost:<NEXT_PUBLIC_APP_PORT>` (default `4000`) for the app and
 `http://mailpit.local` for Mailpit. The hosts-file entries above are required
 for browser access. After changing dependencies, run:

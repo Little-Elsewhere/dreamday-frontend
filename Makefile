@@ -14,19 +14,19 @@ SUPABASE_WITH_ENV = $(DOPPLER_RUN) $(SUPABASE)
 
 .DEFAULT_GOAL := help
 .PHONY: help dev setup local-hosts supabase-templates \
-	supabase-network supabase-start supabase-status supabase-stop \
+	supabase-network supabase-start supabase-migrate-local supabase-status supabase-stop \
 	supabase-reset-local local-domains-start local-domains-stop env-local
 
 help: ## Show available local development commands
 	@grep -E '^[a-zA-Z0-9_-]+:.*## ' $(MAKEFILE_LIST) | \
 	  awk 'BEGIN {FS = ":.*## "} {printf "%-20s %s\n", $$1, $$2}'
 
-dev: ## Build and run the development app in Docker
+dev: supabase-migrate-local ## Apply pending local migrations, then run the development app
 	$(DOPPLER_RUN) $(DEV_COMPOSE) up --build
 
-setup: ## Start local Supabase and its domain proxy, then generate .env.local
+setup: ## Start local Supabase, apply migrations, and prepare .env.local and local domains
 	$(MAKE) local-hosts
-	$(MAKE) supabase-start
+	$(MAKE) supabase-migrate-local
 	$(MAKE) env-local
 	$(MAKE) local-domains-start
 
@@ -47,6 +47,9 @@ supabase-network: ## Create the shared Docker network used by Supabase and the a
 
 supabase-start: supabase-templates supabase-network ## Start Supabase services on the shared Docker network
 	$(SUPABASE_WITH_ENV) start --network-id "$(SUPABASE_NETWORK)"
+
+supabase-migrate-local: supabase-start ## Apply pending migrations to the local database
+	$(SUPABASE_WITH_ENV) migration up --local
 
 supabase-status: ## Show local Supabase URLs and keys
 	$(SUPABASE_WITH_ENV) status

@@ -1,0 +1,38 @@
+{
+  "content": {
+    "title": "Quỹ nhóm",
+    "budget": {
+      "title": "Ngân sách dự kiến"
+    },
+    "expenses": {
+      "title": "Khoản chi"
+    },
+    "balances": {
+      "title": "Cân đối giữa các thành viên"
+    }
+  },
+  "labels": {
+    "spent": "Đã chi",
+    "expenses": {
+      "title": "Tên khoản chi",
+      "amount": "Số tiền",
+      "paidBy": "Người trả",
+      "splitWith": "Chia cho"
+    },
+    "balances": {
+      "credit": "Được nhận",
+      "debit": "Cần trả"
+    }
+  },
+  "messages": {
+    "noExpenses": "Chưa có khoản chi nào."
+  },
+  "actions": {
+    "budget": {
+      "save": "Lưu ngân sách"
+    },
+    "expenses": {
+      "add": "Ghi khoản chi"
+    }
+  }
+}

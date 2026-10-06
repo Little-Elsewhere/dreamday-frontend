@@ -1,0 +1,38 @@
+{
+  "content": {
+    "title": "Group fund",
+    "budget": {
+      "title": "Planned budget"
+    },
+    "expenses": {
+      "title": "Expense"
+    },
+    "balances": {
+      "title": "Member balances"
+    }
+  },
+  "labels": {
+    "spent": "Spent",
+    "expenses": {
+      "title": "Expense title",
+      "amount": "Amount",
+      "paidBy": "Paid by",
+      "splitWith": "Split with"
+    },
+    "balances": {
+      "credit": "To receive",
+      "debit": "To pay"
+    }
+  },
+  "messages": {
+    "noExpenses": "No expenses yet."
+  },
+  "actions": {
+    "budget": {
+      "save": "Save budget"
+    },
+    "expenses": {
+      "add": "Record expense"
+    }
+  }
+}

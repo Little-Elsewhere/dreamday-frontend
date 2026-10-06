@@ -1,0 +1,204 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum TripRole {
+  owner
+  editor
+  member
+  viewer
+
+  @@map("trip_role")
+}
+
+enum InvitationStatus {
+  pending
+  accepted
+  revoked
+
+  @@map("invitation_status")
+}
+
+enum TripLifecycle {
+  planning
+  confirmed
+  cancelled
+
+  @@map("trip_lifecycle")
+}
+
+model CurrencyCatalog {
+  code     String @id
+  exponent Int    @db.SmallInt
+  trips    Trip[]
+
+  @@map("currency_catalog")
+}
+
+model Profile {
+  userId          String   @id @map("user_id") @db.Uuid
+  displayName     String   @map("display_name")
+  emailNormalized String   @map("email_normalized")
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  @@map("profiles")
+}
+
+model Trip {
+  id               String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  ownerId          String             @map("owner_id") @db.Uuid
+  name             String
+  destination      String
+  description      String             @default("")
+  startsOn         DateTime           @map("starts_on") @db.Date
+  endsOn           DateTime           @map("ends_on") @db.Date
+  timeZone         String             @map("time_zone")
+  currencyCode     String             @map("currency_code")
+  currencyExponent Int                @map("currency_exponent") @db.SmallInt
+  lifecycle        TripLifecycle      @default(planning)
+  coverPath        String?            @map("cover_path")
+  createdAt        DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime           @default(now()) @map("updated_at") @db.Timestamptz(6)
+  currency         CurrencyCatalog    @relation(fields: [currencyCode], references: [code])
+  memberships      TripMembership[]
+  invitations      TripInvitation[]
+  schedules        TripScheduleItem[]
+  checklists       TripChecklist[]
+  fund             TripFund?
+
+  @@map("trips")
+}
+
+model TripMembership {
+  id            String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tripId        String             @map("trip_id") @db.Uuid
+  userId        String             @map("user_id") @db.Uuid
+  role          TripRole
+  joinedAt      DateTime           @default(now()) @map("joined_at") @db.Timestamptz(6)
+  trip          Trip               @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  assignedTasks TripTask[]
+  paidExpenses  TripExpense[]
+  splits        TripExpenseSplit[]
+
+  @@unique([tripId, userId])
+  @@unique([tripId, id])
+  @@index([userId, tripId])
+  @@map("trip_memberships")
+}
+
+model TripInvitation {
+  id              String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tripId          String           @map("trip_id") @db.Uuid
+  emailNormalized String           @map("email_normalized")
+  role            TripRole
+  tokenHash       String           @unique @map("token_hash")
+  status          InvitationStatus @default(pending)
+  invitedBy       String           @map("invited_by") @db.Uuid
+  acceptedBy      String?          @map("accepted_by") @db.Uuid
+  expiresAt       DateTime         @map("expires_at") @db.Timestamptz(6)
+  createdAt       DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  acceptedAt      DateTime?        @map("accepted_at") @db.Timestamptz(6)
+  trip            Trip             @relation(fields: [tripId], references: [id], onDelete: Cascade)
+
+  @@index([emailNormalized])
+  @@map("trip_invitations")
+}
+
+model TripScheduleItem {
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tripId        String    @map("trip_id") @db.Uuid
+  title         String
+  note          String    @default("")
+  location      String    @default("")
+  tripDay       DateTime  @map("trip_day") @db.Date
+  startsAt      DateTime  @map("starts_at") @db.Timestamptz(6)
+  endsAt        DateTime? @map("ends_at") @db.Timestamptz(6)
+  startTimeZone String    @map("start_time_zone")
+  endTimeZone   String    @map("end_time_zone")
+  createdBy     String    @map("created_by") @db.Uuid
+  createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
+  trip          Trip      @relation(fields: [tripId], references: [id], onDelete: Cascade)
+
+  @@index([tripId, startsAt])
+  @@map("trip_schedule_items")
+}
+
+model TripChecklist {
+  id        String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tripId    String     @map("trip_id") @db.Uuid
+  title     String
+  position  Int        @default(0)
+  createdAt DateTime   @default(now()) @map("created_at") @db.Timestamptz(6)
+  trip      Trip       @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  tasks     TripTask[]
+
+  @@unique([tripId, id])
+  @@index([tripId, position])
+  @@map("trip_checklists")
+}
+
+model TripTask {
+  id                   String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tripId               String          @map("trip_id") @db.Uuid
+  checklistId          String          @map("checklist_id") @db.Uuid
+  title                String
+  dueAt                DateTime?       @map("due_at") @db.Timestamptz(6)
+  dueTimeZone          String?         @map("due_time_zone")
+  assigneeMembershipId String?         @map("assignee_membership_id") @db.Uuid
+  isDone               Boolean         @default(false) @map("is_done")
+  completedAt          DateTime?       @map("completed_at") @db.Timestamptz(6)
+  position             Int             @default(0)
+  createdBy            String          @map("created_by") @db.Uuid
+  createdAt            DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+  checklist            TripChecklist   @relation(fields: [tripId, checklistId], references: [tripId, id], onDelete: Cascade)
+  assignee             TripMembership? @relation(fields: [tripId, assigneeMembershipId], references: [tripId, id])
+
+  @@index([checklistId, position])
+  @@map("trip_tasks")
+}
+
+model TripFund {
+  tripId      String        @id @map("trip_id") @db.Uuid
+  budgetMinor BigInt?       @map("budget_minor")
+  createdAt   DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  trip        Trip          @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  expenses    TripExpense[]
+
+  @@map("trip_funds")
+}
+
+model TripExpense {
+  id                 String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tripId             String             @map("trip_id") @db.Uuid
+  title              String
+  amountMinor        BigInt             @map("amount_minor")
+  paidByMembershipId String             @map("paid_by_membership_id") @db.Uuid
+  incurredAt         DateTime           @map("incurred_at") @db.Timestamptz(6)
+  createdBy          String             @map("created_by") @db.Uuid
+  createdAt          DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
+  fund               TripFund           @relation(fields: [tripId], references: [tripId], onDelete: Cascade)
+  payer              TripMembership     @relation(fields: [tripId, paidByMembershipId], references: [tripId, id])
+  splits             TripExpenseSplit[]
+
+  @@unique([tripId, id])
+  @@index([tripId, incurredAt])
+  @@map("trip_expenses")
+}
+
+model TripExpenseSplit {
+  tripId       String         @map("trip_id") @db.Uuid
+  expenseId    String         @map("expense_id") @db.Uuid
+  membershipId String         @map("membership_id") @db.Uuid
+  amountMinor  BigInt         @map("amount_minor")
+  expense      TripExpense    @relation(fields: [tripId, expenseId], references: [tripId, id], onDelete: Cascade)
+  member       TripMembership @relation(fields: [tripId, membershipId], references: [tripId, id])
+
+  @@id([expenseId, membershipId])
+  @@map("trip_expense_splits")
+}

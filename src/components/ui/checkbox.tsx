@@ -11,6 +11,9 @@ import { cn } from '@/utils/cn'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { Tick02Icon } from '@hugeicons/core-free-icons'
 
+export const checkboxClassName =
+  'peer border-input focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-invalid:aria-checked:border-primary dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 data-checked:border-primary data-checked:bg-primary data-checked:text-primary-foreground dark:data-checked:bg-primary relative flex size-4 shrink-0 items-center justify-center rounded-[6px] border transition-shadow outline-none group-has-disabled/field:opacity-50 after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:ring-[3px]'
+
 interface CheckboxProps<TFieldValues extends FieldValues> extends Omit<
   CheckboxPrimitive.Root.Props,
   'name' | 'checked' | 'defaultChecked' | 'onCheckedChange' | 'onBlur'
@@ -42,10 +45,7 @@ const Checkbox = <TFieldValues extends FieldValues>({
           <CheckboxPrimitive.Root
             {...props}
             data-slot="checkbox"
-            className={cn(
-              'peer border-input focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-invalid:aria-checked:border-primary dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 data-checked:border-primary data-checked:bg-primary data-checked:text-primary-foreground dark:data-checked:bg-primary relative flex size-4 shrink-0 items-center justify-center rounded-[6px] border transition-shadow outline-none group-has-disabled/field:opacity-50 after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:ring-[3px]',
-              className,
-            )}
+            className={cn(checkboxClassName, className)}
             id={id}
             name={field.name}
             checked={Boolean(field.value)}

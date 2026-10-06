@@ -1,0 +1,26 @@
+{
+  "metadata": {
+    "title": "Tất cả hành trình"
+  },
+  "content": {
+    "eyebrow": "SỔ TAY HÀNH TRÌNH",
+    "title": "Mỗi hành trình, một câu chuyện.",
+    "description": "Lưu những nơi bạn muốn đến và cùng mọi người lên kế hoạch cho từng khoảnh khắc."
+  },
+  "labels": {
+    "search": "Tìm theo tên hoặc điểm đến",
+    "filters": {
+      "all": "Tất cả hành trình"
+    }
+  },
+  "messages": {
+    "empty": {
+      "title": "Chưa có chuyến đi nào",
+      "description": "Bắt đầu bằng một điểm đến bạn luôn muốn khám phá."
+    },
+    "noCover": "Chưa có ảnh bìa"
+  },
+  "actions": {
+    "view": "Xem chuyến đi"
+  }
+}

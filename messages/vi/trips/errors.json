@@ -1,0 +1,31 @@
+{
+  "validation": {
+    "required": "Trường này là bắt buộc.",
+    "tooLong": "Giá trị này quá dài.",
+    "invalidDate": "Hãy nhập ngày hợp lệ.",
+    "invalidDateTime": "Hãy nhập ngày và giờ địa phương hợp lệ.",
+    "dateOrder": "Ngày kết thúc phải bằng hoặc sau ngày bắt đầu.",
+    "invalidTimeZone": "Hãy chọn múi giờ hợp lệ.",
+    "timeZoneRequired": "Hãy chọn múi giờ khi đặt thời hạn.",
+    "invalidSelection": "Hãy chọn một giá trị hợp lệ.",
+    "invalidCurrency": "Hãy chọn loại tiền tệ được hỗ trợ.",
+    "invalidRole": "Hãy chọn vai trò thành viên hợp lệ.",
+    "invalidEmail": "Hãy nhập địa chỉ email hợp lệ.",
+    "invalidToken": "Liên kết mời này không hợp lệ.",
+    "chooseSplit": "Hãy chọn ít nhất một thành viên để chia khoản chi."
+  },
+  "messages": {
+    "forbidden": "Bạn không có quyền thực hiện thao tác này.",
+    "timeGap": "Giờ này không tồn tại tại múi giờ đã chọn do đổi giờ mùa hè.",
+    "timeFold": "Giờ này xuất hiện hai lần. Hãy chọn lần đầu hoặc lần sau.",
+    "invalidAmount": "Số tiền không hợp lệ với tiền tệ đã chọn.",
+    "currencyLocked": "Không thể đổi tiền tệ sau khi đã ghi khoản chi.",
+    "outsideTrip": "Ngày hoạt động phải nằm trong khoảng ngày của chuyến đi.",
+    "endBeforeStart": "Giờ kết thúc phải sau giờ bắt đầu.",
+    "notFound": "Không tìm thấy dữ liệu liên quan.",
+    "alreadyMember": "Email này đã là thành viên của chuyến đi.",
+    "invitationExpired": "Lời mời không còn hiệu lực.",
+    "wrongEmail": "Hãy đăng nhập bằng đúng email được mời.",
+    "system": "Không thể lưu lúc này. Vui lòng thử lại."
+  }
+}

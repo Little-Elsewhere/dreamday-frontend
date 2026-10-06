@@ -1,0 +1,16 @@
+{
+  "labels": {
+    "brand": "dream day",
+    "time": {
+      "firstOccurrence": "Lần xuất hiện đầu",
+      "secondOccurrence": "Lần xuất hiện sau"
+    }
+  },
+  "actions": {
+    "back": "Chuyến đi của tôi",
+    "saving": "Đang lưu…"
+  },
+  "descriptions": {
+    "timeZone": "Ngày và giờ theo múi giờ địa phương"
+  }
+}

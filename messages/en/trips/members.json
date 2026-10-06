@@ -1,0 +1,19 @@
+{
+  "content": {
+    "title": "Members"
+  },
+  "labels": {
+    "inviteEmail": "Member email",
+    "role": "Role",
+    "roles": {
+      "owner": "Owner",
+      "editor": "Editor",
+      "member": "Member",
+      "viewer": "View only"
+    },
+    "pendingInvitations": "Pending invitations"
+  },
+  "actions": {
+    "invite": "Invite member"
+  }
+}

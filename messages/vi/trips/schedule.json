@@ -1,0 +1,23 @@
+{
+  "content": {
+    "title": "Lịch trình sắp tới"
+  },
+  "messages": {
+    "empty": "Chưa có hoạt động. Thêm một điểm dừng đầu tiên."
+  },
+  "labels": {
+    "title": "Tên hoạt động",
+    "location": "Địa điểm",
+    "tripDay": "Ngày trong lịch chuyến đi",
+    "startLocal": "Giờ bắt đầu tại địa phương",
+    "endLocal": "Giờ kết thúc tại địa phương",
+    "startTimeZone": "Múi giờ bắt đầu",
+    "endTimeZone": "Múi giờ kết thúc",
+    "repeatedStartTime": "Giờ bắt đầu bị lặp",
+    "repeatedEndTime": "Giờ kết thúc bị lặp",
+    "note": "Ghi chú (tùy chọn)"
+  },
+  "actions": {
+    "add": "Thêm hoạt động"
+  }
+}

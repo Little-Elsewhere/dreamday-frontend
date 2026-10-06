@@ -8,6 +8,7 @@
   },
   "scripts": {
     "dev": "make dev",
+    "postinstall": "prisma generate",
     "build:dev": "doppler run --project dreamday --config dev -- next build",
     "build:prod": "doppler run --project dreamday --config prod -- next build",
     "start": "doppler run --project dreamday --config dev --no-fallback -- sh scripts/start-standalone.sh",
@@ -75,7 +76,7 @@
     "playwright": "^1.62.1",
     "prettier": "^3.9.6",
     "prettier-plugin-tailwindcss": "^0.8.1",
-    "prisma": "8.0.0-rc.19",
+    "prisma": "7.10.0",
     "release-please": "^17.11.1",
     "serwist": "^9.5.12",
     "shadcn": "^4.17.0",

@@ -46,7 +46,15 @@ const AccountPage = async (): Promise<ReactElement> => {
                 {t('labels.verifiedAccount')}
               </p>
               <div className="mt-7">
-                <SignOutButton />
+                <div className="flex flex-wrap items-center gap-4">
+                  <Link
+                    href={ROUTES.PRIVATE.TRIPS}
+                    className="bg-primary text-primary-foreground rounded-md px-5 py-3 text-sm font-semibold hover:opacity-90"
+                  >
+                    {t('actions.viewTrips')}
+                  </Link>
+                  <SignOutButton />
+                </div>
               </div>
             </div>
           </div>

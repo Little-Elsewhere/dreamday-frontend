@@ -1,0 +1,40 @@
+{
+  "metadata": {
+    "title": "Create trip"
+  },
+  "content": {
+    "eyebrow": "A NEW JOURNEY",
+    "title": "Where to next?",
+    "description": "Set the foundation. You can add the itinerary, tasks and expenses after creating the trip."
+  },
+  "labels": {
+    "name": "Trip name",
+    "destination": "Destination",
+    "description": "Short description",
+    "startsOn": "Start date",
+    "endsOn": "End date",
+    "timeZone": "Trip time zone",
+    "currency": "Trip currency",
+    "status": {
+      "planning": "Planning",
+      "upcoming": "Coming up",
+      "ongoing": "In progress",
+      "past": "Finished",
+      "cancelled": "Cancelled"
+    }
+  },
+  "placeholders": {
+    "name": "For example: Autumn in Kyoto",
+    "destination": "For example: Kyoto, Japan",
+    "description": "A few words about this trip"
+  },
+  "descriptions": {
+    "timeZone": "The trip calendar uses this zone. Confirm it matches your destination.",
+    "currency": "All expenses use this currency. It cannot change after the first expense."
+  },
+  "actions": {
+    "create": "Create trip",
+    "save": "Save trip",
+    "edit": "Edit trip"
+  }
+}

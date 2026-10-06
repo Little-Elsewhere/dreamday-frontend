@@ -1,0 +1,16 @@
+{
+  "labels": {
+    "brand": "dream day",
+    "time": {
+      "firstOccurrence": "First occurrence",
+      "secondOccurrence": "Second occurrence"
+    }
+  },
+  "actions": {
+    "back": "My trips",
+    "saving": "Saving…"
+  },
+  "descriptions": {
+    "timeZone": "Date and time in the local time zone"
+  }
+}

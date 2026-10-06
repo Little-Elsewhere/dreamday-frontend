@@ -41,33 +41,53 @@ export async function createPost(formData: FormData): Promise<void> {
 
 ## 2. Forms
 
-- Use Server Actions for form submission.
-- Use useActionState (React 19) for form state management.
-- Use Zod for schema validation.
-- Display client-side validation errors next to fields. Server-side `ZodError` is an exception for invalid submitted values and must propagate to the caller or framework error handler; it is not a field-error Action result.
+- Every client-side form that collects or edits user input MUST use React Hook Form with `zodResolver` and the feature's Zod schema.
+- Use `FormProvider` when form fields are composed in child components; reusable fields should use `useFormContext` or `Controller`.
+- Submit validated values from `handleSubmit` to a Server Action. Use `useTransition` or `formState.isSubmitting` for pending UI; do not use `useActionState` as a replacement for React Hook Form on client-side forms.
+- Keep the same Zod validation in the Server Action. Parse submitted `FormData` immediately at the start of the action, before `try/catch`; client validation does not replace server validation.
+- Display translated field errors beside their fields and connect them with `aria-describedby` and `aria-invalid`.
+- Server-side `ZodError` must propagate to the caller or framework error handler; do not convert it into an Action result.
+- Forms with no editable user input, such as a button that triggers a single action, do not need React Hook Form.
 
 ```tsx
 'use client'
 
-import { useActionState } from 'react'
+import { useTransition } from 'react'
 import { useTranslations } from 'next-intl'
+import { FormProvider, useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { createPost } from '@/app/actions'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { createPostSchema, type CreatePostValues } from '@/features/posts/schemas/post'
 
 export function PostForm(): JSX.Element {
   const t = useTranslations('PostForm')
-  const [state, formAction, isPending] = useActionState(createPost, null)
+  const [isPending, startTransition] = useTransition()
+  const form = useForm<CreatePostValues>({
+    resolver: zodResolver(createPostSchema),
+    defaultValues: { title: '', content: '' },
+  })
+
+  const onSubmit = form.handleSubmit((values) => {
+    startTransition(async () => {
+      const formData = new FormData()
+      formData.set('title', values.title)
+      formData.set('content', values.content)
+      await createPost(formData)
+    })
+  })
 
   return (
-    <form action={formAction} className="flex flex-col gap-4">
-      <Input name="title" />
-      {state?.errors?.title && <p className="text-destructive text-sm">{state.errors.title}</p>}
-
-      <Button type="submit" disabled={isPending}>
-        {isPending ? t('saving') : t('save')}
-      </Button>
-    </form>
+    <FormProvider {...form}>
+      <form noValidate onSubmit={onSubmit} className="flex flex-col gap-4">
+        <Input<CreatePostValues> name="title" label={t('title')} />
+        <Input<CreatePostValues> name="content" label={t('content')} />
+        <Button type="submit" loading={isPending} loadingLabel={t('saving')}>
+          {t('save')}
+        </Button>
+      </form>
+    </FormProvider>
   )
 }
 ```

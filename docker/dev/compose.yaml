@@ -16,8 +16,11 @@ services:
       - '${NEXT_PUBLIC_APP_PORT:-4000}:${NEXT_PUBLIC_APP_PORT:-4000}'
     environment:
       DOPPLER_ENVIRONMENT: dev
+      DATABASE_HOST: host.docker.internal
       NEXT_PUBLIC_APP_PORT: ${NEXT_PUBLIC_APP_PORT:-4000}
       PORT: ${NEXT_PUBLIC_APP_PORT:-4000}
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
     secrets:
       - doppler_token
     networks:

@@ -15,6 +15,7 @@ FROM base AS dependencies
 
 RUN npm install --global pnpm@12.8.1 && npm cache clean --force
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
+COPY prisma/schema.prisma ./prisma/schema.prisma
 RUN --mount=type=cache,id=dreamday-pnpm-store-prod,target=/pnpm/store \
     pnpm install --frozen-lockfile --store-dir=/pnpm/store
 

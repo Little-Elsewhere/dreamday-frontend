@@ -19,4 +19,6 @@ export const clientEnvSchema = z.object({
 
 export const serverEnvSchema = clientEnvSchema.extend({
   DATABASE_PASSWORD: z.string().min(1),
+  DATABASE_HOST: z.string().min(1).optional(),
+  DATABASE_URL: z.url().optional(),
 })

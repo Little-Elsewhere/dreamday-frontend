@@ -1,0 +1,28 @@
+{
+  "content": {
+    "title": "Checklist"
+  },
+  "messages": {
+    "empty": "Thêm checklist để chia nhỏ công việc."
+  },
+  "labels": {
+    "defaultTitle": "Việc cần làm",
+    "newTitle": "Tên checklist mới",
+    "tasks": {
+      "repeatedDueTime": "Giờ hạn chót bị lặp",
+      "title": "Việc cần làm",
+      "assignee": "Người phụ trách",
+      "unassigned": "Chưa phân công",
+      "dueLocal": "Hạn chót tại địa phương",
+      "dueTimeZone": "Múi giờ hạn chót"
+    }
+  },
+  "actions": {
+    "create": "Tạo checklist",
+    "tasks": {
+      "add": "Thêm việc",
+      "markDone": "Đánh dấu {title} đã hoàn thành",
+      "markUndone": "Đánh dấu {title} chưa hoàn thành"
+    }
+  }
+}

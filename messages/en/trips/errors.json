@@ -1,0 +1,31 @@
+{
+  "validation": {
+    "required": "This field is required.",
+    "tooLong": "This value is too long.",
+    "invalidDate": "Enter a valid date.",
+    "invalidDateTime": "Enter a valid local date and time.",
+    "dateOrder": "The end date must be on or after the start date.",
+    "invalidTimeZone": "Choose a valid time zone.",
+    "timeZoneRequired": "Choose a time zone when setting a due time.",
+    "invalidSelection": "Choose a valid option.",
+    "invalidCurrency": "Choose a supported currency.",
+    "invalidRole": "Choose a valid member role.",
+    "invalidEmail": "Enter a valid email address.",
+    "invalidToken": "This invitation link is invalid.",
+    "chooseSplit": "Select at least one member to split this expense with."
+  },
+  "messages": {
+    "forbidden": "You don't have permission to do that.",
+    "timeGap": "That local time does not exist here because of a daylight saving change.",
+    "timeFold": "That local time happens twice. Choose the first or second occurrence.",
+    "invalidAmount": "The amount is invalid for this currency.",
+    "currencyLocked": "The currency cannot change after an expense is recorded.",
+    "outsideTrip": "The activity day must fall within the trip dates.",
+    "endBeforeStart": "The end time must be after the start time.",
+    "notFound": "Related data was not found.",
+    "alreadyMember": "This email is already a trip member.",
+    "invitationExpired": "This invitation is no longer valid.",
+    "wrongEmail": "Sign in with the email address that was invited.",
+    "system": "Could not save right now. Please try again."
+  }
+}

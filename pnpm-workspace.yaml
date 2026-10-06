@@ -1,8 +1,10 @@
 allowBuilds:
   '@parcel/watcher': true
+  '@prisma/engines': true
   '@swc/core': true
   core-js: true
   esbuild: true
+  prisma: true
   unrs-resolver: true
   workerd: true
 
