@@ -42,8 +42,10 @@ make setup
 pnpm dev
 ```
 
-Open `http://localhost:<NEXT_PUBLIC_APP_PORT>/en` or
-`http://localhost:<NEXT_PUBLIC_APP_PORT>/vi`. The default port is `4000`.
+After `make setup`, open `http://dreamday.local/en` or
+`http://dreamday.local/vi`. You can also use
+`http://localhost:<NEXT_PUBLIC_APP_PORT>` (default port `4000`) to bypass the
+local-domain proxy.
 
 The application uses locale-based routing. The default locale is `en`; supported
 locales are defined in `src/i18n/routing.ts`.
@@ -86,9 +88,10 @@ the `NEXT_PUBLIC_*` variables.
 
 `pnpm dev` passes `NEXT_PUBLIC_APP_PORT` from the `dreamday/dev` Doppler config
 to Docker Compose, which maps the same host and container port and sets the
-container's Next.js `PORT`. The default is `4000`. For local development, keep
-`NEXT_PUBLIC_APP_URL` in `dreamday/dev` set to the matching origin (for example,
-`http://localhost:4100` when the port is `4100`).
+container's Next.js `PORT`. The default is `4000`. `make setup` sets
+`NEXT_PUBLIC_APP_URL` in the generated `.env.local` to `http://dreamday.local`,
+which is the app origin used by local auth links. Keep the Doppler value aligned
+with the canonical origin used by CI/CD and deployed environments.
 
 `next.config.ts` uses `DOPPLER_ENVIRONMENT` when building security headers.
 Set it to `dev` in Doppler `dreamday/dev`; CI/CD gets it from the matching
@@ -109,8 +112,10 @@ templates referenced by `supabase/config.toml`. `pnpm supabase:start` and
 `make setup` build those files before starting Supabase. Users without locale
 metadata receive the English template.
 
-Local Supabase CLI commands run under `dreamday/dev` so the Auth `site_url` in
-`supabase/config.toml` can resolve `NEXT_PUBLIC_APP_URL` from Doppler.
+Local Supabase CLI commands run under `dreamday/dev` for local database
+credentials. The Auth `site_url` in `supabase/config.toml` is
+`http://dreamday.local`; local email callbacks therefore use the same domain as
+the browser.
 
 The localized **Confirm signup** and **Reset password** templates use direct
 `token_hash` links to `/{locale}/auth/confirm`, with `type=email` and
@@ -122,10 +127,12 @@ production email provider for reliable delivery.
 
 The Supabase CLI runs the configuration in `supabase/config.toml` as a local
 stack in Docker. Its local SMTP service captures Auth emails in Mailpit instead
-of delivering them. `make setup` adds this mapping to `/etc/hosts` so your
+of delivering them. `make setup` adds these mappings to `/etc/hosts` so your
 browser resolves the local domains to the machine running Docker:
 
 ```text
+127.0.0.1 dreamday.local
+127.0.0.1 db.supabase.local
 127.0.0.1 supabase.local mailpit.local
 127.0.0.1 studio.supabase.local
 ```
@@ -135,9 +142,10 @@ are already present; enter your administrator password if prompted. You can
 also run `make local-hosts` by itself. `make setup` creates the shared
 `dreamday-local-network`, starts Supabase on it, downloads the `dreamday/dev`
 Doppler config, generates `.env.local`, and starts the local-domain proxy. The
-generator sets `NEXT_PUBLIC_SUPABASE_URL` to `http://supabase.local` and overrides
+generator sets `NEXT_PUBLIC_APP_URL` to `http://dreamday.local` and
+`NEXT_PUBLIC_SUPABASE_URL` to `http://supabase.local`. It overrides
 `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` and `DATABASE_PASSWORD` with values from
-`supabase status -o json`. Other variables come from Doppler, including the
+`supabase status -o json`; other variables come from Doppler, including the
 required `NEXT_PUBLIC_APP_PORT`. Running the target again refreshes the file
 from the current Doppler config.
 
@@ -152,13 +160,21 @@ If Supabase was started separately with `pnpm supabase:start`, run
 start the proxy.
 
 The local-domain proxy listens on `127.0.0.1:80` and routes
+`http://dreamday.local` to the app container,
 `http://supabase.local` to the Supabase API on port `54321`,
 `http://studio.supabase.local` to Supabase Studio on port `54323`, and
 `http://mailpit.local` to Mailpit on port `54324`. URLs therefore do not need
-those service ports. Keep host port `80` free. The `.local` suffix is used by
+those service ports. The app proxy follows `NEXT_PUBLIC_APP_PORT`, so it also
+works when the app uses a non-default port. Keep host port `80` free. The
+`.local` suffix is used by
 multicast DNS/Bonjour and can conflict with local network name resolution on
-some systems ([RFC 6761](https://www.rfc-editor.org/rfc/rfc6761)). Local Supabase Auth uses
-`NEXT_PUBLIC_APP_URL` as its site URL and allows localhost redirect URLs on any
+some systems ([RFC 6761](https://www.rfc-editor.org/rfc/rfc6761)).
+`db.supabase.local` resolves directly to `127.0.0.1`; connect to PostgreSQL
+using port `54322` (the configured host port), for example
+`postgresql://postgres:<DATABASE_PASSWORD>@db.supabase.local:54322/postgres`.
+The PostgreSQL connection uses TCP and does not pass through the HTTP proxy.
+Local Supabase Auth uses
+`http://dreamday.local` as its site URL and allows localhost redirect URLs on any
 port. The development CSP allows the configured Supabase HTTP and WebSocket
 origins; it omits `upgrade-insecure-requests` so the local HTTP endpoint stays
 HTTP.
@@ -167,6 +183,14 @@ Use `pnpm supabase:reset:local` to reset only the local database and replay
 migrations and seed data. This repository does not yet contain application
 database migrations; add versioned migrations and deterministic seed data when
 the app needs local database tables.
+
+Use `make reset` to recreate the local development stack from the repository's
+current configuration. It stops the app, removes this project's local Supabase
+data volumes, runs `make setup`, replays migrations and seed data, and starts
+the app and domain proxy again. **This deletes local Supabase data**, including
+local users and uploaded files. It does not touch a hosted Supabase project and
+keeps the app's `node_modules` and `.next` Docker volumes. The existing dev
+image is reused; use `make dev-build` separately after changing its Dockerfile.
 
 Stop the local Supabase containers when you want to release their resources:
 
@@ -194,17 +218,18 @@ config again when the container starts. On the first run Compose builds the app
 image if it is missing; later `pnpm dev` runs reuse it. To rebuild the image
 after changing the Dockerfile or other image configuration, run `make dev-build`.
 `make setup` generates one `.env.local` file with Doppler values and local
-Supabase overrides. Compose reads that file into the dev container; the local
-Supabase URL, publishable key, and database password are preserved when Doppler
-loads the remaining dev secrets.
+application and Supabase overrides. Compose reads that file into the dev
+container; the local app URL, Supabase URL, publishable key, and database
+password are preserved when Doppler loads the remaining dev secrets.
 
 The app container and `local-domains` proxy join the `dreamday-local-network`
 created by `make setup`; Supabase CLI joins the same network with
-`--network-id`. The proxy routes both host and container requests through the
-same `http://supabase.local` URL, so no separate server URL is needed. Open
-`http://localhost:<NEXT_PUBLIC_APP_PORT>` (default `4000`) for the app and
-`http://mailpit.local` for Mailpit. The hosts-file entries above are required
-for browser access. After changing dependencies, run:
+`--network-id`. The proxy routes `dreamday.local` to the app and both host and
+container requests through the same `http://supabase.local` URL. Open
+`http://dreamday.local` for the app, or
+`http://localhost:<NEXT_PUBLIC_APP_PORT>` (default `4000`) to bypass the proxy;
+use `http://mailpit.local` for Mailpit. The hosts-file entries above are
+required for browser access. After changing dependencies, run:
 
 ```bash
 doppler run --project dreamday --config dev --no-fallback -- \
@@ -253,6 +278,7 @@ pnpm build:dev           # CI/CD build with Doppler dreamday/dev
 pnpm build:prod          # CI/CD build with Doppler dreamday/prod
 pnpm start               # Start production build with Doppler dreamday/dev
 make setup               # Start local Supabase and generate .env.local
+make reset               # Recreate local stack; deletes local Supabase data
 pnpm supabase:templates  # Build generated Auth templates from en/ and vi/
 pnpm supabase:start      # Build templates, then start Supabase services
 pnpm supabase:status     # Show local Supabase URLs and keys

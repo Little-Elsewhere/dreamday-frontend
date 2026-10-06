@@ -23,6 +23,7 @@ export default getRequestConfig(async () => {
     authError,
     commonError,
     commonOffline,
+    trips,
   ] = await Promise.all([
     import(`@messages/${locale}/common/footer.json`),
     import(`@messages/${locale}/account.json`),
@@ -34,6 +35,7 @@ export default getRequestConfig(async () => {
     import(`@messages/${locale}/auth/error.json`),
     import(`@messages/${locale}/common/error.json`),
     import(`@messages/${locale}/common/offline.json`),
+    import(`@messages/${locale}/trips.json`),
   ])
 
   return {
@@ -53,6 +55,7 @@ export default getRequestConfig(async () => {
         common: authCommon.default,
         error: authError.default,
       },
+      trips: trips.default,
     },
   }
 })

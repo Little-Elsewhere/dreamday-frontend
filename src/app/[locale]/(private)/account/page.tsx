@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { getTranslations } from 'next-intl/server'
 import type { ReactElement } from 'react'
 
+import { buttonVariants } from '@/components/ui/button'
 import { ROUTES } from '@/constants/routes'
 import { SignOutButton } from '@/features/auth/components/common/sign-out-button'
 import { Link } from '@/i18n/navigation'
@@ -45,7 +46,10 @@ const AccountPage = async (): Promise<ReactElement> => {
               <p className="text-primary mt-1 font-medium break-all">
                 {t('labels.verifiedAccount')}
               </p>
-              <div className="mt-7">
+              <div className="mt-7 flex flex-wrap items-center gap-3">
+                <Link href={ROUTES.PRIVATE.TRIPS} className={buttonVariants()}>
+                  {t('actions.viewTrips')}
+                </Link>
                 <SignOutButton />
               </div>
             </div>

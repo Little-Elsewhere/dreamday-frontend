@@ -17,6 +17,7 @@
     "supabase:status": "make supabase-status",
     "supabase:reset:local": "make supabase-reset-local",
     "lint": "eslint",
+    "test:e2e:trips": "playwright test --config playwright.trips.config.ts",
     "prepare": "husky",
     "commitlint": "commitlint",
     "format": "prettier --write .",

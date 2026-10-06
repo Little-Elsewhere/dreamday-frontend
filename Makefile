@@ -13,7 +13,7 @@ DOPPLER_RUN = $(DOPPLER) run --project "$(DOPPLER_PROJECT)" \
 SUPABASE_WITH_ENV = $(DOPPLER_RUN) $(SUPABASE)
 
 .DEFAULT_GOAL := help
-.PHONY: help dev dev-build setup local-hosts supabase-templates \
+.PHONY: help dev dev-build setup reset local-hosts supabase-templates \
 	supabase-network supabase-start supabase-status supabase-stop \
 	supabase-reset-local local-domains-start local-domains-stop env-local
 
@@ -33,7 +33,20 @@ setup: ## Start local Supabase and its domain proxy, then generate .env.local
 	$(MAKE) env-local
 	$(MAKE) local-domains-start
 
-local-hosts: ## Add Supabase, Studio, and Mailpit local domains to /etc/hosts
+reset: ## Recreate the local stack and clear local Supabase data
+	$(DOPPLER_RUN) $(DEV_COMPOSE) stop app
+	$(SUPABASE_WITH_ENV) stop --no-backup
+	$(MAKE) setup
+	$(MAKE) supabase-reset-local
+	$(DOPPLER_RUN) $(DEV_COMPOSE) up -d --force-recreate
+
+local-hosts: ## Add app, Supabase, database, Studio, and Mailpit local domains to /etc/hosts
+	@if ! grep -Eq '(^|[[:space:]])dreamday\.local([[:space:]]|$$)' /etc/hosts; then \
+		printf '%s\n' '127.0.0.1 dreamday.local' | sudo tee -a /etc/hosts >/dev/null; \
+	fi
+	@if ! grep -Eq '(^|[[:space:]])db\.supabase\.local([[:space:]]|$$)' /etc/hosts; then \
+		printf '%s\n' '127.0.0.1 db.supabase.local' | sudo tee -a /etc/hosts >/dev/null; \
+	fi
 	@if ! grep -Fqx '127.0.0.1 supabase.local mailpit.local' /etc/hosts; then \
 		printf '%s\n' '127.0.0.1 supabase.local mailpit.local' | sudo tee -a /etc/hosts >/dev/null; \
 	fi
@@ -59,10 +72,10 @@ supabase-stop: ## Stop this project's local Supabase stack and keep its data
 	$(MAKE) local-domains-stop
 
 supabase-reset-local: supabase-templates ## Reset only the local database and replay migrations and seed data
-	$(SUPABASE_WITH_ENV) db reset --local
+	$(SUPABASE_WITH_ENV) db reset --local --network-id "$(SUPABASE_NETWORK)"
 
-local-domains-start: ## Start the local Supabase, Studio, and Mailpit domain proxy
-	$(DEV_COMPOSE) up -d --force-recreate local-domains
+local-domains-start: ## Start the app, Supabase, Studio, and Mailpit domain proxy
+	$(DEV_COMPOSE) --env-file .env.local up -d --force-recreate local-domains
 
 local-domains-stop: ## Stop the local Supabase and Mailpit domain proxy
 	$(DEV_COMPOSE) stop local-domains

@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url'
 const projectRoot = fileURLToPath(new URL('../', import.meta.url))
 const localEnvPath = resolve(projectRoot, '.env.local')
 const localSupabaseUrl = 'http://supabase.local'
+const localAppUrl = 'http://dreamday.local'
 const [dopplerPath, statusPath] = process.argv.slice(2)
 
 if (!dopplerPath || !statusPath) {
@@ -88,6 +89,7 @@ if (!/^\d+$/.test(appPortValue) || !Number.isInteger(appPort) || appPort < 1 || 
 }
 
 values.set('NEXT_PUBLIC_APP_PORT', String(appPort))
+values.set('NEXT_PUBLIC_APP_URL', localAppUrl)
 values.set('NEXT_PUBLIC_SUPABASE_URL', localSupabaseUrl)
 values.set('NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY', publishableKey)
 values.set('DATABASE_PASSWORD', databasePassword)
