@@ -98,6 +98,7 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   output: 'standalone',
   reactCompiler: true,
+  ...(isDevelopment ? { allowedDevOrigins: ['dreamday.local'] } : {}),
   experimental: {
     turbopackRustReactCompiler: true,
     turbopackLocalPostcssConfig: true,
