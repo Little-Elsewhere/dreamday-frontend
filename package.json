@@ -1,6 +1,6 @@
 {
   "name": "next16-codebase",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "private": true,
   "packageManager": "pnpm@12.8.1",
   "engines": {
