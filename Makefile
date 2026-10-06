@@ -13,7 +13,7 @@ DOPPLER_RUN = $(DOPPLER) run --project "$(DOPPLER_PROJECT)" \
 SUPABASE_WITH_ENV = $(DOPPLER_RUN) $(SUPABASE)
 
 .DEFAULT_GOAL := help
-.PHONY: help dev setup local-hosts supabase-templates \
+.PHONY: help dev dev-build setup local-hosts supabase-templates \
 	supabase-network supabase-start supabase-status supabase-stop \
 	supabase-reset-local local-domains-start local-domains-stop env-local
 
@@ -21,7 +21,10 @@ help: ## Show available local development commands
 	@grep -E '^[a-zA-Z0-9_-]+:.*## ' $(MAKEFILE_LIST) | \
 	  awk 'BEGIN {FS = ":.*## "} {printf "%-20s %s\n", $$1, $$2}'
 
-dev: ## Build and run the development app in Docker
+dev: ## Start the development app in Docker, reusing the existing image
+	$(DOPPLER_RUN) $(DEV_COMPOSE) up
+
+dev-build: ## Rebuild and start the development app in Docker
 	$(DOPPLER_RUN) $(DEV_COMPOSE) up --build
 
 setup: ## Start local Supabase and its domain proxy, then generate .env.local

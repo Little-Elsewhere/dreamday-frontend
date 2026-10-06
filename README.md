@@ -190,7 +190,9 @@ pnpm dev
 `pnpm dev` runs Docker Compose under Doppler. Doppler supplies
 `NEXT_PUBLIC_APP_PORT` to Compose interpolation and passes the token through for
 the Compose secret. Compose mounts that token as a secret; Doppler CLI loads the
-config again when the container starts.
+config again when the container starts. On the first run Compose builds the app
+image if it is missing; later `pnpm dev` runs reuse it. To rebuild the image
+after changing the Dockerfile or other image configuration, run `make dev-build`.
 `make setup` generates one `.env.local` file with Doppler values and local
 Supabase overrides. Compose reads that file into the dev container; the local
 Supabase URL, publishable key, and database password are preserved when Doppler
@@ -245,7 +247,8 @@ doppler run --project dreamday --config prod --no-fallback -- \
 ## Scripts
 
 ```bash
-pnpm dev                 # Build and start the Docker development stack
+pnpm dev                 # Start the Docker development stack using the existing image
+make dev-build           # Rebuild the development image and start the stack
 pnpm build:dev           # CI/CD build with Doppler dreamday/dev
 pnpm build:prod          # CI/CD build with Doppler dreamday/prod
 pnpm start               # Start production build with Doppler dreamday/dev
