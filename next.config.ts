@@ -18,13 +18,24 @@ const supabaseConnectionSources = (() => {
 
   return [url.origin, ...(webSocketProtocol ? [`${webSocketProtocol}//${url.host}`] : [])]
 })()
-const connectSources = ["'self'", ...supabaseConnectionSources, 'https://*.posthog.com'].join(' ')
+const supabaseImageSource = supabaseConnectionSources[0]
+const posthogSource = process.env.NEXT_PUBLIC_POSTHOG_HOST
+  ? new URL(process.env.NEXT_PUBLIC_POSTHOG_HOST).origin
+  : null
+const posthogSources = ['https://*.posthog.com', ...(posthogSource ? [posthogSource] : [])]
+const connectSources = ["'self'", ...supabaseConnectionSources, ...posthogSources].join(' ')
+const imageSources = [
+  "'self'",
+  'blob:',
+  'data:',
+  ...(supabaseImageSource ? [supabaseImageSource] : []),
+].join(' ')
 
 const contentSecurityPolicy = [
   "default-src 'self'",
-  `script-src 'self' https://*.posthog.com 'unsafe-inline'${isDevelopment ? " 'unsafe-eval'" : ''}`,
+  `script-src 'self' ${posthogSources.join(' ')} 'unsafe-inline'${isDevelopment ? " 'unsafe-eval'" : ''}`,
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' blob: data:",
+  `img-src ${imageSources}`,
   "font-src 'self'",
   `connect-src ${connectSources}`,
   "media-src 'self'",
@@ -40,9 +51,9 @@ const contentSecurityPolicy = [
 
 const contentSecurityPolicyReportOnly = [
   "default-src 'self'",
-  "script-src 'self' https://*.posthog.com",
+  `script-src 'self' ${posthogSources.join(' ')}`,
   "style-src 'self'",
-  "img-src 'self' blob: data:",
+  `img-src ${imageSources}`,
   "font-src 'self'",
   `connect-src ${connectSources}`,
   "media-src 'self'",

@@ -2,9 +2,9 @@
 
 ## Project Overview
 
-**Project**: Next.js 16 Education Platform (English Learning)  
-**Stack**: Next.js App Router, React 19, TypeScript 7, Tailwind v4, shadcn/ui v4, next-intl, Zod  
-**Architecture**: Server Components by default, Client Components for interactivity, Server Actions for mutations, ISR for content.
+**Project**: Dreamday travel planning app
+**Stack**: Next.js 16 App Router, React 19, TypeScript 6, Tailwind v4, shadcn/ui on Base UI, next-intl, Zod, Supabase
+**Architecture**: Server Components by default, small Client Components for interaction, Server Actions for mutations, Cache Components, and Supabase SQL migrations with RLS.
 
 ---
 
@@ -20,6 +20,7 @@ Additional project conventions are maintained in `.cursor/rules/*.mdc`. Codex do
 - `05-tooling.mdc` — testing, linting, and PWA
 - `06-error-handling.mdc` — error boundaries and error UX
 - `07-ci-cd.mdc` — CI/CD and release conventions
+- `08-anti-patterns.mdc` — patterns to avoid
 
 ---
 
@@ -265,7 +266,7 @@ release-please automatically bumps version based on commit types:
 
 ### Release Flow
 
-1. Commit with conventional commits: `feat: add lesson card`
+1. Commit with conventional commits: `feat: add trip cover upload`
 2. Merge to `develop` → CI passes ✅
 3. Create PR `develop` → `main`
 4. Merge to `main` → release-please creates Release PR
@@ -275,30 +276,31 @@ release-please automatically bumps version based on commit types:
 
 ## Example Scenarios
 
-**Scenario A**: "Create a lesson completion form"
+**Scenario A**: "Create a trip draft form"
 
-- Architect: Decides Server Action + Client Component wrapper
-- Security & Data: Zod schema for completion payload
-- UI/UX: Form layout with Tailwind + shadcn Button/Input
-- Accessibility: Proper `&lt;form&gt;`, `&lt;label&gt;`, error announcement
+- Architect: Decides the Server Action and Client Component boundary
+- Security & Data: Zod schema for draft values and Supabase ownership checks
+- UI/UX: Form layout with Tailwind and shadcn Button/Input
+- Accessibility: Semantic form fields, labels, and error announcements
 - i18n: All labels and errors translated
 - Quality: Test form submission flow
 
-**Scenario B**: "Add audio pronunciation feature"
+**Scenario B**: "Add a trip cover upload"
 
-- Architect: Decides Client Component (browser Audio API)
-- UI/UX: Play/pause button, progress bar
-- Accessibility: Transcript fallback, keyboard controls (`Space` to play/pause)
-- Performance: Lazy load audio component, use `next/dynamic`
+- Architect: Keeps upload interaction in a small Client Component
+- Security & Data: Validate file type/size and enforce storage ownership policies
+- UI/UX: Show a preview and clear upload status
+- Accessibility: Label the file input and announce upload errors
+- Performance: Use `next/image` for rendered covers
 - i18n: Button labels translated
 
-**Scenario C**: "Build leaderboard page"
+**Scenario C**: "Build a trips list page"
 
-- Architect: Decides ISR with `revalidate = 300`
-- Performance: `Suspense` for leaderboard table, `loading.tsx`
-- Security: No PII exposure in leaderboard data
-- UI/UX: Responsive table, medal icons from HugeIcons
-- i18n: Rank, score, player column headers translated
+- Architect: Loads private trip data in a Server Component
+- Performance: Use request-scoped data access and a `Suspense` fallback
+- Security: Scope each query to the verified owner
+- UI/UX: Responsive trip cards with HugeIcons where useful
+- i18n: All labels and status values use translated keys
 
 <!-- BEGIN:nextjs-agent-rules -->
 

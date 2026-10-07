@@ -1,10 +1,15 @@
-import { routing } from '@/i18n/routing'
+import { DEFAULT_LOCALE, LOCALES } from '@/constants/locale'
 
-export const getLocaleFromPathname = (pathname: string): (typeof routing.locales)[number] => {
+export const getLocaleFromPathname = (pathname: string): (typeof LOCALES)[number] => {
   const localeSegment = pathname.split('/')[1]
 
-  return routing.locales.find((locale) => locale === localeSegment) ?? routing.defaultLocale
+  return LOCALES.find((locale) => locale === localeSegment) ?? DEFAULT_LOCALE
 }
 
-export const removeLocalePrefix = (pathname: string): string =>
-  pathname.replace(/^\/[a-z]{2}(?=\/|$)/, '')
+export const removeLocalePrefix = (pathname: string): string => {
+  const localeSegment = pathname.split('/')[1]
+  const locale = LOCALES.find((candidate) => candidate === localeSegment)
+
+  if (!locale) return pathname
+  return pathname.slice(locale.length + 1) || '/'
+}

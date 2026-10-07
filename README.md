@@ -1,37 +1,38 @@
-# Next 16 Codebase
+# Dreamday
 
-A modern web application starter built with Next.js App Router, internationalization, a component system, PWA/offline support, and development quality tooling.
+A bilingual travel planning app for creating private trips, organizing itineraries, and managing trip covers.
 
 ## Tech Stack
 
-| Category             | Technology                                                                                   |
-| :------------------- | :------------------------------------------------------------------------------------------- |
-| Framework            | Next.js 16.3.5 with the App Router, Turbopack, Cache Components, and partial prefetching     |
-| UI runtime           | React 19.3.0, React DOM 19.3.0, and the React Compiler                                       |
-| Language             | TypeScript 6.0.3 with strict mode                                                            |
-| Styling              | Tailwind CSS 4.3, PostCSS, `tw-animate-css`, `clsx`, and `tailwind-merge`                    |
-| UI components        | shadcn/ui v4 (base-maia), `@base-ui/react`, and Class Variance Authority                     |
-| Forms                | React Hook Form with `@hookform/resolvers`                                                   |
-| Icons                | Hugeicons (`@hugeicons/react` and `@hugeicons/core-free-icons`)                              |
-| Internationalization | `next-intl` 4.13 with locale-based routing for English (`en`) and Vietnamese (`vi`)          |
-| Validation           | Zod 4.4                                                                                      |
-| Analytics            | PostHog (`posthog-js`)                                                                       |
-| PWA and offline      | Serwist 9.5, a service worker, web app manifest, and a locale-aware offline fallback         |
-| Security             | Content Security Policy, CSP reporting endpoint, and standard security response headers      |
-| Component workshop   | Storybook 10 with the Next.js + Vite framework, Chromatic, docs, and accessibility add-ons   |
-| Testing              | Vitest 4 browser tests through Playwright/Chromium, including Storybook story tests          |
-| Code quality         | ESLint 9 (Next.js Core Web Vitals and Storybook rules) and Prettier with Tailwind CSS plugin |
-| Git workflow         | Husky, lint-staged, Commitlint, Conventional Commits, and release-please                     |
+| Category             | Technology                                                                                    |
+| :------------------- | :-------------------------------------------------------------------------------------------- |
+| Framework            | Next.js 16.3.7 with the App Router, Turbopack, Cache Components, and partial prefetching      |
+| UI runtime           | React 19.3.0, React DOM 19.3.0, and the React Compiler                                        |
+| Language             | TypeScript 6.0.3 with strict mode                                                             |
+| Styling              | Tailwind CSS 4.3, PostCSS, `tw-animate-css`, `clsx`, and `tailwind-merge`                     |
+| UI components        | shadcn/ui v4, `@base-ui/react`, and Class Variance Authority                                  |
+| Forms                | React Hook Form with `@hookform/resolvers`                                                    |
+| Icons                | Hugeicons (`@hugeicons/react` and `@hugeicons/core-free-icons`)                               |
+| Internationalization | `next-intl` 4.x with locale-based routing for English (`en`) and Vietnamese (`vi`)            |
+| Validation           | Zod 4.4                                                                                       |
+| Analytics            | PostHog (`posthog-js`)                                                                        |
+| PWA and offline      | Serwist 9.5, a service worker, web app manifest, and a locale-aware offline fallback          |
+| Security             | Content Security Policy, CSP reporting endpoint, and standard security response headers       |
+| Component workshop   | Storybook 10 with the Next.js + Vite framework, Chromatic, docs, and accessibility add-ons    |
+| Testing              | Vitest 4 unit tests and Playwright 1.62 for trip browser flows                                |
+| Code quality         | ESLint 10 (Next.js Core Web Vitals and Storybook rules) and Prettier with Tailwind CSS plugin |
+| Git workflow         | Husky, lint-staged, Commitlint, Conventional Commits, and release-please                      |
 
 ## Requirements
 
-- Node.js 24, as used in CI
-- pnpm 10
+- Node.js 22.22.1 or newer (CI uses Node.js 24)
+- pnpm 12.8.1, pinned in `package.json`
 
-Install pnpm if it is not already available:
+Enable Corepack to use the pinned pnpm version:
 
 ```bash
-npm install --global pnpm
+corepack enable
+pnpm --version
 ```
 
 ## Getting Started
@@ -75,16 +76,16 @@ application env values passed to the build.
 | `NEXT_PUBLIC_APP_DESCRIPTION`          |   Yes    | Application and metadata description                            |
 | `NEXT_PUBLIC_APP_URL`                  |   Yes    | Canonical application origin for Supabase email links           |
 | `NEXT_PUBLIC_APP_PORT`                 |   Yes    | Next.js listener and Docker host/container port; usually `4000` |
-| `DATABASE_PASSWORD`                    |   Yes    | Server-only value required by environment validation            |
+| `DATABASE_PASSWORD`                    |    No    | Local direct PostgreSQL access; not read by the Next.js app     |
 | `NEXT_PUBLIC_SUPABASE_URL`             |   Yes    | Supabase project URL                                            |
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` |   Yes    | Supabase publishable key; safe for browser exposure             |
 | `NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN`    |    No    | PostHog token; omit to disable analytics                        |
 | `NEXT_PUBLIC_POSTHOG_HOST`             |    No    | PostHog host, defaults to `https://us.i.posthog.com`            |
 
-Environment variables are validated with Zod in `src/env/server.ts` and
-`src/env/client.ts`. The Supabase URL and publishable key are required by the
-client and server schemas; never use a Supabase secret or `service_role` key in
-the `NEXT_PUBLIC_*` variables.
+Application environment variables are validated with Zod in `src/env/server.ts`
+and `src/env/client.ts`. The Supabase URL and publishable key are required by
+the client and server schemas; never use a Supabase secret or `service_role` key
+in the `NEXT_PUBLIC_*` variables.
 
 `pnpm dev` passes `NEXT_PUBLIC_APP_PORT` from the `dreamday/dev` Doppler config
 to Docker Compose, which maps the same host and container port and sets the
@@ -180,9 +181,9 @@ origins; it omits `upgrade-insecure-requests` so the local HTTP endpoint stays
 HTTP.
 
 Use `pnpm supabase:reset:local` to reset only the local database and replay
-migrations and seed data. This repository does not yet contain application
-database migrations; add versioned migrations and deterministic seed data when
-the app needs local database tables.
+migrations and seed data. Trip tables, row-level security, and storage policies
+are defined in `supabase/migrations/` and covered by pgTAP tests in
+`supabase/tests/`.
 
 Use `make reset` to recreate the local development stack from the repository's
 current configuration. It stops the app, removes this project's local Supabase
@@ -286,15 +287,18 @@ pnpm supabase:stop       # Stop local Supabase
 pnpm supabase:reset:local # Build templates, then reset the local database
 pnpm lint                # Run ESLint
 pnpm typecheck           # Run TypeScript checks
+pnpm test:unit           # Run unit tests in Node.js
+pnpm test:e2e:trips      # Run trip flows in Playwright
 pnpm format              # Format the project with Prettier
+pnpm format:check        # Check formatting without changing files
 pnpm storybook           # Start Storybook at http://localhost:6006
 pnpm build-storybook     # Build Storybook as a static site
 pnpm clean               # Remove .next and node_modules
 pnpm commitlint          # Validate commit messages
 ```
 
-Vitest and Playwright are installed for unit and browser testing. Dedicated test
-scripts will be added alongside the corresponding test suites.
+Vitest runs colocated unit tests in Node.js with `pnpm test:unit`. Trip browser
+flows use Playwright through `pnpm test:e2e:trips`.
 
 ## Project Structure
 
@@ -309,10 +313,12 @@ src/
 │   ├── globals.css            # Design tokens and Tailwind CSS v4
 │   ├── manifest.ts            # PWA manifest
 │   └── sw.ts                  # Service worker source
-├── components/ui/             # shadcn/ui components
-├── hooks/                     # Custom React hooks
+├── components/                # Shared and UI components
+├── features/
+│   ├── auth/                  # Authentication actions, forms, and helpers
+│   └── trips/                 # Trip actions, data, components, and utilities
 ├── i18n/                      # Routing, request config, and navigation
-├── modules/                   # Feature modules
+├── lib/supabase/              # Browser, server, and proxy clients
 ├── schemas/                   # Zod schemas
 ├── types/                     # TypeScript types
 ├── constants/                 # Shared constants
@@ -321,6 +327,10 @@ src/
 messages/
 ├── en/                        # English translations
 └── vi/                        # Vietnamese translations
+supabase/
+├── migrations/                # Schema, constraints, triggers, and RLS policies
+├── templates/                 # Localized Auth emails
+└── tests/                     # Database policy and trigger tests
 ```
 
 ## Development Conventions

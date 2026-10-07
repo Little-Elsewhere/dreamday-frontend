@@ -6,7 +6,11 @@ import type { ReactElement } from 'react'
 import { Button } from '@/components/ui/button'
 import type { TripActivityFormValues } from '@/features/trips/types/components'
 import type { TripActivity } from '@/features/trips/types/trip'
-import { formatMinute, formatTripActivityDate } from '@/features/trips/utils/trip'
+import {
+  formatMinute,
+  formatTripActivityDate,
+  groupTripActivitiesByDate,
+} from '@/features/trips/utils/trip'
 
 type Props = {
   activities: TripActivity[]
@@ -32,6 +36,7 @@ export const TripItinerarySection = ({
 }: Props): ReactElement => {
   const t = useTranslations('trips')
   const locale = useLocale()
+  const activitiesByDate = groupTripActivitiesByDate(activities)
 
   return (
     <section className="border-line bg-surface rounded-2xl border p-5 sm:p-8">
@@ -62,7 +67,7 @@ export const TripItinerarySection = ({
       ) : (
         <div className="mt-6 grid gap-4">
           {dates.map((date) => {
-            const dayActivities = activities.filter((activity) => activity.activityDate === date)
+            const dayActivities = activitiesByDate.get(date) ?? []
             return (
               <section
                 key={date}

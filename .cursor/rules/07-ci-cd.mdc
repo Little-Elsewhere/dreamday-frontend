@@ -18,9 +18,10 @@ Runs on: **PR to `develop`**
 
 Jobs:
 - **Commitlint**: validate PR commit messages (Conventional Commits 1.0.0)
-- **Format**: `pnpm format --check`
+- **Format**: `pnpm format:check`
 - **Lint**: `pnpm lint`
-- **Type Check**: `pnpm tsc --noEmit`
+- **Type Check**: `pnpm typecheck`
+- **Unit Tests**: `pnpm test:unit`
 - **Build**: `pnpm build:dev` using Doppler `dreamday/dev`
 
 The repository-level GitHub Actions secret `DOPPLER_TOKEN` is read by the build
@@ -114,7 +115,7 @@ git commit -m "feat: add user profile page"
 git commit -m "fix(auth): resolve login timeout issue"
 
 # With scope
-git commit -m "feat(lessons): add audio playback feature"
+git commit -m "feat(trips): add itinerary scheduling"
 
 # Breaking change
 git commit -m "feat!: change API response format"
@@ -153,7 +154,7 @@ BREAKING CHANGE: oldFunction() is removed"
 
 ```
 1. Developer commits with conventional format:
-   git commit -m "feat: add lesson card"
+   git commit -m "feat: add trip detail page"
 
 2. Merge to develop → CI runs ✅
 
@@ -185,7 +186,7 @@ BREAKING CHANGE: oldFunction() is removed"
 
 ### Features
 
-- **add lesson card**: Add new lesson card component (#123)
+- **add trip detail page**: Add a private trip detail page (#123)
 
 ### Bug Fixes
 

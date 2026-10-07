@@ -6,7 +6,7 @@ import { cacheLife } from 'next/cache'
 
 export const getCurrentYear = async () => {
   'use cache'
-  cacheLife('max')
+  cacheLife('days')
   return new Date().getFullYear()
 }
 

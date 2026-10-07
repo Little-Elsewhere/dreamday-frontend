@@ -10,7 +10,8 @@ alwaysApply: true
 
 ## 1. Testing
 
-- Unit tests: Vitest with @vitest/browser-playwright for component tests.
+- Unit tests: `pnpm test:unit` runs colocated Vitest tests in Node.js.
+- Component tests: Vitest with @vitest/browser-playwright.
 - E2E tests: Playwright directly.
 - Test files: **/*.test.ts or **/*.spec.ts.
 - Colocate tests next to source files OR in __tests__/ folders — be consistent.

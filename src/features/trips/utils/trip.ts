@@ -20,6 +20,28 @@ export const createInitialTripActivity = (activityDate: string): Omit<TripActivi
   note: '',
 })
 
+export const sortTripActivities = (activities: TripActivity[]): TripActivity[] =>
+  [...activities].sort(
+    (first, second) =>
+      first.activityDate.localeCompare(second.activityDate) ||
+      first.startMinute - second.startMinute ||
+      first.id.localeCompare(second.id),
+  )
+
+export const groupTripActivitiesByDate = (
+  activities: TripActivity[],
+): Map<string, TripActivity[]> => {
+  const groups = new Map<string, TripActivity[]>()
+
+  for (const activity of activities) {
+    const dayActivities = groups.get(activity.activityDate)
+    if (dayActivities) dayActivities.push(activity)
+    else groups.set(activity.activityDate, [activity])
+  }
+
+  return groups
+}
+
 export const getTripDatesInRange = (start: string, end: string): string[] => {
   if (!start || !end || end < start) return []
   const dates: string[] = []
@@ -108,14 +130,25 @@ export const toTripActivity = (row: TripActivityRow): TripActivity => ({
   note: row.note,
 })
 
+export const getCoverUrls = async (
+  supabase: SupabaseClient<Database>,
+  coverPaths: string[],
+): Promise<Map<string, string>> => {
+  const paths = [...new Set(coverPaths.filter(Boolean))]
+  if (paths.length === 0) return new Map()
+
+  const { data, error } = await supabase.storage.from('trip-covers').createSignedUrls(paths, 3600)
+  if (error) return new Map()
+
+  return new Map(
+    data.flatMap(({ path, signedUrl }) => (path && signedUrl ? [[path, signedUrl] as const] : [])),
+  )
+}
+
 export const getCoverUrl = async (
   supabase: SupabaseClient<Database>,
   coverPath: string | null,
 ): Promise<string | null> => {
   if (!coverPath) return null
-  const { data, error } = await supabase.storage
-    .from('trip-covers')
-    .createSignedUrl(coverPath, 3600)
-  if (error) return null
-  return data?.signedUrl ?? null
+  return (await getCoverUrls(supabase, [coverPath])).get(coverPath) ?? null
 }
