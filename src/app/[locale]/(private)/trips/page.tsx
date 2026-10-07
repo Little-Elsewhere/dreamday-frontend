@@ -1,9 +1,7 @@
 import type { Metadata } from 'next'
 import type { ReactElement } from 'react'
-import { Suspense } from 'react'
 import { getTranslations } from 'next-intl/server'
 
-import { TripLoading } from '@/features/trips/components/trip-loading'
 import { TripHeader } from '@/features/trips/components/trip-header'
 import { TripsList } from '@/features/trips/components/trips-list'
 import { getTrips } from '@/features/trips/data/trips'
@@ -33,10 +31,4 @@ const TripsContent = async (): Promise<ReactElement> => {
   )
 }
 
-const Trips = (): ReactElement => (
-  <Suspense fallback={<TripLoading variant="list" />}>
-    <TripsContent />
-  </Suspense>
-)
-
-export default Trips
+export default TripsContent
