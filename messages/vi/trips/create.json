@@ -1,0 +1,119 @@
+{
+  "eyebrow": "Một hành trình mới",
+  "title": "Tạo chuyến đi",
+  "intro": "Bắt đầu với điểm đến và ngày đi. Bạn có thể lưu bất cứ lúc nào rồi tiếp tục bản nháp sau.",
+  "scheduleTitle": "Sắp xếp lịch trình",
+  "scheduleIntro": "Thêm những điều bạn muốn dành thời gian. Hoạt động có thể trùng giờ và bạn có thể di chuyển chúng sau.",
+  "draftSaved": "Đã lưu bản nháp. Bạn có thể quay lại bất cứ khi nào sẵn sàng.",
+  "coverUploaded": "Đã thêm ảnh bìa chuyến đi.",
+  "coverUploading": "Đang tải ảnh bìa lên…",
+  "steps": {
+    "label": "Các bước tạo chuyến đi",
+    "step1": "Thông tin chuyến đi",
+    "step2": "Lịch trình và ghi chú",
+    "current": "Đang thực hiện",
+    "complete": "Đã hoàn tất",
+    "upcoming": "Bước tiếp theo"
+  },
+  "fields": {
+    "name": "Tên chuyến đi",
+    "destination": "Điểm đến hoặc khu vực",
+    "description": "Mô tả ngắn",
+    "cover": "Ảnh bìa",
+    "dateRange": "Ngày đi — ngày về",
+    "duration": "Thời lượng",
+    "startDate": "Ngày đi",
+    "endDate": "Ngày về",
+    "pace": "Bạn muốn đi theo nhịp nào?"
+  },
+  "duration": {
+    "notSet": "Chưa xác định",
+    "days": "{count} ngày",
+    "caption": "Tự tính theo ngày đi và ngày về"
+  },
+  "draftStatus": "Đang lên kế hoạch",
+  "placeholders": {
+    "name": "Vài ngày bên biển",
+    "destination": "Vịnh Lan Hạ, Việt Nam",
+    "description": "Bạn mong chờ điều gì trong chuyến đi?"
+  },
+  "coverAlt": "Ảnh xem trước bìa chuyến đi",
+  "coverEmpty": "Một bức ảnh gợi nhớ về chuyến đi",
+  "coverHelp": "JPG, PNG hoặc WebP · Tối đa 2 MB",
+  "paces": {
+    "relaxed": "Thư thả",
+    "balanced": "Cân bằng",
+    "active": "Nhiều khám phá"
+  },
+  "actions": {
+    "saveDraft": "Lưu nháp",
+    "publish": "Tạo chuyến đi",
+    "continue": "Tiếp tục đến lịch trình",
+    "back": "Quay lại thông tin",
+    "cancel": "Hủy",
+    "chooseCover": "Chọn ảnh bìa",
+    "replaceCover": "Thay ảnh bìa",
+    "removeCover": "Xóa ảnh",
+    "addActivity": "Thêm hoạt động",
+    "addForDay": "＋ Thêm hoạt động",
+    "saveActivity": "Lưu hoạt động",
+    "delete": "Xóa",
+    "saveNote": "Lưu ghi chú",
+    "moveDayEarlier": "Chuyển {title} sang ngày trước",
+    "moveDayLater": "Chuyển {title} sang ngày sau",
+    "previousDay": "Ngày trước",
+    "nextDay": "Ngày sau",
+    "shiftEarlier": "Dời {title} sớm hơn 15 phút",
+    "shiftLater": "Dời {title} muộn hơn 15 phút",
+    "shorten": "Rút ngắn {title} 15 phút",
+    "extend": "Kéo dài {title} 15 phút",
+    "shorter": "−15 phút",
+    "longer": "+15 phút"
+  },
+  "errors": {
+    "endBeforeStart": "Ngày về không thể trước ngày đi.",
+    "endTimeBeforeStart": "Giờ kết thúc hoạt động phải sau giờ bắt đầu.",
+    "nameRequired": "Hãy nhập tên chuyến đi trước khi tạo.",
+    "startDateRequired": "Hãy chọn ngày đi trước khi tạo chuyến đi.",
+    "endDateRequired": "Hãy chọn ngày về trước khi tạo chuyến đi.",
+    "paceRequired": "Hãy chọn nhịp chuyến đi trước khi tạo.",
+    "publishRequired": "Hãy nhập tên, ngày hợp lệ và nhịp chuyến đi trước khi tạo.",
+    "invalidCover": "Hãy chọn ảnh JPG, PNG hoặc WebP có dung lượng tối đa 2 MB.",
+    "coverUploadFailed": "Chưa thể lưu ảnh bìa. Vui lòng thử lại.",
+    "activityOutsideTrip": "Ngày hoạt động cần nằm trong khoảng ngày của chuyến đi.",
+    "activitySaveFailed": "Không thể lưu hoạt động này. Vui lòng thử lại."
+  },
+  "itinerary": {
+    "heading": "Từng ngày một",
+    "description": "Kéo hoạt động sang ngày khác để di chuyển. Dùng nút thời gian để dời lịch hoặc đổi thời lượng theo từng bước 15 phút.",
+    "addDatesFirst": "Hãy chọn ngày đi và ngày về ở phần thông tin trước khi thêm hoạt động.",
+    "emptyDay": "Ngày này vẫn còn khoảng trống. Thêm hoạt động khi bạn sẵn sàng."
+  },
+  "activityTypes": {
+    "explore": "Khám phá",
+    "meal": "Ẩm thực",
+    "travel": "Di chuyển",
+    "stay": "Lưu trú",
+    "free": "Tự do"
+  },
+  "activity": {
+    "addTitle": "Thêm hoạt động",
+    "editTitle": "Chỉnh sửa hoạt động",
+    "dialogDescription": "Chọn ngày và giờ. Lịch trình cho phép các hoạt động trùng giờ.",
+    "fields": {
+      "title": "Tên hoạt động",
+      "date": "Ngày",
+      "type": "Loại hoạt động",
+      "start": "Bắt đầu",
+      "end": "Kết thúc",
+      "note": "Ghi chú"
+    }
+  },
+  "note": {
+    "heading": "Ghi chú cho hành trình",
+    "description": "Lưu lời nhắc, một ý tưởng hoặc điều bạn không muốn quên.",
+    "label": "Ghi chú chuyến đi",
+    "placeholder": "Một lời nhắn nhỏ cho bạn sau này…"
+  },
+  "noteSaved": "Đã lưu ghi chú chuyến đi."
+}

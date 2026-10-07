@@ -26,7 +26,7 @@ COPY --chmod=755 docker/doppler-entrypoint.sh /usr/local/bin/doppler-entrypoint.
 RUN mkdir -p /app/.next && chown -R node:node /app
 USER node
 
-EXPOSE ${NEXT_PUBLIC_APP_PORT}
+EXPOSE ${NEXT_PUBLIC_APP_PORT} 9229 9230
 ENTRYPOINT ["/usr/local/bin/doppler-entrypoint.sh"]
 CMD ["--project", \
   "dreamday", \
@@ -43,4 +43,5 @@ CMD ["--project", \
   "next", \
   "dev", \
   "--hostname", \
-  "0.0.0.0"]
+  "0.0.0.0", \
+  "--inspect=0.0.0.0"]

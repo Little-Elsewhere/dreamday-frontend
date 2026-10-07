@@ -1,8 +1,9 @@
 import 'server-only'
 
-import { cacheLife } from 'next/cache'
+import { cache } from 'react'
+import { cacheLife, io } from 'next/cache'
 
-import { createClient } from '@/lib/supabase/server'
+import { getSupabaseUserContext } from '@/lib/supabase/user-context'
 import type { TripCard, TripDetail, TripDraft, TripRow } from '@/features/trips/types/trip'
 import {
   getAppDate,
@@ -12,11 +13,16 @@ import {
   toTripActivity,
 } from '@/features/trips/utils/trip'
 
-const getOwnerId = async (): Promise<string | null> => {
-  const supabase = await createClient()
-  const { data, error } = await supabase.auth.getClaims()
-  if (error || typeof data?.claims?.sub !== 'string') return null
-  return data.claims.sub
+type TripCardRow = Pick<
+  TripRow,
+  'id' | 'name' | 'destination' | 'description' | 'start_date' | 'end_date' | 'pace' | 'cover_path'
+>
+type TripDraftRow = TripCardRow & Pick<TripRow, 'note'>
+type ServerSupabaseClient = Awaited<ReturnType<typeof getSupabaseUserContext>>['supabase']
+
+const getUserContext = async () => {
+  await io()
+  return getSupabaseUserContext()
 }
 
 const getCachedAppDate = async (): Promise<string> => {
@@ -26,8 +32,8 @@ const getCachedAppDate = async (): Promise<string> => {
 }
 
 const toTripCard = async (
-  supabase: Awaited<ReturnType<typeof createClient>>,
-  trip: TripRow,
+  supabase: ServerSupabaseClient,
+  trip: TripCardRow,
   today: string,
 ): Promise<TripCard> => {
   if (!trip.start_date || !trip.end_date || !trip.pace) {
@@ -49,32 +55,36 @@ const toTripCard = async (
 }
 
 export const getTrips = async (): Promise<TripCard[]> => {
-  const ownerId = await getOwnerId()
+  const { supabase, userId: ownerId } = await getUserContext()
   if (!ownerId) return []
 
-  const today = await getCachedAppDate()
-  const supabase = await createClient()
-  const { data, error } = await supabase
-    .from('trips')
-    .select('*')
-    .eq('owner_id', ownerId)
-    .eq('lifecycle', 'published')
-    .order('start_date', { ascending: true })
+  const [today, result] = await Promise.all([
+    getCachedAppDate(),
+    supabase
+      .from('trips')
+      .select('id, name, destination, description, start_date, end_date, pace, cover_path')
+      .eq('owner_id', ownerId)
+      .eq('lifecycle', 'published')
+      .order('start_date', { ascending: true }),
+  ])
 
+  const { data, error } = result
   if (error) throw new Error('Could not load trips')
   return Promise.all((data ?? []).map((trip) => toTripCard(supabase, trip, today)))
 }
 
-const toDraft = async (trip: TripRow): Promise<TripDraft> => {
-  const supabase = await createClient()
-  const { data, error } = await supabase
-    .from('trip_activities')
-    .select('*')
-    .eq('trip_id', trip.id)
-    .order('activity_date')
-    .order('start_minute')
+const toDraft = async (supabase: ServerSupabaseClient, trip: TripDraftRow): Promise<TripDraft> => {
+  const [activitiesResult, coverUrl] = await Promise.all([
+    supabase
+      .from('trip_activities')
+      .select('*')
+      .eq('trip_id', trip.id)
+      .order('activity_date')
+      .order('start_minute'),
+    getCoverUrl(supabase, trip.cover_path),
+  ])
 
-  if (error) throw new Error('Could not load trip activities')
+  if (activitiesResult.error) throw new Error('Could not load trip activities')
   return {
     id: trip.id,
     name: trip.name,
@@ -84,52 +94,55 @@ const toDraft = async (trip: TripRow): Promise<TripDraft> => {
     endDate: trip.end_date ?? '',
     pace: (trip.pace as TripDraft['pace']) ?? '',
     coverPath: trip.cover_path,
-    coverUrl: await getCoverUrl(supabase, trip.cover_path),
+    coverUrl,
     note: trip.note,
-    activities: (data ?? []).map(toTripActivity),
+    activities: (activitiesResult.data ?? []).map(toTripActivity),
   }
 }
 
 export const getCurrentDraft = async (): Promise<TripDraft | null> => {
-  const ownerId = await getOwnerId()
+  const { supabase, userId: ownerId } = await getUserContext()
   if (!ownerId) return null
 
-  const supabase = await createClient()
   const { data, error } = await supabase
     .from('trips')
-    .select('*')
+    .select('id, name, destination, description, start_date, end_date, pace, cover_path, note')
     .eq('owner_id', ownerId)
     .eq('lifecycle', 'draft')
     .maybeSingle()
 
   if (error) throw new Error('Could not load trip draft')
-  return data ? toDraft(data) : null
+  return data ? toDraft(supabase, data) : null
 }
 
-export const getTripDetail = async (tripId: string): Promise<TripDetail | null> => {
-  const ownerId = await getOwnerId()
+export const getTripDetail = cache(async (tripId: string): Promise<TripDetail | null> => {
+  const { supabase, userId: ownerId } = await getUserContext()
   if (!ownerId) return null
 
-  const today = await getCachedAppDate()
-  const supabase = await createClient()
-  const { data: trip, error } = await supabase
-    .from('trips')
-    .select('*')
-    .eq('id', tripId)
-    .eq('owner_id', ownerId)
-    .eq('lifecycle', 'published')
-    .maybeSingle()
+  const [today, tripResult] = await Promise.all([
+    getCachedAppDate(),
+    supabase
+      .from('trips')
+      .select('id, name, destination, description, start_date, end_date, pace, cover_path, note')
+      .eq('id', tripId)
+      .eq('owner_id', ownerId)
+      .eq('lifecycle', 'published')
+      .maybeSingle(),
+  ])
+  const { data: trip, error } = tripResult
 
   if (error || !trip || !trip.start_date || !trip.end_date || !trip.pace) return null
 
-  const { data: activities, error: activitiesError } = await supabase
-    .from('trip_activities')
-    .select('*')
-    .eq('trip_id', trip.id)
-    .order('activity_date')
-    .order('start_minute')
+  const [activitiesResult, card] = await Promise.all([
+    supabase
+      .from('trip_activities')
+      .select('*')
+      .eq('trip_id', trip.id)
+      .order('activity_date')
+      .order('start_minute'),
+    toTripCard(supabase, trip, today),
+  ])
 
-  if (activitiesError) throw new Error('Could not load trip detail')
-  const card = await toTripCard(supabase, trip, today)
-  return { ...card, note: trip.note, activities: (activities ?? []).map(toTripActivity) }
-}
+  if (activitiesResult.error) throw new Error('Could not load trip detail')
+  return { ...card, note: trip.note, activities: (activitiesResult.data ?? []).map(toTripActivity) }
+})

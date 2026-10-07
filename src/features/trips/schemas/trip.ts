@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { ACTIVITY_TYPES, TRIP_PACES } from '@/features/trips/types/trip'
+import { ACTIVITY_TYPES, TRIP_PACES } from '@/features/trips/constants/trips'
 
 const optionalDateSchema = z.union([z.iso.date(), z.literal('')])
 

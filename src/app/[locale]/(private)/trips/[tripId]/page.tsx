@@ -7,7 +7,7 @@ import { getLocale, getTranslations } from 'next-intl/server'
 import { buttonVariants } from '@/components/ui/button'
 import { TripHeader } from '@/features/trips/components/trip-header'
 import { getTripDetail } from '@/features/trips/data/trips'
-import { formatMinute, getTripDuration } from '@/features/trips/utils/trip'
+import { formatMinute, formatTripDetailDate, getTripDuration } from '@/features/trips/utils/trip'
 import { Link } from '@/i18n/navigation'
 import type { TripDetail } from '@/features/trips/types/trip'
 
@@ -25,11 +25,6 @@ export const generateMetadata = async ({ params }: PageProps): Promise<Metadata>
     : { title: t('notFoundTitle') }
 }
 
-const formatDate = (value: string, locale: string): string =>
-  new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long', year: 'numeric' }).format(
-    new Date(`${value}T12:00:00+07:00`),
-  )
-
 const TripSchedule = ({
   trip,
   locale,
@@ -39,7 +34,13 @@ const TripSchedule = ({
   locale: string
   labels: (key: string) => string
 }): ReactElement => {
-  const days = Array.from(new Set(trip.activities.map((activity) => activity.activityDate)))
+  const activitiesByDate = new Map<string, TripDetail['activities']>()
+  for (const activity of trip.activities) {
+    const activities = activitiesByDate.get(activity.activityDate)
+    if (activities) activities.push(activity)
+    else activitiesByDate.set(activity.activityDate, [activity])
+  }
+
   return (
     <section className="border-line bg-surface rounded-2xl border p-5 sm:p-8">
       <p className="text-champagne-ink text-xs font-semibold tracking-[0.16em] uppercase">
@@ -48,38 +49,34 @@ const TripSchedule = ({
       <h2 className="text-primary mt-2 text-2xl font-medium tracking-tight">
         {labels('scheduleTitle')}
       </h2>
-      {days.length === 0 ? (
+      {activitiesByDate.size === 0 ? (
         <p className="text-ink-soft bg-paper mt-6 rounded-xl p-5 text-sm">
           {labels('emptySchedule')}
         </p>
       ) : (
         <div className="mt-6 grid gap-5">
-          {days.map((date) => (
+          {Array.from(activitiesByDate, ([date, activities]) => (
             <section key={date} className="border-line grid gap-3 border-l-2 pl-4 sm:pl-6">
-              <h3 className="text-primary font-semibold">{formatDate(date, locale)}</h3>
+              <h3 className="text-primary font-semibold">{formatTripDetailDate(date, locale)}</h3>
               <ul className="grid gap-3">
-                {trip.activities
-                  .filter((activity) => activity.activityDate === date)
-                  .map((activity) => (
-                    <li key={activity.id} className="bg-paper rounded-xl p-4">
-                      <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
-                        <div>
-                          <p className="text-champagne-ink text-xs font-semibold uppercase">
-                            {labels(`activityTypes.${activity.activityType}`)}
-                          </p>
-                          <h4 className="text-primary mt-1 font-semibold">{activity.title}</h4>
-                        </div>
-                        <p className="text-ink-soft text-sm tabular-nums">
-                          {formatMinute(activity.startMinute)} – {formatMinute(activity.endMinute)}
+                {activities.map((activity) => (
+                  <li key={activity.id} className="bg-paper rounded-xl p-4">
+                    <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
+                      <div>
+                        <p className="text-champagne-ink text-xs font-semibold uppercase">
+                          {labels(`activityTypes.${activity.activityType}`)}
                         </p>
+                        <h4 className="text-primary mt-1 font-semibold">{activity.title}</h4>
                       </div>
-                      {activity.note && (
-                        <p className="text-ink-soft mt-2 text-sm leading-relaxed">
-                          {activity.note}
-                        </p>
-                      )}
-                    </li>
-                  ))}
+                      <p className="text-ink-soft text-sm tabular-nums">
+                        {formatMinute(activity.startMinute)} – {formatMinute(activity.endMinute)}
+                      </p>
+                    </div>
+                    {activity.note && (
+                      <p className="text-ink-soft mt-2 text-sm leading-relaxed">{activity.note}</p>
+                    )}
+                  </li>
+                ))}
               </ul>
             </section>
           ))}
@@ -102,7 +99,7 @@ const TripDetailPage = async ({ params }: PageProps): Promise<ReactElement> => {
   return (
     <main className="bg-paper text-ink min-h-svh antialiased">
       <TripHeader />
-      <div className="mx-auto w-full max-w-7xl px-5 py-8 md:px-10 md:py-12">
+      <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 md:py-12 lg:px-8">
         <Link
           className="text-ink-soft hover:text-primary inline-flex min-h-10 items-center gap-2 text-sm font-medium"
           href="/trips"
@@ -163,7 +160,8 @@ const TripDetailPage = async ({ params }: PageProps): Promise<ReactElement> => {
                   <div>
                     <dt className="text-ink-soft text-xs">{t('facts.dateRange')}</dt>
                     <dd className="text-primary mt-1 font-medium">
-                      {formatDate(trip.startDate, locale)} – {formatDate(trip.endDate, locale)}
+                      {formatTripDetailDate(trip.startDate, locale)} –{' '}
+                      {formatTripDetailDate(trip.endDate, locale)}
                     </dd>
                   </div>
                   <div>

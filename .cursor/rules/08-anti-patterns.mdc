@@ -1,0 +1,23 @@
+---
+description: Custom hook return-shape conventions
+globs:
+  - 'src/**/*.{ts,tsx}'
+alwaysApply: true
+---
+
+# Custom Hook Conventions
+
+## 1. Hook Return Shape
+
+1. Return hook values in an object grouped by purpose instead of a flat object of unrelated values.
+2. Use `data` for source and derived values, `handlers` for callbacks and actions, `statuses` for loading/error/success state, and `refs` for React refs.
+3. Include only the groups the hook needs; omit empty groups.
+
+```ts
+return {
+  data: { trips, selectedTrip },
+  handlers: { handleSelectTrip, handleSave },
+  statuses: { isLoading, isSaving, error },
+  refs: { searchInputRef },
+}
+```

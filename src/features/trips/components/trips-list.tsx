@@ -3,49 +3,37 @@
 import Image from 'next/image'
 import { Search01Icon, Image01Icon, ArrowRight01Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
-import { useEffect, useMemo, useRef, useState, type ReactElement } from 'react'
+import { useEffect, useRef, useState, type ReactElement } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 
 import { Button, buttonVariants } from '@/components/ui/button'
+import { getTripDetailRoute, ROUTES } from '@/constants/routes'
 import { Link } from '@/i18n/navigation'
-import type { TripCard, TripStatus } from '@/features/trips/types/trip'
+import { TRIP_LIST_FILTERS, TRIP_LIST_PAGE_SIZE } from '@/features/trips/constants/trips'
+import { filterTrips, formatTripDate } from '@/features/trips/utils/trip'
+import type { TripCard, TripListFilter } from '@/features/trips/types/trip'
 
-type Filter = 'all' | TripStatus
-
-interface TripsListProps {
+type Props = {
   trips: TripCard[]
 }
 
-const PAGE_SIZE = 6
-
-const formatTripDate = (date: string, locale: string): string =>
-  new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'short', year: 'numeric' }).format(
-    new Date(`${date}T12:00:00+07:00`),
-  )
-
-export const TripsList = ({ trips }: TripsListProps): ReactElement => {
+export const TripsList = ({ trips }: Props): ReactElement => {
   const t = useTranslations('trips')
   const locale = useLocale()
   const [query, setQuery] = useState('')
-  const [filter, setFilter] = useState<Filter>('all')
+  const [filter, setFilter] = useState<TripListFilter>('all')
   const [visibleState, setVisibleState] = useState({
-    filter: 'all' as Filter,
+    filter: 'all' as TripListFilter,
     query: '',
-    count: PAGE_SIZE,
+    count: TRIP_LIST_PAGE_SIZE,
   })
   const visibleCount =
-    visibleState.filter === filter && visibleState.query === query ? visibleState.count : PAGE_SIZE
+    visibleState.filter === filter && visibleState.query === query
+      ? visibleState.count
+      : TRIP_LIST_PAGE_SIZE
   const sentinelRef = useRef<HTMLDivElement>(null)
 
-  const filteredTrips = useMemo(() => {
-    const normalizedQuery = query.trim().toLocaleLowerCase(locale)
-    return trips.filter((trip) => {
-      const matchesQuery =
-        !normalizedQuery ||
-        `${trip.name} ${trip.destination}`.toLocaleLowerCase(locale).includes(normalizedQuery)
-      return matchesQuery && (filter === 'all' || trip.status === filter)
-    })
-  }, [filter, locale, query, trips])
+  const filteredTrips = filterTrips(trips, query, filter, locale)
 
   useEffect(() => {
     const sentinel = sentinelRef.current
@@ -58,8 +46,9 @@ export const TripsList = ({ trips }: TripsListProps): ReactElement => {
             filter,
             query,
             count: Math.min(
-              (current.filter === filter && current.query === query ? current.count : PAGE_SIZE) +
-                PAGE_SIZE,
+              (current.filter === filter && current.query === query
+                ? current.count
+                : TRIP_LIST_PAGE_SIZE) + TRIP_LIST_PAGE_SIZE,
               filteredTrips.length,
             ),
           }))
@@ -70,8 +59,6 @@ export const TripsList = ({ trips }: TripsListProps): ReactElement => {
     observer.observe(sentinel)
     return () => observer.disconnect()
   }, [filter, filteredTrips.length, query, visibleCount])
-
-  const filters: Filter[] = ['all', 'upcoming', 'past']
 
   return (
     <>
@@ -105,7 +92,7 @@ export const TripsList = ({ trips }: TripsListProps): ReactElement => {
           className="flex min-w-0 [scrollbar-width:none] gap-2 overflow-x-auto py-0.5 md:justify-end [&::-webkit-scrollbar]:hidden"
           role="group"
         >
-          {filters.map((value) => (
+          {TRIP_LIST_FILTERS.map((value) => (
             <button
               key={value}
               aria-pressed={filter === value}
@@ -138,7 +125,10 @@ export const TripsList = ({ trips }: TripsListProps): ReactElement => {
             {trips.length === 0 ? t('list.emptyDescription') : t('list.noResultsDescription')}
           </p>
           {trips.length === 0 ? (
-            <Link className={buttonVariants({ className: 'mt-7' })} href="/trips/create">
+            <Link
+              className={buttonVariants({ className: 'mt-7' })}
+              href={ROUTES.PRIVATE.TRIP_CREATE}
+            >
               {t('list.createFirst')}
             </Link>
           ) : (
@@ -169,7 +159,7 @@ export const TripsList = ({ trips }: TripsListProps): ReactElement => {
                 key={trip.id}
                 aria-label={t('list.openTrip', { name: trip.name })}
                 className="group border-line bg-surface focus-visible:outline-focus rounded-auth hover:border-line-strong overflow-hidden border shadow-[0_8px_28px_rgba(23,54,46,0.05)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_16px_38px_rgba(23,54,46,0.1)] focus-visible:outline-2 focus-visible:outline-offset-4 motion-reduce:transform-none motion-reduce:transition-none"
-                href={`/trips/${trip.id}`}
+                href={getTripDetailRoute(trip.id)}
               >
                 <div className="bg-muted relative aspect-[16/10] overflow-hidden">
                   {trip.coverUrl ? (

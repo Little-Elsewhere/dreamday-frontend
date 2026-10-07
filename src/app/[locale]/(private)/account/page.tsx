@@ -13,7 +13,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
   return { title: t('metadata.title'), description: t('metadata.description') }
 }
 
-const AccountPage = async (): Promise<ReactElement> => {
+const Account = async (): Promise<ReactElement> => {
   const t = await getTranslations('account')
 
   return (
@@ -72,4 +72,4 @@ const AccountPage = async (): Promise<ReactElement> => {
   )
 }
 
-export default AccountPage
+export default Account
