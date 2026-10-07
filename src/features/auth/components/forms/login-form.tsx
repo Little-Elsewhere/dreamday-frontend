@@ -42,7 +42,7 @@ export const LoginForm = (): ReactElement => {
     try {
       const result = await signIn(values)
       if (result.success) {
-        router.replace(ROUTES.PRIVATE.ACCOUNT)
+        router.replace(ROUTES.PRIVATE.TRIPS)
       } else {
         handleFormActionError(result.error, {
           fields: [AuthField.Email, AuthField.Password],
