@@ -2,18 +2,12 @@ import { routing } from '@/i18n/routing'
 import { hasLocale, NextIntlClientProvider } from 'next-intl'
 import { notFound } from 'next/navigation'
 import type { Metadata, Viewport } from 'next'
-import { Be_Vietnam_Pro } from 'next/font/google'
 import { ReactNode } from 'react'
 import { SerwistProvider } from '@/app/serwist'
+import { beVietnamPro } from '@/fonts'
 import { cn } from '@/utils/cn'
 import '@/app/globals.css'
 import { serverEnv } from '@/env/server'
-
-const beVietnamPro = Be_Vietnam_Pro({
-  variable: '--font-be-vietnam-pro',
-  subsets: ['latin', 'vietnamese'],
-  weight: ['400', '500', '600', '700'],
-})
 
 const appName = serverEnv.NEXT_PUBLIC_APP_NAME
 const appDefaultTitle = serverEnv.NEXT_PUBLIC_APP_DEFAULT_TITLE

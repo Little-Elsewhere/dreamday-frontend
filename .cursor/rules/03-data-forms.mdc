@@ -18,54 +18,94 @@ alwaysApply: true
 - NEVER fetch initial page data inside useEffect.
 
 ```tsx
-// src/app/actions.ts
+// src/features/posts/actions.ts
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { z } from 'zod'
+import { createPostSchema } from '@/features/posts/schemas/post'
 
-const createPostSchema = z.object({
-  title: z.string().min(1).max(200),
-  content: z.string().min(1),
-})
+type CreatePostResult = { success: true } | { success: false; error: 'saveFailed' }
 
-export async function createPost(formData: FormData): Promise<void> {
-  const data = Object.fromEntries(formData)
-  const validated = createPostSchema.parse(data)
+export async function createPost(input: unknown): Promise<CreatePostResult> {
+  const validated = createPostSchema.parse(input)
 
-  await db.post.create({ data: validated })
-
-  revalidatePath('/posts')
+  try {
+    await db.post.create({ data: validated })
+    revalidatePath('/posts')
+    return { success: true }
+  } catch {
+    return { success: false, error: 'saveFailed' }
+  }
 }
 ```
 
 ## 2. Forms
 
-- Use Server Actions for form submission.
-- Use useActionState (React 19) for form state management.
-- Use Zod for schema validation.
-- Display client-side validation errors next to fields. Server-side `ZodError` is an exception for invalid submitted values and must propagate to the caller or framework error handler; it is not a field-error Action result.
+- Use React Hook Form (`useForm`, `register`, and `handleSubmit`) to manage interactive form state and submission.
+- Define each form's validation with a Zod schema in the feature's `schemas/` folder and connect it to React Hook Form with `zodResolver` from `@hookform/resolvers/zod`.
+- Export schema-derived input/output types next to the schema when components or actions need them. Use `z.input<typeof schema>` and `z.output<typeof schema>` when Zod transforms make the input and validated output differ.
+- Submit validated values through a Server Action. Client-side validation improves feedback but does not replace server validation: the Server Action must call `schema.parse(...)` immediately, before its `try/catch`, as described above.
+- Use React Hook Form's `formState.isSubmitting` for pending UI and display client-side validation errors next to their fields. Server-side `ZodError` must propagate to the caller or framework error handler; it is not a field-error Action result.
+
+```ts
+// src/features/posts/schemas/post.ts
+import { z } from 'zod'
+
+export const createPostSchema = z.object({
+  title: z.string().trim().min(1).max(200),
+  content: z.string().trim().min(1),
+})
+
+export type CreatePostInput = z.input<typeof createPostSchema>
+export type CreatePostOutput = z.output<typeof createPostSchema>
+```
 
 ```tsx
 'use client'
 
-import { useActionState } from 'react'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useTranslations } from 'next-intl'
-import { createPost } from '@/app/actions'
+import { useForm } from 'react-hook-form'
+
+import { createPost } from '@/features/posts/actions'
+import { createPostSchema } from '@/features/posts/schemas/post'
+import type { CreatePostInput, CreatePostOutput } from '@/features/posts/schemas/post'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
 export function PostForm(): JSX.Element {
   const t = useTranslations('PostForm')
-  const [state, formAction, isPending] = useActionState(createPost, null)
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors, isSubmitting },
+  } = useForm<CreatePostInput, undefined, CreatePostOutput>({
+    resolver: zodResolver(createPostSchema),
+  })
+
+  const onSubmit = async (values: CreatePostOutput): Promise<void> => {
+    const result = await createPost(values)
+    if (!result.success) {
+      setError('root.server', { type: 'server', message: t(`errors.${result.error}`) })
+    }
+  }
 
   return (
-    <form action={formAction} className="flex flex-col gap-4">
-      <Input name="title" />
-      {state?.errors?.title && <p className="text-destructive text-sm">{state.errors.title}</p>}
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+      <Input {...register('title')} />
+      {errors.title && <p className="text-destructive text-sm">{t('errors.title')}</p>}
 
-      <Button type="submit" disabled={isPending}>
-        {isPending ? t('saving') : t('save')}
+      <Input {...register('content')} />
+      {errors.content && <p className="text-destructive text-sm">{t('errors.content')}</p>}
+      {errors.root?.server && (
+        <p className="text-destructive text-sm" role="alert">
+          {errors.root.server.message}
+        </p>
+      )}
+
+      <Button type="submit" disabled={isSubmitting}>
+        {isSubmitting ? t('saving') : t('save')}
       </Button>
     </form>
   )

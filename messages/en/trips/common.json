@@ -1,0 +1,16 @@
+{
+  "navigation": {
+    "label": "Trip navigation",
+    "trips": "My trips",
+    "brand": "dream day",
+    "brandLink": "dream day — my trips",
+    "accountNameFallback": "Your dream day",
+    "accountRole": "Your travel planner"
+  },
+  "errors": {
+    "saveFailed": "We couldn’t save your changes. Please try again.",
+    "sessionExpired": "Your session has expired. Sign in again to continue.",
+    "draftNotFound": "This trip draft could not be found. It may have been removed."
+  },
+  "loading": "Loading your trip"
+}

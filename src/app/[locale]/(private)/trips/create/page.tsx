@@ -15,7 +15,7 @@ const TripCreatePage = async (): Promise<ReactElement> => {
   const draft = await getCurrentDraft()
   return (
     <main className="bg-paper text-ink min-h-svh antialiased">
-      <TripHeader />
+      <TripHeader showTripsLink />
       <TripCreateForm initialDraft={draft} />
     </main>
   )

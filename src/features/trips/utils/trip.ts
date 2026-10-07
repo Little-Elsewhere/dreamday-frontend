@@ -1,17 +1,73 @@
 import type {
   TripActivity,
   TripActivityRow,
-  TripRow,
+  TripCard,
+  TripListFilter,
   TripStatus,
 } from '@/features/trips/types/trip'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type { Database } from '@/types/database'
+import { TRIP_APP_TIME_ZONE } from '@/features/trips/constants/trips'
 
-const APP_TIME_ZONE = 'Asia/Ho_Chi_Minh'
+export const createUuidV4 = (): string => crypto.randomUUID()
+
+export const createInitialTripActivity = (activityDate: string): Omit<TripActivity, 'id'> => ({
+  title: '',
+  activityDate,
+  activityType: 'explore',
+  startMinute: 9 * 60,
+  endMinute: 10 * 60,
+  note: '',
+})
+
+export const getTripDatesInRange = (start: string, end: string): string[] => {
+  if (!start || !end || end < start) return []
+  const dates: string[] = []
+  const cursor = new Date(`${start}T12:00:00Z`)
+  const endTime = new Date(`${end}T12:00:00Z`).getTime()
+  while (cursor.getTime() <= endTime && dates.length < 60) {
+    dates.push(cursor.toISOString().slice(0, 10))
+    cursor.setUTCDate(cursor.getUTCDate() + 1)
+  }
+  return dates
+}
+
+const formatDateOnly = (
+  date: string,
+  locale: string,
+  options: Intl.DateTimeFormatOptions,
+): string =>
+  new Intl.DateTimeFormat(locale, { ...options, timeZone: 'UTC' }).format(
+    new Date(`${date}T00:00:00.000Z`),
+  )
+
+export const formatTripDate = (date: string, locale: string): string =>
+  formatDateOnly(date, locale, { day: 'numeric', month: 'short', year: 'numeric' })
+
+export const formatTripActivityDate = (date: string, locale: string): string =>
+  formatDateOnly(date, locale, { weekday: 'short', day: 'numeric', month: 'short' })
+
+export const formatTripDetailDate = (date: string, locale: string): string =>
+  formatDateOnly(date, locale, { day: 'numeric', month: 'long', year: 'numeric' })
+
+export const filterTrips = (
+  trips: TripCard[],
+  query: string,
+  filter: TripListFilter,
+  locale: string,
+): TripCard[] => {
+  const normalizedQuery = query.trim().toLocaleLowerCase(locale)
+  return trips.filter((trip) => {
+    const matchesQuery =
+      !normalizedQuery ||
+      `${trip.name} ${trip.destination}`.toLocaleLowerCase(locale).includes(normalizedQuery)
+    return matchesQuery && (filter === 'all' || trip.status === filter)
+  })
+}
 
 export const getAppDate = (date: Date): string =>
   new Intl.DateTimeFormat('sv-SE', {
-    timeZone: APP_TIME_ZONE,
+    timeZone: TRIP_APP_TIME_ZONE,
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
@@ -63,5 +119,3 @@ export const getCoverUrl = async (
   if (error) return null
   return data?.signedUrl ?? null
 }
-
-export const isPublishedTrip = (trip: TripRow): boolean => trip.lifecycle === 'published'

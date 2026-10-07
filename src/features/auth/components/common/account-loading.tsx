@@ -9,7 +9,7 @@ export const AccountLoading = async (): Promise<ReactElement> => {
   return (
     <main className="bg-surface text-ink min-h-svh antialiased" aria-busy="true">
       <p className="sr-only" role="status">
-        {t('messages.loading')}
+        {t('messages.loadingAccount')}
       </p>
       <div className="mx-auto flex min-h-svh w-full max-w-7xl flex-col px-6 py-8 md:px-12 md:py-10">
         <header

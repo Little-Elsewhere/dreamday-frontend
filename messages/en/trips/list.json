@@ -1,0 +1,34 @@
+{
+  "eyebrow": "Your journeys, gathered",
+  "title": "Days to look forward to",
+  "description": "Follow your upcoming journeys and look back on the places you’ve been.",
+  "metadataDescription": "Your saved trips and travel plans.",
+  "createTrip": "Plan a trip",
+  "toolbarLabel": "Search and filter trips",
+  "searchLabel": "Find a trip",
+  "searchPlaceholder": "Search by trip or destination",
+  "filterLabel": "Filter trips",
+  "filters": {
+    "all": "All trips",
+    "upcoming": "Upcoming",
+    "past": "Past"
+  },
+  "status": {
+    "upcoming": "Upcoming",
+    "past": "Past"
+  },
+  "resultsTitle": "Your trip list",
+  "coverMissing": "No cover photo",
+  "noDescription": "A journey you planned for yourself.",
+  "viewDetails": "View details",
+  "openTrip": "View details for {name}",
+  "paginationStatus": "Showing {shown} of {total} trips",
+  "emptyTitle": "Your next story starts here",
+  "emptyDescription": "Create a trip to gather the dates, small details, and moments you want to remember.",
+  "createFirst": "Create your first trip",
+  "noResultsTitle": "No trips match that search",
+  "noResultsDescription": "Try another name or destination, or clear your filters to see every trip.",
+  "clearFilters": "Clear filters",
+  "resultCount": "{count, plural, one {# trip} other {# trips}}",
+  "days": "{count, plural, one {# day} other {# days}}"
+}

@@ -1,0 +1,41 @@
+{
+  "metadataDescription": "A trip to {destination}.",
+  "notFoundTitle": "Trip not found",
+  "backToTrips": "All trips",
+  "coverAlt": "Cover photo for {name}",
+  "scheduleEyebrow": "One day at a time",
+  "scheduleTitle": "Itinerary",
+  "emptySchedule": "There are no activities on this trip yet.",
+  "activityTypes": {
+    "explore": "Explore",
+    "meal": "Food and drink",
+    "travel": "Getting there",
+    "stay": "Stay",
+    "free": "Free time"
+  },
+  "facts": {
+    "eyebrow": "The small details",
+    "title": "Trip at a glance",
+    "destination": "Destination",
+    "dateRange": "Dates",
+    "duration": "Duration",
+    "days": "{count, plural, one {# day} other {# days}}",
+    "pace": "Pace",
+    "status": "Status",
+    "notSet": "Not set"
+  },
+  "paces": {
+    "relaxed": "Slow and easy",
+    "balanced": "A little of everything",
+    "active": "Full of discovery"
+  },
+  "status": {
+    "upcoming": "Upcoming",
+    "past": "Past"
+  },
+  "note": {
+    "eyebrow": "For later",
+    "title": "Trip note",
+    "empty": "No note has been added."
+  }
+}
