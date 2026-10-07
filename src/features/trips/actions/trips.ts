@@ -10,18 +10,13 @@ import {
   tripDraftSchema,
   tripNoteSchema,
 } from '@/features/trips/schemas/trip'
-import { createClient } from '@/lib/supabase/server'
+import { getSupabaseUserContext } from '@/lib/supabase/user-context'
 import { fieldError, messageError, systemError } from '@/utils/action-result'
 import type { ActionResult } from '@/types/action-result'
 import type { TripActivity, TripDraft } from '@/features/trips/types/trip'
 import { toTripActivity } from '@/features/trips/utils/trip'
 
-const getOwnerId = async (): Promise<string | null> => {
-  const supabase = await createClient()
-  const { data, error } = await supabase.auth.getClaims()
-  if (error || typeof data?.claims?.sub !== 'string') return null
-  return data.claims.sub
-}
+type ServerSupabaseClient = Awaited<ReturnType<typeof getSupabaseUserContext>>['supabase']
 
 const revalidateTrips = (tripId?: string): void => {
   revalidatePath('/[locale]/trips', 'page')
@@ -29,16 +24,16 @@ const revalidateTrips = (tripId?: string): void => {
   if (tripId) revalidatePath('/[locale]/trips/[tripId]', 'page')
 }
 
-const getDraft = async (tripId: string, ownerId: string) => {
-  const supabase = await createClient()
+const getDraft = async (supabase: ServerSupabaseClient, tripId: string, ownerId: string) => {
   const { data, error } = await supabase
     .from('trips')
-    .select('id, owner_id, lifecycle, start_date, end_date')
+    .select('start_date, end_date')
     .eq('id', tripId)
     .eq('owner_id', ownerId)
     .eq('lifecycle', 'draft')
     .maybeSingle()
-  return { supabase, trip: error ? null : data }
+  if (error) throw new Error('Could not load trip draft')
+  return data
 }
 
 export const saveTripDraft = async (
@@ -47,10 +42,8 @@ export const saveTripDraft = async (
   const validated = tripDraftSchema.parse(values)
 
   try {
-    const ownerId = await getOwnerId()
+    const { supabase, userId: ownerId } = await getSupabaseUserContext()
     if (!ownerId) return messageError('trips.errors.sessionExpired')
-
-    const supabase = await createClient()
     const { data: existing, error: lookupError } = await supabase
       .from('trips')
       .select('id')
@@ -78,16 +71,22 @@ export const saveTripDraft = async (
       updated_at: new Date().toISOString(),
     }
     const result = existing
-      ? await supabase.from('trips').update(payload).eq('id', existing.id).select('id').single()
-      : validated.coverPath
-        ? { data: null, error: new Error('Cover requires a saved draft') }
-        : await supabase
-            .from('trips')
-            .insert({ ...payload, owner_id: ownerId, lifecycle: 'draft' })
-            .select('id')
-            .single()
+      ? await supabase
+          .from('trips')
+          .update(payload)
+          .eq('id', existing.id)
+          .select('id')
+          .maybeSingle()
+      : await supabase
+          .from('trips')
+          .insert({ ...payload, owner_id: ownerId, lifecycle: 'draft' })
+          .select('id')
+          .maybeSingle()
 
-    if (result.error || !result.data) return systemError()
+    if (result.error) return systemError()
+    if (!result.data) {
+      return existing ? messageError('trips.errors.draftNotFound') : systemError()
+    }
     revalidateTrips(result.data.id)
     return { success: true, data: { id: result.data.id } }
   } catch {
@@ -101,9 +100,9 @@ export const saveTripActivity = async (
   const validated = tripActivitySchema.parse(values)
 
   try {
-    const ownerId = await getOwnerId()
+    const { supabase, userId: ownerId } = await getSupabaseUserContext()
     if (!ownerId) return messageError('trips.errors.sessionExpired')
-    const { supabase, trip } = await getDraft(validated.tripId, ownerId)
+    const trip = await getDraft(supabase, validated.tripId, ownerId)
     if (!trip) return messageError('trips.errors.draftNotFound')
     if (
       (trip.start_date && validated.activityDate < trip.start_date) ||
@@ -129,10 +128,19 @@ export const saveTripActivity = async (
           .eq('trip_id', validated.tripId)
           .eq('id', validated.activityId)
           .select('*')
-          .single()
-      : await supabase.from('trip_activities').insert(payload).select('*').single()
+          .maybeSingle()
+      : await supabase.from('trip_activities').insert(payload).select('*').maybeSingle()
 
-    if (result.error || !result.data) return systemError()
+    if (result.error) {
+      if (
+        result.error.code === '23514' &&
+        result.error.message === 'Activity date must be within the trip date range'
+      ) {
+        return fieldError('activityDate', 'trips.create.errors.activityOutsideTrip')
+      }
+      return systemError()
+    }
+    if (!result.data) return messageError('trips.errors.draftNotFound')
     revalidateTrips(validated.tripId)
     return { success: true, data: toTripActivity(result.data) }
   } catch {
@@ -144,17 +152,20 @@ export const deleteTripActivity = async (values: unknown): Promise<ActionResult<
   const validated = deleteTripActivitySchema.parse(values)
 
   try {
-    const ownerId = await getOwnerId()
+    const { supabase, userId: ownerId } = await getSupabaseUserContext()
     if (!ownerId) return messageError('trips.errors.sessionExpired')
-    const { supabase, trip } = await getDraft(validated.tripId, ownerId)
+    const trip = await getDraft(supabase, validated.tripId, ownerId)
     if (!trip) return messageError('trips.errors.draftNotFound')
 
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from('trip_activities')
       .delete()
       .eq('trip_id', validated.tripId)
       .eq('id', validated.activityId)
+      .select('id')
+      .maybeSingle()
     if (error) return systemError()
+    if (!data) return messageError('trips.errors.draftNotFound')
     revalidateTrips(validated.tripId)
     return { success: true, data: null }
   } catch {
@@ -166,16 +177,19 @@ export const saveTripNote = async (values: unknown): Promise<ActionResult<null>>
   const validated = tripNoteSchema.parse(values)
 
   try {
-    const ownerId = await getOwnerId()
+    const { supabase, userId: ownerId } = await getSupabaseUserContext()
     if (!ownerId) return messageError('trips.errors.sessionExpired')
-    const { supabase, trip } = await getDraft(validated.tripId, ownerId)
+    const trip = await getDraft(supabase, validated.tripId, ownerId)
     if (!trip) return messageError('trips.errors.draftNotFound')
 
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from('trips')
       .update({ note: validated.note, updated_at: new Date().toISOString() })
       .eq('id', validated.tripId)
+      .select('id')
+      .maybeSingle()
     if (error) return systemError()
+    if (!data) return messageError('trips.errors.draftNotFound')
     revalidateTrips(validated.tripId)
     return { success: true, data: null }
   } catch {
@@ -187,17 +201,17 @@ export const publishTrip = async (values: unknown): Promise<ActionResult<{ id: s
   const validated = publishTripSchema.parse(values)
 
   try {
-    const ownerId = await getOwnerId()
+    const { supabase, userId: ownerId } = await getSupabaseUserContext()
     if (!ownerId) return messageError('trips.errors.sessionExpired')
-    const { supabase, trip } = await getDraft(validated.tripId, ownerId)
-    if (!trip) return messageError('trips.errors.draftNotFound')
-
     const { data: fullTrip, error: tripError } = await supabase
       .from('trips')
       .select('name, start_date, end_date, pace')
       .eq('id', validated.tripId)
-      .single()
-    if (tripError || !fullTrip) return systemError()
+      .eq('owner_id', ownerId)
+      .eq('lifecycle', 'draft')
+      .maybeSingle()
+    if (tripError) return systemError()
+    if (!fullTrip) return messageError('trips.errors.draftNotFound')
     const publishFields = publishTripFieldsSchema.safeParse({
       name: fullTrip.name,
       startDate: fullTrip.start_date,
@@ -229,11 +243,20 @@ export const publishTrip = async (values: unknown): Promise<ActionResult<{ id: s
     )
     if (outsideTrip) return fieldError('startDate', 'trips.create.errors.activityOutsideTrip')
 
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from('trips')
       .update({ lifecycle: 'published', updated_at: new Date().toISOString() })
       .eq('id', validated.tripId)
+      .select('id')
+      .maybeSingle()
+    if (
+      error?.code === '23514' &&
+      error.message === 'Trip activities must fall within the trip date range'
+    ) {
+      return fieldError('startDate', 'trips.create.errors.activityOutsideTrip')
+    }
     if (error) return systemError()
+    if (!data) return messageError('trips.errors.draftNotFound')
     revalidateTrips(validated.tripId)
     return { success: true, data: { id: validated.tripId } }
   } catch {

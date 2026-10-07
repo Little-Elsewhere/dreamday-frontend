@@ -58,7 +58,7 @@ jobs:
         run: HUSKY=0 pnpm install --frozen-lockfile
 
       - name: Check format
-        run: pnpm format --check
+        run: pnpm format:check
 
   lint:
     name: Lint
@@ -103,6 +103,9 @@ jobs:
 
       - name: Type check
         run: pnpm typecheck
+
+      - name: Run unit tests
+        run: pnpm test:unit
 
   build:
     name: Build

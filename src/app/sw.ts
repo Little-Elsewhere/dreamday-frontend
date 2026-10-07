@@ -6,6 +6,7 @@ import type { PrecacheEntry, SerwistGlobalConfig } from 'serwist'
 import { NetworkOnly, Serwist } from 'serwist'
 
 import { isPrivateRoute } from '@/features/auth/utils/route'
+import { getLocaleFromPathname } from '@/utils/locale'
 
 declare global {
   interface WorkerGlobalScope extends SerwistGlobalConfig {
@@ -51,7 +52,7 @@ const purgeCachedPrivatePages = async (): Promise<void> => {
 
 serwist.setCatchHandler(async ({ request, url }) => {
   if (request.destination === 'document') {
-    const offlineUrl = url.pathname.startsWith('/vi') ? '/vi/~offline' : '/en/~offline'
+    const offlineUrl = `/${getLocaleFromPathname(url.pathname)}/~offline`
     const offlineResponse = await serwist.matchPrecache(offlineUrl)
     if (offlineResponse) return offlineResponse
   }

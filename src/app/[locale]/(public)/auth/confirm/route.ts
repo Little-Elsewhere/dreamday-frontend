@@ -1,17 +1,17 @@
 import { type NextRequest } from 'next/server'
+
 import { ROUTES } from '@/constants/routes'
 import { AuthErrorCode, AuthConfirmationFailure } from '@/features/auth/constants/auth'
-import { confirmationSchema } from '@/features/auth/schemas/callback'
+import { confirmationSchema, getConfirmationRedirect } from '@/features/auth/schemas/callback'
 import { generateLocalizedUrl } from '@/features/auth/utils/common'
 import { redirect } from '@/i18n/navigation'
+import { serverEnv } from '@/env/server'
 import { createClient } from '@/lib/supabase/server'
 import { ActionErrorKind } from '@/types/action-result'
+import { getLocaleFromPathname } from '@/utils/locale'
 
-export const GET = async (
-  request: NextRequest,
-  { params }: RouteContext<'/[locale]/auth/confirm'>,
-) => {
-  const { locale } = await params
+export const GET = async (request: NextRequest) => {
+  const locale = getLocaleFromPathname(request.nextUrl.pathname)
   const { searchParams } = new URL(request.url)
 
   const parsed = confirmationSchema.safeParse({
@@ -24,7 +24,12 @@ export const GET = async (
     return redirect({ href: ROUTES.PUBLIC.AUTH.ERROR, locale })
   }
 
-  const { token_hash, type, next } = parsed.data
+  const { token_hash, type } = parsed.data
+  const confirmationRedirect = getConfirmationRedirect(
+    parsed.data.next,
+    serverEnv.NEXT_PUBLIC_APP_URL,
+    locale,
+  )
   let failure: AuthConfirmationFailure | null = null
 
   try {
@@ -58,5 +63,5 @@ export const GET = async (
     })
   }
 
-  return redirect({ href: next, locale })
+  return redirect(confirmationRedirect)
 }
