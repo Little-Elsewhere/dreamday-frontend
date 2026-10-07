@@ -1,0 +1,16 @@
+{
+  "navigation": {
+    "label": "Điều hướng chuyến đi",
+    "trips": "Chuyến đi của tôi",
+    "brand": "dream day",
+    "brandLink": "dream day — chuyến đi của tôi",
+    "accountNameFallback": "dream day của bạn",
+    "accountRole": "Người lập hành trình"
+  },
+  "errors": {
+    "saveFailed": "Không thể lưu thay đổi. Vui lòng thử lại.",
+    "sessionExpired": "Phiên đăng nhập đã hết hạn. Hãy đăng nhập lại để tiếp tục.",
+    "draftNotFound": "Không tìm thấy bản nháp chuyến đi này. Có thể bản nháp đã bị xóa."
+  },
+  "loading": "Đang tải chuyến đi của bạn"
+}

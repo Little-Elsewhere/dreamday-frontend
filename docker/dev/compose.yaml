@@ -14,6 +14,9 @@ services:
       - ../../.env.local
     ports:
       - '${NEXT_PUBLIC_APP_PORT:-4000}:${NEXT_PUBLIC_APP_PORT:-4000}'
+      # Keep Node inspector ports local to this machine; the app stays on dreamday.local.
+      - '127.0.0.1:9229:9229'
+      - '127.0.0.1:9230:9230'
     environment:
       DOPPLER_ENVIRONMENT: dev
       NEXT_PUBLIC_APP_PORT: ${NEXT_PUBLIC_APP_PORT:-4000}

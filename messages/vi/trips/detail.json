@@ -1,0 +1,41 @@
+{
+  "metadataDescription": "Chuyến đi đến {destination}.",
+  "notFoundTitle": "Không tìm thấy chuyến đi",
+  "backToTrips": "Tất cả chuyến đi",
+  "coverAlt": "Ảnh bìa chuyến đi {name}",
+  "scheduleEyebrow": "Từng ngày một",
+  "scheduleTitle": "Lịch trình",
+  "emptySchedule": "Chuyến đi này chưa có hoạt động nào.",
+  "activityTypes": {
+    "explore": "Khám phá",
+    "meal": "Ẩm thực",
+    "travel": "Di chuyển",
+    "stay": "Lưu trú",
+    "free": "Tự do"
+  },
+  "facts": {
+    "eyebrow": "Những điều nhỏ xinh",
+    "title": "Tóm tắt chuyến đi",
+    "destination": "Điểm đến",
+    "dateRange": "Thời gian",
+    "duration": "Thời lượng",
+    "days": "{count, plural, one {# ngày} other {# ngày}}",
+    "pace": "Nhịp chuyến đi",
+    "status": "Trạng thái",
+    "notSet": "Chưa có"
+  },
+  "paces": {
+    "relaxed": "Thư thả",
+    "balanced": "Cân bằng",
+    "active": "Nhiều khám phá"
+  },
+  "status": {
+    "upcoming": "Sắp tới",
+    "past": "Đã qua"
+  },
+  "note": {
+    "eyebrow": "Để dành sau",
+    "title": "Ghi chú chuyến đi",
+    "empty": "Chưa có ghi chú nào."
+  }
+}

@@ -7,9 +7,29 @@
     {
       "type": "chrome",
       "request": "launch",
-      "name": "Launch Chrome against localhost",
-      "url": "http://localhost:4000",
+      "name": "Launch Chrome against dreamday.local",
+      "url": "http://dreamday.local",
       "webRoot": "${workspaceFolder}"
+    },
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "Attach Next.js Server Action (Docker)",
+      "address": "127.0.0.1",
+      "port": 9230,
+      "localRoot": "${workspaceFolder}",
+      "remoteRoot": "/app",
+      "skipFiles": ["<node_internals>/**"]
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Debug Server Action on dreamday.local",
+      "configurations": [
+        "Attach Next.js Server Action (Docker)",
+        "Launch Chrome against dreamday.local"
+      ],
+      "stopAll": false
     }
   ]
 }

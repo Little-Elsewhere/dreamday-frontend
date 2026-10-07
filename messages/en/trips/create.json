@@ -1,0 +1,119 @@
+{
+  "eyebrow": "A new journey",
+  "title": "Create a trip",
+  "intro": "Start with the place and dates. You can save any time and come back to your draft.",
+  "scheduleTitle": "Shape your itinerary",
+  "scheduleIntro": "Add the moments you want to make room for. Activities can overlap and you can move them later.",
+  "draftSaved": "Draft saved. Pick up where you left off whenever you’re ready.",
+  "coverUploaded": "Your cover photo has been added.",
+  "coverUploading": "Uploading your cover photo…",
+  "steps": {
+    "label": "Trip creation steps",
+    "step1": "Trip details",
+    "step2": "Itinerary and notes",
+    "current": "In progress",
+    "complete": "Completed",
+    "upcoming": "Next step"
+  },
+  "fields": {
+    "name": "Trip name",
+    "destination": "Destination or region",
+    "description": "A short description",
+    "cover": "Cover photo",
+    "dateRange": "Departure — return",
+    "duration": "Duration",
+    "startDate": "Departure",
+    "endDate": "Return",
+    "pace": "What pace feels right?"
+  },
+  "duration": {
+    "notSet": "Not set",
+    "days": "{count, plural, one {# day} other {# days}}",
+    "caption": "Calculated from your departure and return dates"
+  },
+  "draftStatus": "Planning",
+  "placeholders": {
+    "name": "A few days by the sea",
+    "destination": "Lan Ha Bay, Vietnam",
+    "description": "What are you looking forward to?"
+  },
+  "coverAlt": "Trip cover preview",
+  "coverEmpty": "A photo that feels like this trip",
+  "coverHelp": "JPG, PNG, or WebP · Up to 2 MB",
+  "paces": {
+    "relaxed": "Slow and easy",
+    "balanced": "A little of everything",
+    "active": "Full of discovery"
+  },
+  "actions": {
+    "saveDraft": "Save draft",
+    "publish": "Create trip",
+    "continue": "Continue to itinerary",
+    "back": "Back to details",
+    "cancel": "Cancel",
+    "chooseCover": "Choose a cover photo",
+    "replaceCover": "Replace cover photo",
+    "removeCover": "Remove photo",
+    "addActivity": "Add an activity",
+    "addForDay": "＋ Add activity",
+    "saveActivity": "Save activity",
+    "delete": "Delete",
+    "saveNote": "Save note",
+    "moveDayEarlier": "Move {title} to the previous day",
+    "moveDayLater": "Move {title} to the next day",
+    "previousDay": "Previous day",
+    "nextDay": "Next day",
+    "shiftEarlier": "Move {title} 15 minutes earlier",
+    "shiftLater": "Move {title} 15 minutes later",
+    "shorten": "Shorten {title} by 15 minutes",
+    "extend": "Extend {title} by 15 minutes",
+    "shorter": "−15 min",
+    "longer": "+15 min"
+  },
+  "errors": {
+    "endBeforeStart": "The return date can’t be before the departure date.",
+    "endTimeBeforeStart": "An activity must end after it starts.",
+    "nameRequired": "Add a trip name before creating your trip.",
+    "startDateRequired": "Choose a departure date before creating your trip.",
+    "endDateRequired": "Choose a return date before creating your trip.",
+    "paceRequired": "Choose a pace for this trip before creating it.",
+    "publishRequired": "Add a name, valid dates, and a pace before creating this trip.",
+    "invalidCover": "Choose a JPG, PNG, or WebP image up to 2 MB.",
+    "coverUploadFailed": "We couldn’t save the cover photo. Please try again.",
+    "activityOutsideTrip": "Keep this activity within the trip dates.",
+    "activitySaveFailed": "We couldn’t save that activity. Please try again."
+  },
+  "itinerary": {
+    "heading": "A day at a time",
+    "description": "Drop an activity onto another day to move it. Use the time controls to shift it or change its duration in 15-minute steps.",
+    "addDatesFirst": "Choose a departure and return date in trip details before adding activities.",
+    "emptyDay": "A little space for the day. Add an activity when you’re ready."
+  },
+  "activityTypes": {
+    "explore": "Explore",
+    "meal": "Food and drink",
+    "travel": "Getting there",
+    "stay": "Stay",
+    "free": "Free time"
+  },
+  "activity": {
+    "addTitle": "Add an activity",
+    "editTitle": "Edit activity",
+    "dialogDescription": "Choose a day and time. The schedule allows overlapping activities.",
+    "fields": {
+      "title": "Activity name",
+      "date": "Day",
+      "type": "Type",
+      "start": "Starts",
+      "end": "Ends",
+      "note": "Note"
+    }
+  },
+  "note": {
+    "heading": "A note for the journey",
+    "description": "Keep a reminder, a thought, or something you don’t want to forget.",
+    "label": "Trip note",
+    "placeholder": "A little note to future you…"
+  },
+  "noteSaved": "Trip note saved."
+}

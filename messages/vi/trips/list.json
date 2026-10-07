@@ -1,0 +1,34 @@
+{
+  "eyebrow": "Hành trình của tôi",
+  "title": "Những ngày đang chờ bạn",
+  "description": "Theo dõi các chuyến đi sắp tới và nhìn lại những nơi bạn đã qua.",
+  "metadataDescription": "Những chuyến đi và kế hoạch du lịch đã lưu.",
+  "createTrip": "Lên kế hoạch",
+  "toolbarLabel": "Tìm kiếm và lọc chuyến đi",
+  "searchLabel": "Tìm chuyến đi",
+  "searchPlaceholder": "Tìm theo tên hoặc điểm đến",
+  "filterLabel": "Lọc chuyến đi",
+  "filters": {
+    "all": "Tất cả",
+    "upcoming": "Sắp tới",
+    "past": "Đã qua"
+  },
+  "status": {
+    "upcoming": "Sắp tới",
+    "past": "Đã qua"
+  },
+  "resultsTitle": "Danh sách chuyến đi",
+  "coverMissing": "Chưa có ảnh bìa",
+  "noDescription": "Một hành trình bạn đã dành riêng cho mình.",
+  "viewDetails": "Xem chi tiết",
+  "openTrip": "Xem chi tiết chuyến đi {name}",
+  "paginationStatus": "Đang hiển thị {shown} trên {total} chuyến đi",
+  "emptyTitle": "Hành trình tiếp theo bắt đầu từ đây",
+  "emptyDescription": "Tạo một chuyến đi để lưu ngày tháng, những chi tiết nhỏ và khoảnh khắc bạn muốn nhớ.",
+  "createFirst": "Tạo chuyến đi đầu tiên",
+  "noResultsTitle": "Không tìm thấy chuyến đi phù hợp",
+  "noResultsDescription": "Thử tên hoặc điểm đến khác, hoặc xóa bộ lọc để xem tất cả chuyến đi.",
+  "clearFilters": "Xóa bộ lọc",
+  "resultCount": "{count, plural, one {# chuyến đi} other {# chuyến đi}}",
+  "days": "{count, plural, one {# ngày} other {# ngày}}"
+}

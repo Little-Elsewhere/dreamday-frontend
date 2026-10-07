@@ -20,8 +20,8 @@ alwaysApply: true
 
 - Strict mode is mandatory.
 - NEVER use `any`. Use `unknown` with type guards for dynamic types.
-- All functions MUST have explicit return types.
-- All component props MUST have an interface named `{ComponentName}Props`.
+- Prefer inferred return types when TypeScript can infer them clearly. Add an explicit return type when it clarifies a contract, resolves recursive inference, or constrains a non-obvious public API; being exported alone is not a reason to require one.
+- The primary component's props MUST use a file-local `type Props = { ... }`.
 - Prefer `interface` over `type` for object shapes. Use `type` for unions and mapped types.
 
 ## 3. Rendering Strategy

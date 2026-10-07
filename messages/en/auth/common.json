@@ -26,7 +26,9 @@
     "register": "Create an account"
   },
   "messages": {
-    "loading": "Loading authentication form"
+    "loading": "Loading authentication form",
+    "loadingAccount": "Loading your account",
+    "checkingSession": "Checking your session"
   },
   "errors": {
     "emailInvalid": "Enter a valid email address.",
