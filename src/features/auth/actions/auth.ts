@@ -4,7 +4,7 @@ import { z } from 'zod'
 
 import { Locale } from '@/constants/locale'
 import { ROUTES } from '@/constants/routes'
-import { AuthAction } from '@/features/auth/constants/auth'
+import { AuthAction, AuthErrorCode } from '@/features/auth/constants/auth'
 import {
   loginSchema,
   passwordResetSchema,
@@ -57,6 +57,13 @@ export const signUp = async (
         }),
       },
     })
+    if (
+      error?.code === AuthErrorCode.EmailExists ||
+      error?.code === AuthErrorCode.UserAlreadyExists
+    ) {
+      return { success: true, data: null }
+    }
+
     return error ? authError(error, AuthAction.SignUp) : { success: true, data: null }
   } catch {
     return systemError()

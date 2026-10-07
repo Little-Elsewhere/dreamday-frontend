@@ -7,7 +7,11 @@ import { getLocale, getTranslations } from 'next-intl/server'
 import { buttonVariants } from '@/components/ui/button'
 import { TripHeader } from '@/features/trips/components/trip-header'
 import { getTripDetail } from '@/features/trips/data/trips'
-import { formatMinute, formatTripDetailDate, getTripDuration } from '@/features/trips/utils/trip'
+import {
+  formatMinute,
+  formatTripDetailDate,
+  groupTripActivitiesByDate,
+} from '@/features/trips/utils/trip'
 import { Link } from '@/i18n/navigation'
 import type { TripDetail } from '@/features/trips/types/trip'
 
@@ -34,12 +38,7 @@ const TripSchedule = ({
   locale: string
   labels: (key: string) => string
 }): ReactElement => {
-  const activitiesByDate = new Map<string, TripDetail['activities']>()
-  for (const activity of trip.activities) {
-    const activities = activitiesByDate.get(activity.activityDate)
-    if (activities) activities.push(activity)
-    else activitiesByDate.set(activity.activityDate, [activity])
-  }
+  const activitiesByDate = groupTripActivitiesByDate(trip.activities)
 
   return (
     <section className="border-line bg-surface rounded-2xl border p-5 sm:p-8">
@@ -94,7 +93,7 @@ const TripDetailPage = async ({ params }: PageProps): Promise<ReactElement> => {
   ])
   const trip = await getTripDetail(tripId)
   if (!trip) notFound()
-  const duration = getTripDuration(trip.startDate, trip.endDate)
+  const duration = trip.durationDays
 
   return (
     <main className="bg-paper text-ink min-h-svh antialiased">

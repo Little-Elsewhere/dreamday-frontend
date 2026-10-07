@@ -20,6 +20,7 @@ import {
   createInitialTripActivity,
   createUuidV4,
   getTripDatesInRange,
+  sortTripActivities,
 } from '@/features/trips/utils/trip'
 import { getTripDetailRoute, ROUTES } from '@/constants/routes'
 import { useRouter } from '@/i18n/navigation'
@@ -233,12 +234,10 @@ export const useTripCreateForm = (initialDraft: TripDraft | null) => {
       }
       setActivities((current) => {
         const exists = current.some((activity) => activity.id === result.data.id)
-        return exists
+        const nextActivities = exists
           ? current.map((activity) => (activity.id === result.data.id ? result.data : activity))
-          : [...current, result.data].sort(
-              (a, b) =>
-                a.activityDate.localeCompare(b.activityDate) || a.startMinute - b.startMinute,
-            )
+          : [...current, result.data]
+        return sortTripActivities(nextActivities)
       })
       setActivityOpen(false)
       setError('')
@@ -281,7 +280,7 @@ export const useTripCreateForm = (initialDraft: TripDraft | null) => {
         return
       }
       setActivities((current) =>
-        current.map((item) => (item.id === activity.id ? result.data : item)),
+        sortTripActivities(current.map((item) => (item.id === activity.id ? result.data : item))),
       )
       setError('')
     } catch {

@@ -18,38 +18,28 @@ alwaysApply: true
 
 ### 2.1. Route-level Error UI
 
-- Create `error.tsx` files alongside `page.tsx` and `layout.tsx` to catch runtime errors in that route segment.
+- Add a route-level `error.tsx` when a segment needs its own recovery UI. It must be a Client Component and handles errors from the segment's page and child segments, not its same-level layout.
 - `error.tsx` MUST be a Client Component (`"use client"`).
-- Provide a "Try again" button that calls `reset()`.
+- Provide a "Try again" button that calls `retry()` to re-fetch and render the failed segment.
 - NEVER show raw error stacks or internal messages to users.
 
 ```tsx
-// src/app/[locale]/lessons/[slug]/error.tsx
+// src/app/[locale]/error.tsx
 'use client'
 
-import { useEffect } from 'react'
 import { useTranslations } from 'next-intl'
-import { captureException } from '@/lib/monitoring'
 import { Button } from '@/components/ui/button'
 
-interface LessonErrorProps {
-  error: Error & { digest?: string }
-  reset: () => void
+interface ErrorProps {
+  retry: () => void
 }
 
-export default function LessonError({ error, reset }: LessonErrorProps): JSX.Element {
-  const t = useTranslations('LessonError')
-
-  useEffect(() => {
-    // Send to monitoring service (Sentry, LogRocket, etc.) — never use console.error
-    captureException(error)
-  }, [error])
-
+export default function Error({ retry }: ErrorProps): JSX.Element {
+  const t = useTranslations('common.error')
   return (
     <div className="flex min-h-screen flex-col items-center justify-center gap-4">
       <h2 className="text-xl font-semibold">{t('title')}</h2>
-      <p className="text-muted-foreground">{t('description')}</p>
-      <Button onClick={reset}>{t('retry')}</Button>
+      <Button onClick={retry}>{t('actions.try_again')}</Button>
     </div>
   )
 }
@@ -66,15 +56,15 @@ export default function LessonError({ error, reset }: LessonErrorProps): JSX.Ele
 
 interface GlobalErrorProps {
   error: Error & { digest?: string }
-  reset: () => void
+  retry: () => void
 }
 
-export default function GlobalError({ reset }: GlobalErrorProps): JSX.Element {
+export default function GlobalError({ retry }: GlobalErrorProps): JSX.Element {
   return (
     <html>
       <body className="flex min-h-screen flex-col items-center justify-center gap-4">
         <h1 className="text-2xl font-bold">Something went wrong</h1>
-        <button onClick={reset}>Try again</button>
+        <button onClick={retry}>Try again</button>
       </body>
     </html>
   )
@@ -199,27 +189,23 @@ export async function GET(): Promise<NextResponse> {
 - Create custom src/app/not-found.tsx for global 404 UI.
 
 ```tsx
-// src/app/[locale]/lessons/[slug]/page.tsx
+// src/app/[locale]/(private)/trips/[tripId]/page.tsx
 import { notFound } from 'next/navigation'
-import { LessonContent } from '@/components/lesson-content'
+import { getTripDetail } from '@/features/trips/data/trips'
 
-interface LessonPageProps {
-  params: Promise<{ slug: string }>
+interface TripPageProps {
+  params: Promise<{ tripId: string }>
 }
 
-async function getLesson(slug: string): Promise<Lesson | null> {
-  // ...
-}
+export default async function TripPage({ params }: TripPageProps): Promise<JSX.Element> {
+  const { tripId } = await params
+  const trip = await getTripDetail(tripId)
 
-export default async function LessonPage({ params }: LessonPageProps): Promise<JSX.Element> {
-  const { slug } = await params
-  const lesson = await getLesson(slug)
-
-  if (!lesson) {
+  if (!trip) {
     notFound() // Triggers nearest not-found.tsx
   }
 
-  return <LessonContent lesson={lesson} />
+  return <main><h1>{trip.name}</h1></main>
 }
 ```
 

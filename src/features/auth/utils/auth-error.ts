@@ -27,9 +27,6 @@ export const authError = (error: SupabaseAuthError, action: AuthAction): AuthRes
       switch (error.code) {
         case AuthErrorCode.EmailAddressInvalid:
           return fieldError(AuthField.Email, 'auth.common.errors.emailInvalid')
-        case AuthErrorCode.EmailExists:
-        case AuthErrorCode.UserAlreadyExists:
-          return fieldError(AuthField.Email, 'auth.register.errors.emailExists')
         case AuthErrorCode.WeakPassword:
           return fieldError(AuthField.Password, 'auth.common.errors.weakPassword')
       }
