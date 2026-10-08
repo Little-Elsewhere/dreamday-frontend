@@ -223,6 +223,17 @@ application and Supabase overrides. Compose reads that file into the dev
 container; the local app URL, Supabase URL, publishable key, and database
 password are preserved when Doppler loads the remaining dev secrets.
 
+`pnpm dev` prints each preflight step and streams Docker build output in plain
+text. A first start can take longer while Docker downloads its base image and
+installs dependencies. Later starts reuse the built image and dependency cache.
+If a preflight fails, its message identifies whether `.env.local`,
+`DOPPLER_TOKEN`, Docker access, or the shared Supabase network is missing.
+
+`make setup` prints its four stages as it configures local hostnames, starts
+Supabase, writes `.env.local`, and starts the domain proxy. The environment
+setup script keeps temporary Doppler and Supabase JSON files outside the
+checkout and removes them when it exits.
+
 The app container and `local-domains` proxy join the `dreamday-local-network`
 created by `make setup`; Supabase CLI joins the same network with
 `--network-id`. The proxy routes `dreamday.local` to the app and both host and
