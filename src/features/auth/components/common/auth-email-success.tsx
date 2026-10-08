@@ -43,6 +43,7 @@ export const AuthEmailSuccess = ({
       <p className="text-ink-soft mt-3 max-w-[42ch] text-sm">{helper}</p>
 
       <Link
+        prefetch
         className="focus-visible:outline-focus rounded-auth border-primary bg-primary text-primary-foreground hover:bg-primary/90 mt-8 inline-flex min-h-11 w-full items-center justify-center border px-4 py-2 text-sm leading-5 font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
         href={ROUTES.PUBLIC.AUTH.LOGIN}
       >

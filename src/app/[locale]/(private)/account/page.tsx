@@ -21,6 +21,7 @@ const Account = async (): Promise<ReactElement> => {
       <div className="mx-auto flex min-h-svh w-full max-w-7xl flex-col px-6 py-8 md:px-12 md:py-10">
         <header className="border-line flex items-center justify-between gap-6 border-b pb-6">
           <Link
+            prefetch
             href={ROUTES.PUBLIC.ROOT}
             className="text-primary focus-visible:outline-focus text-xl font-semibold tracking-[-0.03em] focus-visible:outline-2 focus-visible:outline-offset-4"
           >
@@ -47,7 +48,7 @@ const Account = async (): Promise<ReactElement> => {
                 {t('labels.verifiedAccount')}
               </p>
               <div className="mt-7 flex flex-wrap items-center gap-3">
-                <Link href={ROUTES.PRIVATE.TRIPS} className={buttonVariants()}>
+                <Link href={ROUTES.PRIVATE.TRIPS} prefetch className={buttonVariants()}>
                   {t('actions.viewTrips')}
                 </Link>
                 <SignOutButton />

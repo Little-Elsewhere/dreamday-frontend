@@ -61,12 +61,14 @@ const AuthErrorContent = async ({ searchParams }: Props): Promise<ReactElement> 
 
       <div className="mt-8 grid gap-3">
         <Link
+          prefetch
           className="focus-visible:outline-focus rounded-auth border-primary bg-primary text-primary-foreground hover:bg-primary/90 inline-flex min-h-11 items-center justify-center border px-4 py-2 text-sm leading-5 font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
           href={ROUTES.PUBLIC.AUTH.LOGIN}
         >
           {t('actions.login')}
         </Link>
         <Link
+          prefetch
           className="focus-visible:outline-focus rounded-auth border-line-strong bg-surface text-primary hover:border-primary hover:bg-paper inline-flex min-h-11 items-center justify-center border px-4 py-2 text-sm leading-5 font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
           href={ROUTES.PUBLIC.AUTH.REGISTER}
         >
