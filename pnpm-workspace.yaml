@@ -16,3 +16,4 @@ minimumReleaseAgeExclude:
 
 overrides:
   'browserslist': 'npm:browserslist@4.29.0'
+  'valibot': '1.4.2'
