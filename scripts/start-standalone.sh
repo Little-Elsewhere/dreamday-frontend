@@ -15,7 +15,6 @@ NODE_ENV=production
 export PORT HOSTNAME NODE_ENV
 
 printf '[start] Preparing standalone assets...\n'
-# Next's standalone output omits public and static assets by default.
 mkdir -p "$standalone_dir/public" "$standalone_dir/.next/static"
 cp -R public/. "$standalone_dir/public/"
 cp -R .next/static/. "$standalone_dir/.next/static/"
