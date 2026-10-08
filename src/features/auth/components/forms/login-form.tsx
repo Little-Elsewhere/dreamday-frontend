@@ -1,7 +1,7 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useLocale, useTranslations } from 'next-intl'
+import { useTranslations } from 'next-intl'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useRef, useState, type ReactElement } from 'react'
 
@@ -21,9 +21,8 @@ import { handleFormActionError } from '@/utils/form-action-error'
 
 export const LoginForm = (): ReactElement => {
   const t = useTranslations('auth')
-  const locale = useLocale()
   const router = useRouter()
-  const systemErrorUrl = getAuthSystemErrorUrl(locale)
+  const systemErrorUrl = getAuthSystemErrorUrl()
   const errorSummary = useRef<HTMLDivElement>(null)
   const [resetDialogOpen, setResetDialogOpen] = useState(false)
   const [resetInitialEmail, setResetInitialEmail] = useState('')

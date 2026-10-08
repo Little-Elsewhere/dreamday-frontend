@@ -34,7 +34,7 @@ export const RequireSession = async ({ children, params }: Props): Promise<React
   }
 
   if (state === AuthSessionState.Error) {
-    redirect({ href: getAuthSystemErrorUrl(locale), locale })
+    redirect({ href: getAuthSystemErrorUrl(), locale })
   }
 
   if (state === AuthSessionState.Unauthenticated) {

@@ -1,9 +1,8 @@
 import type { AuthError } from '@supabase/supabase-js'
-import { AuthErrorCode, AuthErrorName } from '@/features/auth/constants/auth'
+import {
+  MISSING_SESSION_ERROR_CODES,
+  MISSING_SESSION_ERROR_NAMES,
+} from '@/features/auth/constants/session-error'
 
 export const isMissingSession = (error: AuthError): boolean =>
-  error.name === AuthErrorName.SessionMissing ||
-  error.name === AuthErrorName.InvalidJwt ||
-  error.code === AuthErrorCode.SessionNotFound ||
-  error.code === AuthErrorCode.SessionExpired ||
-  error.code === AuthErrorCode.RefreshTokenNotFound
+  MISSING_SESSION_ERROR_NAMES.has(error.name) || MISSING_SESSION_ERROR_CODES.has(error.code ?? '')

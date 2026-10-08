@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, type ReactElement } from 'react'
-import { useLocale, useTranslations } from 'next-intl'
+import { useTranslations } from 'next-intl'
 import { Logout01Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
 
@@ -19,9 +19,8 @@ interface SignOutButtonProps {
 
 export const SignOutButton = ({ compactLabel = false }: SignOutButtonProps): ReactElement => {
   const t = useTranslations('account')
-  const locale = useLocale()
   const router = useRouter()
-  const systemErrorUrl = getAuthSystemErrorUrl(locale)
+  const systemErrorUrl = getAuthSystemErrorUrl()
   const [pending, setPending] = useState(false)
   const [error, setError] = useState(false)
 

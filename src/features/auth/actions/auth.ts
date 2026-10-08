@@ -51,9 +51,9 @@ export const signUp = async (
       password,
       options: {
         data: { full_name: name, locale: parsedLocale.data },
-        emailRedirectTo: generateLocalizedUrl(parsedLocale.data, ROUTES.PRIVATE.ACCOUNT, {
+        emailRedirectTo: generateLocalizedUrl(ROUTES.PRIVATE.ACCOUNT, {
+          locale: parsedLocale.data,
           fullUrl: true,
-          includeLocale: true,
         }),
       },
     })
@@ -81,9 +81,9 @@ export const forgotPassword = async (
   try {
     const supabase = await createClient()
     const { error } = await supabase.auth.resetPasswordForEmail(validated.email, {
-      redirectTo: generateLocalizedUrl(parsedLocale.data, ROUTES.PRIVATE.UPDATE_PASSWORD, {
+      redirectTo: generateLocalizedUrl(ROUTES.PRIVATE.UPDATE_PASSWORD, {
+        locale: parsedLocale.data,
         fullUrl: true,
-        includeLocale: true,
       }),
     })
     return error ? authError(error, AuthAction.ForgotPassword) : { success: true, data: null }

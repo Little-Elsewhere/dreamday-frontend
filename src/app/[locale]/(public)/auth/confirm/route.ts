@@ -56,7 +56,7 @@ export const GET = async (request: NextRequest) => {
   }
 
   if (failure === AuthConfirmationFailure.System) {
-    return redirect({ href: getAuthSystemErrorUrl(locale), locale })
+    return redirect({ href: getAuthSystemErrorUrl(), locale })
   }
 
   return redirect(confirmationRedirect)
