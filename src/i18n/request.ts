@@ -23,6 +23,7 @@ export default getRequestConfig(async () => {
     authError,
     commonError,
     commonOffline,
+    commonMaintenance,
     tripsCommon,
     tripsList,
     tripsCreate,
@@ -38,6 +39,7 @@ export default getRequestConfig(async () => {
     import(`@messages/${locale}/auth/error.json`),
     import(`@messages/${locale}/common/error.json`),
     import(`@messages/${locale}/common/offline.json`),
+    import(`@messages/${locale}/common/maintenance.json`),
     import(`@messages/${locale}/trips/common.json`),
     import(`@messages/${locale}/trips/list.json`),
     import(`@messages/${locale}/trips/create.json`),
@@ -51,6 +53,7 @@ export default getRequestConfig(async () => {
         footer: commonFooter.default,
         error: commonError.default,
         offline: commonOffline.default,
+        maintenance: commonMaintenance.default,
       },
       account: account.default,
       auth: {

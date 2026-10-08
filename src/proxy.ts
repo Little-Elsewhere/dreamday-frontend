@@ -2,7 +2,9 @@ import createMiddleware from 'next-intl/middleware'
 import { NextResponse, type NextRequest } from 'next/server'
 
 import { DEFAULT_LOCALE } from '@/constants/locale'
+import { HTTP_STATUS } from '@/constants/httpStatuses'
 import { ROUTES } from '@/constants/routes'
+import { serverEnv } from '@/env/server'
 import { AuthSessionState } from '@/features/auth/constants/auth'
 import { generateLocalizedUrl } from '@/features/auth/utils/common'
 import { isLoginRoute, isPrivateRoute } from '@/features/auth/utils/route'
@@ -14,11 +16,34 @@ import { getPathnameLocale } from '@/utils/locale'
 const intlMiddleware = createMiddleware(routing)
 
 export const proxy = async (request: NextRequest): Promise<NextResponse> => {
-  const { response: supabaseResponse, state } = await updateSession(request)
   const pathname = request.nextUrl.pathname
   const isPrivate = isPrivateRoute(pathname)
   const isLogin = isLoginRoute(pathname)
   const locale = getPathnameLocale(pathname) ?? DEFAULT_LOCALE
+  const maintenancePath = generateLocalizedUrl(ROUTES.PUBLIC.MAINTENANCE, { locale })
+
+  if (serverEnv.MAINTENANCE_MODE === 'true') {
+    if (pathname !== maintenancePath) {
+      const url = request.nextUrl.clone()
+      url.pathname = maintenancePath
+
+      return NextResponse.rewrite(url, {
+        status: HTTP_STATUS.SERVICE_UNAVAILABLE,
+        headers: {
+          'Cache-Control': 'no-store',
+          'X-Robots-Tag': 'noindex, nofollow',
+        },
+      })
+    }
+
+    const response = intlMiddleware(request)
+    response.headers.set('Cache-Control', 'no-store')
+    response.headers.set('X-Robots-Tag', 'noindex, nofollow')
+
+    return response
+  }
+
+  const { response: supabaseResponse, state } = await updateSession(request)
   let response = intlMiddleware(request)
 
   if (state === AuthSessionState.Error && (isPrivate || isLogin)) {
