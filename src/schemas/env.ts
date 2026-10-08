@@ -17,4 +17,6 @@ export const clientEnvSchema = z.object({
   NEXT_PUBLIC_POSTHOG_HOST: z.url().default('https://us.i.posthog.com'),
 })
 
-export const serverEnvSchema = clientEnvSchema
+export const serverEnvSchema = clientEnvSchema.extend({
+  MAINTENANCE_MODE: z.enum(['true', 'false']).default('false'),
+})

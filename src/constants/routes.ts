@@ -1,6 +1,7 @@
 export const ROUTES = {
   PUBLIC: {
     ROOT: '/',
+    MAINTENANCE: '/maintenance',
     AUTH: {
       LOGIN: '/auth/login',
       REGISTER: '/auth/register',
