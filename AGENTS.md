@@ -81,6 +81,9 @@ When working on this codebase, adopt the appropriate agent persona based on the 
 - Validate ALL external inputs with Zod
 - Validate form values with `schema.parse()` at the start of each Server Action; invalid values throw `ZodError` immediately
 - Return discriminated unions (`{success: true, data} | {success: false, error}`) for outcomes after form validation
+- Log unexpected failures on the server with safe diagnostic context; never log submitted form values, credentials, tokens, or private user data
+- Map known domain and database failures using stable codes or typed causes, then return client-safe, translated Action errors
+- Keep field-error mappings typed to the form schema and handle known fields explicitly
 - Protect secrets — only `NEXT_PUBLIC_*` vars reach client
 - Implement proper error boundaries (`error.tsx`, `global-error.tsx`)
 
@@ -88,6 +91,8 @@ When working on this codebase, adopt the appropriate agent persona based on the 
 
 - NEVER catch or convert a form-value `ZodError` into an Action result
 - NEVER expose `DATABASE_URL`, `API_SECRET`, or stack traces to client
+- NEVER branch on full human-readable database error messages; use stable codes or typed errors
+- NEVER send raw database errors or unexpected exception details to the client; use a generic system error for unknown failures
 - NEVER import `src/env/server.ts` into Client Components
 - MUST use `server-only` package for server-only modules
 
