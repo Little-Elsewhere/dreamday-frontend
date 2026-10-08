@@ -5,11 +5,10 @@ import type { ReactNode } from 'react'
 
 import { ROUTES } from '@/constants/routes'
 import { AuthSessionState } from '@/features/auth/constants/auth'
-import { generateLocalizedUrl } from '@/features/auth/utils/common'
+import { getAuthSystemErrorUrl } from '@/features/auth/utils/common'
 import { redirect } from '@/i18n/navigation'
 import { isMissingSession } from '@/features/auth/utils/session-error'
 import { createClient } from '@/lib/supabase/server'
-import { ActionErrorKind } from '@/types/action-result'
 
 type Props = {
   children: ReactNode
@@ -35,12 +34,7 @@ export const RequireSession = async ({ children, params }: Props): Promise<React
   }
 
   if (state === AuthSessionState.Error) {
-    redirect({
-      href: generateLocalizedUrl(locale, ROUTES.PUBLIC.AUTH.ERROR, {
-        queryParams: new URLSearchParams({ type: ActionErrorKind.System }),
-      }),
-      locale,
-    })
+    redirect({ href: getAuthSystemErrorUrl(locale), locale })
   }
 
   if (state === AuthSessionState.Unauthenticated) {

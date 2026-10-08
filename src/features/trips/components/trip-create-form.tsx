@@ -49,7 +49,7 @@ export const TripCreateForm = ({ initialDraft }: Props): ReactElement => {
           <p className="text-champagne-ink text-xs font-semibold tracking-[0.12em] uppercase">
             {t('create.eyebrow')}
           </p>
-          <h1 className="text-primary mt-2 text-2xl font-medium tracking-[-0.025em] sm:text-3xl">
+          <h1 className="text-primary mt-2 text-2xl font-medium tracking-tighter sm:text-3xl">
             {step === 1 ? t('create.title') : t('create.scheduleTitle')}
           </h1>
           <p className="text-ink-soft mt-2">
@@ -162,6 +162,7 @@ export const TripCreateForm = ({ initialDraft }: Props): ReactElement => {
             activities={activities}
             canAddActivity={Boolean(draftId)}
             dates={dates}
+            pending={pending}
             onDeleteActivity={handleDeleteActivity}
             onMoveActivity={moveActivity}
             onOpenActivity={openActivity}

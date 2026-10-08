@@ -16,7 +16,7 @@ import { cn } from '@/utils/cn'
 type Props = {
   coverUrl: string | null
   onChange: (patch: Partial<TripDraftFormValues>) => void
-  onChooseCover: (file: File | undefined) => Promise<void>
+  onChooseCover: (file: File | undefined) => void
   onRemoveCover: () => Promise<void>
   coverUploading: boolean
   pending: boolean
@@ -71,13 +71,13 @@ export const TripDetailsFields = ({
                   className="sr-only"
                   disabled={pending}
                   onChange={(event) => {
-                    void onChooseCover(event.target.files?.[0])
+                    onChooseCover(event.target.files?.[0])
                     event.currentTarget.value = ''
                   }}
                   type="file"
                 />
               </label>
-              {values.coverPath && (
+              {(values.coverPath || coverUrl) && (
                 <Button
                   disabled={pending}
                   onClick={() => void onRemoveCover()}

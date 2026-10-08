@@ -20,7 +20,9 @@ export const tripDraftSchema = z
     error: 'trips.create.errors.endBeforeStart',
   })
 
-export const publishTripSchema = z.object({ tripId: z.uuid() })
+export const tripIdSchema = z.uuid()
+
+export const publishTripSchema = z.object({ tripId: tripIdSchema })
 
 export const publishTripFieldsSchema = z
   .object({
@@ -36,7 +38,7 @@ export const publishTripFieldsSchema = z
 
 export const tripActivitySchema = z
   .object({
-    tripId: z.uuid(),
+    tripId: tripIdSchema,
     activityId: z.uuid().optional(),
     title: z.string().trim().min(1).max(80),
     activityDate: z.iso.date(),
@@ -51,12 +53,12 @@ export const tripActivitySchema = z
   })
 
 export const deleteTripActivitySchema = z.object({
-  tripId: z.uuid(),
+  tripId: tripIdSchema,
   activityId: z.uuid(),
 })
 
 export const tripNoteSchema = z.object({
-  tripId: z.uuid(),
+  tripId: tripIdSchema,
   note: z.string().max(1000),
 })
 

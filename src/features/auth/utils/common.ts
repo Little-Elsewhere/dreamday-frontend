@@ -1,5 +1,7 @@
 import { clientEnv } from '@/env/client'
+import { ROUTES } from '@/constants/routes'
 import { routing } from '@/i18n/routing'
+import { ActionErrorKind } from '@/types/action-result'
 
 type UrlOptions = {
   queryParams?: URLSearchParams
@@ -24,3 +26,8 @@ export function generateLocalizedUrl(
 
   return options.fullUrl ? url.toString() : `${url.pathname}${url.search}${url.hash}`
 }
+
+export const getAuthSystemErrorUrl = (locale: string): string =>
+  generateLocalizedUrl(locale, ROUTES.PUBLIC.AUTH.ERROR, {
+    queryParams: new URLSearchParams({ type: ActionErrorKind.System }),
+  })
