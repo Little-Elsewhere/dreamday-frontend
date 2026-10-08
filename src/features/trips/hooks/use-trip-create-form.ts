@@ -7,7 +7,7 @@ import type { TripDraftFormValues } from '@/features/trips/types/components'
 import type { TripDraft } from '@/features/trips/types/trip'
 import { PUBLISH_ERROR_TRANSLATION_KEYS } from '@/features/trips/constants/trips'
 import { publishTrip, saveTripDraft, saveTripNote } from '@/features/trips/actions/trips'
-import { getTripDetailRoute, ROUTES } from '@/constants/routes'
+import { ROUTES } from '@/constants/routes'
 import { useRouter } from '@/i18n/navigation'
 import { useTripActivities } from '@/features/trips/hooks/use-trip-activities'
 import { useTripCover } from '@/features/trips/hooks/use-trip-cover'
@@ -186,7 +186,7 @@ export const useTripCreateForm = (initialDraft: TripDraft | null) => {
         return
       }
 
-      router.push(getTripDetailRoute(result.data.id))
+      router.push(ROUTES.PRIVATE.TRIP_DETAIL(result.data.id))
       router.refresh()
     } catch {
       setError(t('errors.saveFailed'))
