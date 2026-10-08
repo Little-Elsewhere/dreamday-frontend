@@ -41,7 +41,7 @@ const parseDopplerValues = (value) => {
 const values = parseDopplerValues(await parseJsonFile(dopplerPath, 'Doppler'))
 const status = await parseJsonFile(statusPath, 'Supabase status')
 
-const publishableKey = status.PUBLISHABLE_KEY ?? status.ANON_KEY
+const publishableKey = status.PUBLISHABLE_KEY
 const databaseUrl = status.DB_URL
 
 if (
@@ -50,7 +50,7 @@ if (
   typeof databaseUrl !== 'string' ||
   databaseUrl.length === 0
 ) {
-  throw new Error('Supabase status is missing a publishable key (or anon key) or DB URL.')
+  throw new Error('Supabase status is missing a publishable key or DB URL.')
 }
 
 let databasePassword
