@@ -5,8 +5,9 @@ import { PAGES_CACHE_NAME, defaultCache } from '@serwist/turbopack/worker'
 import type { PrecacheEntry, SerwistGlobalConfig } from 'serwist'
 import { NetworkOnly, Serwist } from 'serwist'
 
+import { DEFAULT_LOCALE } from '@/constants/locale'
 import { isPrivateRoute } from '@/features/auth/utils/route'
-import { getLocaleFromPathname } from '@/utils/locale'
+import { getPathnameLocale } from '@/utils/locale'
 
 declare global {
   interface WorkerGlobalScope extends SerwistGlobalConfig {
@@ -52,7 +53,8 @@ const purgeCachedPrivatePages = async (): Promise<void> => {
 
 serwist.setCatchHandler(async ({ request, url }) => {
   if (request.destination === 'document') {
-    const offlineUrl = `/${getLocaleFromPathname(url.pathname)}/~offline`
+    const locale = getPathnameLocale(url.pathname) ?? DEFAULT_LOCALE
+    const offlineUrl = `/${locale}/~offline`
     const offlineResponse = await serwist.matchPrecache(offlineUrl)
     if (offlineResponse) return offlineResponse
   }

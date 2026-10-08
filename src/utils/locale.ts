@@ -1,14 +1,13 @@
-import { DEFAULT_LOCALE, LOCALES } from '@/constants/locale'
+import { LOCALES } from '@/constants/locale'
 
-export const getLocaleFromPathname = (pathname: string): (typeof LOCALES)[number] => {
+export const getPathnameLocale = (pathname: string) => {
   const localeSegment = pathname.split('/')[1]
 
-  return LOCALES.find((locale) => locale === localeSegment) ?? DEFAULT_LOCALE
+  return LOCALES.find((locale) => locale === localeSegment)
 }
 
 export const removeLocalePrefix = (pathname: string): string => {
-  const localeSegment = pathname.split('/')[1]
-  const locale = LOCALES.find((candidate) => candidate === localeSegment)
+  const locale = getPathnameLocale(pathname)
 
   if (!locale) return pathname
   return pathname.slice(locale.length + 1) || '/'

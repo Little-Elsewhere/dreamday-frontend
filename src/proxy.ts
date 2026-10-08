@@ -1,6 +1,7 @@
 import createMiddleware from 'next-intl/middleware'
 import { NextResponse, type NextRequest } from 'next/server'
 
+import { DEFAULT_LOCALE } from '@/constants/locale'
 import { ROUTES } from '@/constants/routes'
 import { AuthSessionState } from '@/features/auth/constants/auth'
 import { generateLocalizedUrl } from '@/features/auth/utils/common'
@@ -8,7 +9,7 @@ import { isLoginRoute, isPrivateRoute } from '@/features/auth/utils/route'
 import { routing } from '@/i18n/routing'
 import { updateSession } from '@/lib/supabase/proxy'
 import { ActionErrorKind } from '@/types/action-result'
-import { getLocaleFromPathname } from '@/utils/locale'
+import { getPathnameLocale } from '@/utils/locale'
 
 const intlMiddleware = createMiddleware(routing)
 
@@ -17,7 +18,7 @@ export const proxy = async (request: NextRequest): Promise<NextResponse> => {
   const pathname = request.nextUrl.pathname
   const isPrivate = isPrivateRoute(pathname)
   const isLogin = isLoginRoute(pathname)
-  const locale = getLocaleFromPathname(pathname)
+  const locale = getPathnameLocale(pathname) ?? DEFAULT_LOCALE
   let response = intlMiddleware(request)
 
   if (state === AuthSessionState.Error && (isPrivate || isLogin)) {

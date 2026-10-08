@@ -4,10 +4,10 @@ import { useEffect, Suspense } from 'react'
 import { usePathname } from 'next/navigation'
 
 import { Button } from '@/components/ui/button'
-import { DEFAULT_LOCALE, LOCALES } from '@/constants/locale'
+import { DEFAULT_LOCALE, Locale } from '@/constants/locale'
 import { beVietnamPro } from '@/fonts'
 import { cn } from '@/utils/cn'
-import { getLocaleFromPathname } from '@/utils/locale'
+import { getPathnameLocale } from '@/utils/locale'
 import englishError from '../../messages/en/common/error.json'
 import vietnameseError from '../../messages/vi/common/error.json'
 import '@/app/globals.css'
@@ -22,7 +22,7 @@ type Props = {
 }
 
 type ErrorContentProps = Props & {
-  locale: (typeof LOCALES)[number]
+  locale: Locale
 }
 
 const ErrorContent = ({ locale, retry }: ErrorContentProps) => {
@@ -37,7 +37,7 @@ const ErrorContent = ({ locale, retry }: ErrorContentProps) => {
 }
 
 const LocalizedErrorContent = ({ retry }: Props) => {
-  const locale = getLocaleFromPathname(usePathname() ?? '/')
+  const locale = getPathnameLocale(usePathname() ?? '/') ?? DEFAULT_LOCALE
 
   useEffect(() => {
     document.documentElement.lang = locale
