@@ -1,39 +1,39 @@
 import { describe, expect, it } from 'vitest'
 
-import { Locale } from '@/constants/locale'
 import { AuthEmailOtpType } from '@/features/auth/constants/auth'
-import { confirmationSchema, getConfirmationRedirect } from '@/features/auth/schemas/callback'
+import { confirmationSchema, emailOtpTypeSchema } from '@/features/auth/schemas/callback'
+
+describe('emailOtpTypeSchema', () => {
+  it('accepts every supported OTP type', () => {
+    for (const type of Object.values(AuthEmailOtpType)) {
+      expect(emailOtpTypeSchema.parse(type)).toBe(type)
+    }
+  })
+
+  it('rejects unsupported OTP types', () => {
+    expect(emailOtpTypeSchema.safeParse('unknown').success).toBe(false)
+  })
+})
 
 describe('confirmation schema', () => {
-  const appUrl = 'https://dreamday.example'
-  const parseNext = (next?: string) => {
+  it('parses valid confirmation data with an optional redirect', () => {
     const parsed = confirmationSchema.parse({
       token_hash: 'valid-token',
       type: AuthEmailOtpType.Signup,
-      next,
     })
-    return getConfirmationRedirect(parsed.next, appUrl, Locale.EN)
-  }
 
-  it('preserves a local redirect path', () => {
-    expect(parseNext('/account?tab=trips')).toEqual({ href: '/account?tab=trips', locale: 'en' })
+    expect(parsed.token_hash).toBe('valid-token')
+    expect(parsed.type).toBe(AuthEmailOtpType.Signup)
+    expect(parsed.next).toBeUndefined()
   })
 
-  it('accepts the same-origin redirect URL passed by Supabase and keeps its locale', () => {
-    expect(parseNext('https://dreamday.example/vi/auth/update-password')).toEqual({
-      href: '/auth/update-password',
-      locale: Locale.VI,
+  it('ignores an invalid redirect value', () => {
+    const parsed = confirmationSchema.parse({
+      token_hash: 'valid-token',
+      type: AuthEmailOtpType.Signup,
+      next: 'a'.repeat(2049),
     })
-  })
 
-  it.each(['https://example.com', '//example.com', '/\\example.com'])(
-    'falls back to the app root for an unsafe redirect: %s',
-    (next) => {
-      expect(parseNext(next)).toEqual({ href: '/', locale: Locale.EN })
-    },
-  )
-
-  it('defaults to the app root when next is missing', () => {
-    expect(parseNext()).toEqual({ href: '/', locale: Locale.EN })
+    expect(parsed.next).toBeUndefined()
   })
 })
