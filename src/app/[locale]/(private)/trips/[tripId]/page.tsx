@@ -100,6 +100,7 @@ const TripDetailPage = async ({ params }: PageProps): Promise<ReactElement> => {
       <TripHeader />
       <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 md:py-12 lg:px-8">
         <Link
+          prefetch
           className="text-ink-soft hover:text-primary inline-flex min-h-10 items-center gap-2 text-sm font-medium"
           href="/trips"
         >
@@ -189,6 +190,7 @@ const TripDetailPage = async ({ params }: PageProps): Promise<ReactElement> => {
                 </p>
               </section>
               <Link
+                prefetch
                 className={buttonVariants({ className: 'w-full', variant: 'outline' })}
                 href="/trips"
               >
