@@ -84,14 +84,5 @@
     "typescript": "^6.0.3",
     "vite": "^8.2.1",
     "vitest": "^4.1.11"
-  },
-  "lint-staged": {
-    "*.{js,ts,jsx,tsx}": [
-      "eslint --fix --no-warn-ignored",
-      "prettier --write"
-    ],
-    "*.{css,json,yaml,yml,mjs,md,mdx}": [
-      "prettier --write"
-    ]
   }
 }
