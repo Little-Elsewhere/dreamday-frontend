@@ -5,7 +5,7 @@ FROM node:22-alpine AS base
 WORKDIR /app
 ENV NEXT_TELEMETRY_DISABLED=1
 
-RUN wget -q -t3 'https://packages.doppler.com/public/cli/rsa.8004D9FF50437357.key' \
+RUN wget -T 15 -t 3 'https://packages.doppler.com/public/cli/rsa.8004D9FF50437357.key' \
       -O /etc/apk/keys/cli@doppler-8004D9FF50437357.rsa.pub \
     && echo 'https://packages.doppler.com/public/cli/alpine/any-version/main' \
       >> /etc/apk/repositories \
