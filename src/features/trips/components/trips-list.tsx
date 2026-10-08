@@ -7,7 +7,7 @@ import { useEffect, useRef, useState, type ReactElement } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 
 import { Button, buttonVariants } from '@/components/ui/button'
-import { getTripDetailRoute, ROUTES } from '@/constants/routes'
+import { ROUTES } from '@/constants/routes'
 import { Link } from '@/i18n/navigation'
 import { TRIP_LIST_FILTERS, TRIP_LIST_PAGE_SIZE } from '@/features/trips/constants/trips'
 import { filterTrips, formatTripDate } from '@/features/trips/utils/trip'
@@ -159,7 +159,7 @@ export const TripsList = ({ trips }: Props): ReactElement => {
                 key={trip.id}
                 aria-label={t('list.openTrip', { name: trip.name })}
                 className="group border-line bg-surface focus-visible:outline-focus rounded-auth hover:border-line-strong overflow-hidden border shadow-[0_8px_28px_rgba(23,54,46,0.05)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_16px_38px_rgba(23,54,46,0.1)] focus-visible:outline-2 focus-visible:outline-offset-4 motion-reduce:transform-none motion-reduce:transition-none"
-                href={getTripDetailRoute(trip.id)}
+                href={ROUTES.PRIVATE.TRIP_DETAIL(trip.id)}
               >
                 <div className="bg-muted relative aspect-[16/10] overflow-hidden">
                   {trip.coverUrl ? (

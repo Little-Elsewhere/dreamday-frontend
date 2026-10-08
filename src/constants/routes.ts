@@ -13,9 +13,10 @@ export const ROUTES = {
   PRIVATE: {
     ACCOUNT: '/account',
     TRIPS: '/trips',
+    TRIP_DETAIL: Object.assign((tripId: string) => `/trips/${tripId}`, {
+      pattern: /^\/trips\/[^/]+$/,
+    }),
     TRIP_CREATE: '/trips/create',
     UPDATE_PASSWORD: '/auth/update-password',
   },
 } as const
-
-export const getTripDetailRoute = (tripId: string): string => `${ROUTES.PRIVATE.TRIPS}/${tripId}`
