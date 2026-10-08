@@ -36,6 +36,7 @@ export const TripHeader = async ({
     <header className="border-line bg-surface/95 sticky top-0 z-20 border-b backdrop-blur">
       <div className="mx-auto flex min-h-18 w-full max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
         <Link
+          prefetch
           href={ROUTES.PRIVATE.TRIPS}
           aria-label={t('navigation.brandLink')}
           className="text-primary focus-visible:outline-focus flex shrink-0 items-center gap-3 rounded-sm text-lg font-semibold tracking-[-0.04em] focus-visible:outline-2 focus-visible:outline-offset-4"
@@ -62,6 +63,7 @@ export const TripHeader = async ({
         <div className="flex min-w-0 items-center justify-end gap-2 sm:gap-4">
           {showTripsLink && (
             <Link
+              prefetch
               href={ROUTES.PRIVATE.TRIPS}
               className="text-ink-soft hover:text-primary focus-visible:outline-focus inline-flex min-h-11 shrink-0 items-center gap-2 rounded-sm px-2 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 sm:px-3"
             >
@@ -83,6 +85,7 @@ export const TripHeader = async ({
           </div>
           {showCreate && (
             <Link
+              prefetch
               href={ROUTES.PRIVATE.TRIP_CREATE}
               aria-label={t('list.createTrip')}
               className="focus-visible:outline-focus rounded-auth bg-primary hover:bg-primary/90 inline-flex min-h-11 shrink-0 items-center justify-center gap-2 px-3 text-sm font-medium text-white transition focus-visible:outline-2 focus-visible:outline-offset-3 sm:px-4"

@@ -126,6 +126,7 @@ export const TripsList = ({ trips }: Props): ReactElement => {
           </p>
           {trips.length === 0 ? (
             <Link
+              prefetch
               className={buttonVariants({ className: 'mt-7' })}
               href={ROUTES.PRIVATE.TRIP_CREATE}
             >
@@ -157,6 +158,7 @@ export const TripsList = ({ trips }: Props): ReactElement => {
             {filteredTrips.slice(0, visibleCount).map((trip) => (
               <Link
                 key={trip.id}
+                prefetch
                 aria-label={t('list.openTrip', { name: trip.name })}
                 className="group border-line bg-surface focus-visible:outline-focus rounded-auth hover:border-line-strong overflow-hidden border shadow-[0_8px_28px_rgba(23,54,46,0.05)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_16px_38px_rgba(23,54,46,0.1)] focus-visible:outline-2 focus-visible:outline-offset-4 motion-reduce:transform-none motion-reduce:transition-none"
                 href={ROUTES.PRIVATE.TRIP_DETAIL(trip.id)}

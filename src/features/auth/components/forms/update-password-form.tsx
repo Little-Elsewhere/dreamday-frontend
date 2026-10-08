@@ -72,6 +72,7 @@ export const UpdatePasswordForm = (): ReactElement => {
         <div className="mt-6 grid gap-6">
           <FeedbackMessage message={t('updatePassword.messages.success')} isError={false} />
           <Link
+            prefetch
             className="bg-primary text-primary-foreground focus-visible:outline-focus rounded-auth inline-flex min-h-11 items-center justify-center px-4 py-2 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2"
             href={ROUTES.PRIVATE.ACCOUNT}
           >
