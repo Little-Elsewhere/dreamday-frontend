@@ -5,11 +5,10 @@ import type {
   TripListFilter,
   TripStatus,
 } from '@/features/trips/types/trip'
-import type { SupabaseClient } from '@supabase/supabase-js'
-import type { Database } from '@/types/database'
+import { v4 as uuidv4 } from 'uuid'
 import { TRIP_APP_TIME_ZONE } from '@/features/trips/constants/trips'
 
-export const createUuidV4 = (): string => crypto.randomUUID()
+export const createUuidV4 = (): string => uuidv4()
 
 export const createInitialTripActivity = (activityDate: string): Omit<TripActivity, 'id'> => ({
   title: '',
@@ -129,26 +128,3 @@ export const toTripActivity = (row: TripActivityRow): TripActivity => ({
   endMinute: row.end_minute,
   note: row.note,
 })
-
-export const getCoverUrls = async (
-  supabase: SupabaseClient<Database>,
-  coverPaths: string[],
-): Promise<Map<string, string>> => {
-  const paths = [...new Set(coverPaths.filter(Boolean))]
-  if (paths.length === 0) return new Map()
-
-  const { data, error } = await supabase.storage.from('trip-covers').createSignedUrls(paths, 3600)
-  if (error) return new Map()
-
-  return new Map(
-    data.flatMap(({ path, signedUrl }) => (path && signedUrl ? [[path, signedUrl] as const] : [])),
-  )
-}
-
-export const getCoverUrl = async (
-  supabase: SupabaseClient<Database>,
-  coverPath: string | null,
-): Promise<string | null> => {
-  if (!coverPath) return null
-  return (await getCoverUrls(supabase, [coverPath])).get(coverPath) ?? null
-}

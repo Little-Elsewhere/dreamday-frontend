@@ -9,10 +9,17 @@ type Props = {
   variant?: AuthLoadingVariant
 }
 
+const FIELD_COUNTS: Record<AuthLoadingVariant, number> = {
+  login: 2,
+  register: 4,
+  'update-password': 2,
+  error: 0,
+  success: 0,
+}
+
 export const AuthLoading = async ({ variant = 'login' }: Props): Promise<ReactElement> => {
   const t = await getTranslations('auth.common')
-  const fieldCount =
-    variant === 'register' ? 4 : variant === 'error' || variant === 'success' ? 0 : 2
+  const fieldCount = FIELD_COUNTS[variant]
 
   return (
     <div className="w-full" aria-busy="true">
@@ -37,18 +44,22 @@ export const AuthLoading = async ({ variant = 'login' }: Props): Promise<ReactEl
           </div>
         </div>
 
-        {variant === 'success' ? (
+        {variant === 'success' && (
           <div className="mt-3 grid gap-2">
             <Skeleton className="bg-skeleton rounded-auth h-4 w-full max-w-96 motion-reduce:animate-none" />
             <Skeleton className="bg-skeleton rounded-auth h-4 w-3/4 max-w-80 motion-reduce:animate-none" />
             <Skeleton className="bg-skeleton rounded-auth mt-6 h-11 w-full motion-reduce:animate-none" />
           </div>
-        ) : variant === 'error' ? (
+        )}
+
+        {variant === 'error' && (
           <div className="mt-8 grid gap-3">
             <Skeleton className="bg-skeleton rounded-auth h-11 w-full motion-reduce:animate-none" />
             <Skeleton className="bg-skeleton rounded-auth h-11 w-full motion-reduce:animate-none" />
           </div>
-        ) : (
+        )}
+
+        {variant !== 'success' && variant !== 'error' && (
           <>
             <div className="mt-10 grid gap-5">
               {Array.from({ length: fieldCount }, (_, index) => (

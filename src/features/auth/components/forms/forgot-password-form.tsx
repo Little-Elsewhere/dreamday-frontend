@@ -23,9 +23,8 @@ import { useRouter } from '@/i18n/navigation'
 
 import { forgotPassword } from '@/features/auth/actions/auth'
 import { AuthField } from '@/features/auth/constants/auth'
-import { generateLocalizedUrl } from '@/features/auth/utils/common'
+import { getAuthSystemErrorUrl } from '@/features/auth/utils/common'
 import { passwordResetSchema, type PasswordResetFormValues } from '@/features/auth/schemas/auth'
-import { ActionErrorKind } from '@/types/action-result'
 import { handleFormActionError } from '@/utils/form-action-error'
 
 type Props = {
@@ -37,9 +36,7 @@ export const ForgotPasswordForm = ({ initialEmail, show }: Props): ReactElement 
   const t = useTranslations('auth')
   const locale = useLocale()
   const router = useRouter()
-  const systemErrorUrl = generateLocalizedUrl(locale, ROUTES.PUBLIC.AUTH.ERROR, {
-    queryParams: new URLSearchParams({ type: ActionErrorKind.System }),
-  })
+  const systemErrorUrl = getAuthSystemErrorUrl(locale)
   const errorSummaryRef = useRef<HTMLDivElement>(null)
   const [recoveryError, setRecoveryError] = useState<string | null>(null)
   const form = useForm<PasswordResetFormValues>({

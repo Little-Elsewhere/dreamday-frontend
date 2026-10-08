@@ -3,12 +3,11 @@ import 'server-only'
 import { cache } from 'react'
 import { io } from 'next/cache'
 
+import { tripIdSchema } from '@/features/trips/schemas/trip'
 import { getSupabaseUserContext } from '@/lib/supabase/user-context'
 import type { TripCard, TripDetail, TripDraft, TripRow } from '@/features/trips/types/trip'
 import {
   getAppDate,
-  getCoverUrl,
-  getCoverUrls,
   getTripDuration,
   getTripStatus,
   toTripActivity,
@@ -20,6 +19,29 @@ type TripCardRow = Pick<
 >
 type TripDraftRow = TripCardRow & Pick<TripRow, 'note'>
 type ServerSupabaseClient = Awaited<ReturnType<typeof getSupabaseUserContext>>['supabase']
+
+const getCoverUrls = async (
+  supabase: ServerSupabaseClient,
+  coverPaths: string[],
+): Promise<Map<string, string>> => {
+  const paths = [...new Set(coverPaths.filter(Boolean))]
+  if (paths.length === 0) return new Map()
+
+  const { data, error } = await supabase.storage.from('trip-covers').createSignedUrls(paths, 3600)
+  if (error) return new Map()
+
+  return new Map(
+    data.flatMap(({ path, signedUrl }) => (path && signedUrl ? [[path, signedUrl] as const] : [])),
+  )
+}
+
+const getCoverUrl = async (
+  supabase: ServerSupabaseClient,
+  coverPath: string | null,
+): Promise<string | null> => {
+  if (!coverPath) return null
+  return (await getCoverUrls(supabase, [coverPath])).get(coverPath) ?? null
+}
 
 const getUserContext = async () => {
   await io()
@@ -115,6 +137,8 @@ export const getCurrentDraft = async (): Promise<TripDraft | null> => {
 }
 
 export const getTripDetail = cache(async (tripId: string): Promise<TripDetail | null> => {
+  if (!tripIdSchema.safeParse(tripId).success) return null
+
   const { supabase, userId: ownerId } = await getUserContext()
   if (!ownerId) return null
 

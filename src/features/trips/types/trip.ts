@@ -41,7 +41,7 @@ export interface TripDetail extends TripCard {
 }
 
 export interface TripDraft {
-  id: string | null
+  id: string
   name: string
   destination: string
   description: string

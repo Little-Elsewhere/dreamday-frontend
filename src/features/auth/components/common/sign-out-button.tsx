@@ -10,7 +10,7 @@ import { FeedbackMessage } from '@/components/common/feedback-message'
 import { ROUTES } from '@/constants/routes'
 import { useRouter } from '@/i18n/navigation'
 import { signOut } from '@/features/auth/actions/auth'
-import { generateLocalizedUrl } from '@/features/auth/utils/common'
+import { getAuthSystemErrorUrl } from '@/features/auth/utils/common'
 import { ActionErrorKind } from '@/types/action-result'
 
 interface SignOutButtonProps {
@@ -21,9 +21,7 @@ export const SignOutButton = ({ compactLabel = false }: SignOutButtonProps): Rea
   const t = useTranslations('account')
   const locale = useLocale()
   const router = useRouter()
-  const systemErrorUrl = generateLocalizedUrl(locale, ROUTES.PUBLIC.AUTH.ERROR, {
-    queryParams: new URLSearchParams({ type: ActionErrorKind.System }),
-  })
+  const systemErrorUrl = getAuthSystemErrorUrl(locale)
   const [pending, setPending] = useState(false)
   const [error, setError] = useState(false)
 

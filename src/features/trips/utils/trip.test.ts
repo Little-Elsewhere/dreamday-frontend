@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import type { TripActivity } from '@/features/trips/types/trip'
 import {
+  createUuidV4,
   formatMinute,
   formatTripDate,
   formatTripDetailDate,
@@ -24,6 +25,12 @@ const createActivity = (id: string, activityDate: string, startMinute: number): 
 })
 
 describe('trip date and time utilities', () => {
+  it('creates a version 4 UUID using Web Crypto random values', () => {
+    expect(createUuidV4()).toMatch(
+      /^[\da-f]{8}-[\da-f]{4}-4[\da-f]{3}-[89ab][\da-f]{3}-[\da-f]{12}$/,
+    )
+  })
+
   it('formats app dates in the configured Ho Chi Minh timezone', () => {
     expect(getAppDate(new Date('2026-10-05T17:30:00.000Z'))).toBe('2026-10-06')
   })

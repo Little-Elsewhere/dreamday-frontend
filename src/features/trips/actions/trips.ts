@@ -12,7 +12,7 @@ import {
 } from '@/features/trips/schemas/trip'
 import { getSupabaseUserContext } from '@/lib/supabase/user-context'
 import { fieldError, messageError, systemError } from '@/utils/action-result'
-import type { ActionResult } from '@/types/action-result'
+import type { ActionFailure, ActionResult } from '@/types/action-result'
 import type { TripActivity, TripDraft } from '@/features/trips/types/trip'
 import { toTripActivity } from '@/features/trips/utils/trip'
 
@@ -34,6 +34,19 @@ const getDraft = async (supabase: ServerSupabaseClient, tripId: string, ownerId:
     .maybeSingle()
   if (error) throw new Error('Could not load trip draft')
   return data
+}
+
+const publishFieldError = (field: unknown, message: string | undefined): ActionFailure => {
+  if (field === 'endDate' && message === 'trips.create.errors.endBeforeStart') {
+    return fieldError('endDate', message)
+  }
+
+  if (field === 'name') return fieldError('name', 'trips.create.errors.nameRequired')
+  if (field === 'startDate') {
+    return fieldError('startDate', 'trips.create.errors.startDateRequired')
+  }
+  if (field === 'endDate') return fieldError('endDate', 'trips.create.errors.endDateRequired')
+  return fieldError('pace', 'trips.create.errors.paceRequired')
 }
 
 export const saveTripDraft = async (
@@ -220,15 +233,7 @@ export const publishTrip = async (values: unknown): Promise<ActionResult<{ id: s
     })
     if (!publishFields.success) {
       const firstIssue = publishFields.error.issues[0]
-      const field = firstIssue?.path[0]
-      if (field === 'name') return fieldError('name', 'trips.create.errors.nameRequired')
-      if (field === 'startDate')
-        return fieldError('startDate', 'trips.create.errors.startDateRequired')
-      if (field === 'endDate' && firstIssue.message === 'trips.create.errors.endBeforeStart') {
-        return fieldError('endDate', firstIssue.message)
-      }
-      if (field === 'endDate') return fieldError('endDate', 'trips.create.errors.endDateRequired')
-      return fieldError('pace', 'trips.create.errors.paceRequired')
+      return publishFieldError(firstIssue?.path[0], firstIssue?.message)
     }
 
     const { data: activities, error: activitiesError } = await supabase
