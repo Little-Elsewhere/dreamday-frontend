@@ -2,7 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Link } from '@/i18n/navigation'
-import { useLocale, useTranslations } from 'next-intl'
+import { useTranslations } from 'next-intl'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useRef, useState, type ReactElement } from 'react'
 
@@ -20,9 +20,8 @@ import { handleFormActionError } from '@/utils/form-action-error'
 
 export const UpdatePasswordForm = (): ReactElement => {
   const t = useTranslations('auth')
-  const locale = useLocale()
   const router = useRouter()
-  const systemErrorUrl = getAuthSystemErrorUrl(locale)
+  const systemErrorUrl = getAuthSystemErrorUrl()
   const summary = useRef<HTMLDivElement>(null)
   const [message, setMessage] = useState<string | null>(null)
   const [updated, setUpdated] = useState(false)

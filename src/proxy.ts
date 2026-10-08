@@ -23,24 +23,24 @@ export const proxy = async (request: NextRequest): Promise<NextResponse> => {
 
   if (state === AuthSessionState.Error && (isPrivate || isLogin)) {
     response = NextResponse.redirect(
-      generateLocalizedUrl(locale, ROUTES.PUBLIC.AUTH.ERROR, {
+      generateLocalizedUrl(ROUTES.PUBLIC.AUTH.ERROR, {
+        locale,
         queryParams: new URLSearchParams({ type: ActionErrorKind.System }),
         fullUrl: true,
-        includeLocale: true,
       }),
     )
   } else if (state === AuthSessionState.Unauthenticated && isPrivate) {
     response = NextResponse.redirect(
-      generateLocalizedUrl(locale, ROUTES.PUBLIC.AUTH.LOGIN, {
+      generateLocalizedUrl(ROUTES.PUBLIC.AUTH.LOGIN, {
+        locale,
         fullUrl: true,
-        includeLocale: true,
       }),
     )
   } else if (state === AuthSessionState.Authenticated && isLogin) {
     response = NextResponse.redirect(
-      generateLocalizedUrl(locale, ROUTES.PRIVATE.ACCOUNT, {
+      generateLocalizedUrl(ROUTES.PRIVATE.ACCOUNT, {
+        locale,
         fullUrl: true,
-        includeLocale: true,
       }),
     )
   }

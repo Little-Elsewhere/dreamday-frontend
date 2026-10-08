@@ -22,7 +22,7 @@ export const RegisterForm = (): ReactElement => {
   const t = useTranslations('auth')
   const locale = useLocale()
   const router = useRouter()
-  const systemErrorUrl = getAuthSystemErrorUrl(locale)
+  const systemErrorUrl = getAuthSystemErrorUrl()
   const errorSummary = useRef<HTMLDivElement>(null)
   const [message, setMessage] = useState<string | null>(null)
   const form = useForm<RegistrationFormValues>({
