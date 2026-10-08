@@ -2,12 +2,13 @@ import 'server-only'
 
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
-import type { SupabaseClient } from '@supabase/supabase-js'
 
 import { serverEnv } from '@/env/server'
+import { isMissingSession } from '@/features/auth/utils/session-error'
 import type { Database } from '@/types/database'
+import type { ServerSupabaseClient } from '@/types/supabase'
 
-export const createClient = async (): Promise<SupabaseClient<Database>> => {
+export const createClient = async (): Promise<ServerSupabaseClient> => {
   const cookieStore = await cookies()
 
   return createServerClient<Database>(
@@ -30,4 +31,14 @@ export const createClient = async (): Promise<SupabaseClient<Database>> => {
       },
     },
   )
+}
+
+export const getSupabaseContext = async () => {
+  const supabase = await createClient()
+  const { data, error } = await supabase.auth.getClaims()
+  if (error && !isMissingSession(error)) throw new Error('Could not verify user session')
+
+  const userId = error || typeof data?.claims?.sub !== 'string' ? null : data.claims.sub
+
+  return { supabase, userId }
 }

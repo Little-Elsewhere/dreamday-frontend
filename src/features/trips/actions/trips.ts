@@ -10,13 +10,12 @@ import {
   tripDraftSchema,
   tripNoteSchema,
 } from '@/features/trips/schemas/trip'
-import { getSupabaseUserContext } from '@/lib/supabase/user-context'
+import { getSupabaseContext } from '@/lib/supabase/server'
 import { fieldError, messageError, systemError } from '@/utils/action-result'
 import type { ActionFailure, ActionResult } from '@/types/action-result'
+import type { ServerSupabaseClient } from '@/types/supabase'
 import type { TripActivity, TripDraft } from '@/features/trips/types/trip'
 import { toTripActivity } from '@/features/trips/utils/trip'
-
-type ServerSupabaseClient = Awaited<ReturnType<typeof getSupabaseUserContext>>['supabase']
 
 const revalidateTrips = (tripId?: string): void => {
   revalidatePath('/[locale]/trips', 'page')
@@ -55,7 +54,7 @@ export const saveTripDraft = async (
   const validated = tripDraftSchema.parse(values)
 
   try {
-    const { supabase, userId: ownerId } = await getSupabaseUserContext()
+    const { supabase, userId: ownerId } = await getSupabaseContext()
     if (!ownerId) return messageError('trips.errors.sessionExpired')
     const { data: existing, error: lookupError } = await supabase
       .from('trips')
@@ -113,7 +112,7 @@ export const saveTripActivity = async (
   const validated = tripActivitySchema.parse(values)
 
   try {
-    const { supabase, userId: ownerId } = await getSupabaseUserContext()
+    const { supabase, userId: ownerId } = await getSupabaseContext()
     if (!ownerId) return messageError('trips.errors.sessionExpired')
     const trip = await getDraft(supabase, validated.tripId, ownerId)
     if (!trip) return messageError('trips.errors.draftNotFound')
@@ -165,7 +164,7 @@ export const deleteTripActivity = async (values: unknown): Promise<ActionResult<
   const validated = deleteTripActivitySchema.parse(values)
 
   try {
-    const { supabase, userId: ownerId } = await getSupabaseUserContext()
+    const { supabase, userId: ownerId } = await getSupabaseContext()
     if (!ownerId) return messageError('trips.errors.sessionExpired')
     const trip = await getDraft(supabase, validated.tripId, ownerId)
     if (!trip) return messageError('trips.errors.draftNotFound')
@@ -190,7 +189,7 @@ export const saveTripNote = async (values: unknown): Promise<ActionResult<null>>
   const validated = tripNoteSchema.parse(values)
 
   try {
-    const { supabase, userId: ownerId } = await getSupabaseUserContext()
+    const { supabase, userId: ownerId } = await getSupabaseContext()
     if (!ownerId) return messageError('trips.errors.sessionExpired')
     const trip = await getDraft(supabase, validated.tripId, ownerId)
     if (!trip) return messageError('trips.errors.draftNotFound')
@@ -214,7 +213,7 @@ export const publishTrip = async (values: unknown): Promise<ActionResult<{ id: s
   const validated = publishTripSchema.parse(values)
 
   try {
-    const { supabase, userId: ownerId } = await getSupabaseUserContext()
+    const { supabase, userId: ownerId } = await getSupabaseContext()
     if (!ownerId) return messageError('trips.errors.sessionExpired')
     const { data: fullTrip, error: tripError } = await supabase
       .from('trips')

@@ -4,8 +4,9 @@ import { cache } from 'react'
 import { io } from 'next/cache'
 
 import { tripIdSchema } from '@/features/trips/schemas/trip'
-import { getSupabaseUserContext } from '@/lib/supabase/user-context'
+import { getSupabaseContext } from '@/lib/supabase/server'
 import type { TripCard, TripDetail, TripDraft, TripRow } from '@/features/trips/types/trip'
+import type { ServerSupabaseClient } from '@/types/supabase'
 import {
   getAppDate,
   getTripDuration,
@@ -18,7 +19,6 @@ type TripCardRow = Pick<
   'id' | 'name' | 'destination' | 'description' | 'start_date' | 'end_date' | 'pace' | 'cover_path'
 >
 type TripDraftRow = TripCardRow & Pick<TripRow, 'note'>
-type ServerSupabaseClient = Awaited<ReturnType<typeof getSupabaseUserContext>>['supabase']
 
 const getCoverUrls = async (
   supabase: ServerSupabaseClient,
@@ -45,7 +45,7 @@ const getCoverUrl = async (
 
 const getUserContext = async () => {
   await io()
-  return getSupabaseUserContext()
+  return getSupabaseContext()
 }
 
 const toTripCard = (trip: TripCardRow, today: string, coverUrl: string | null): TripCard => {
