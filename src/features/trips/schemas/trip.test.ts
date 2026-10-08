@@ -4,6 +4,7 @@ import {
   publishTripFieldsSchema,
   tripActivitySchema,
   tripDraftSchema,
+  tripIdSchema,
 } from '@/features/trips/schemas/trip'
 
 const blankDraft = {
@@ -18,6 +19,10 @@ const blankDraft = {
 }
 
 describe('trip schemas', () => {
+  it('rejects malformed trip IDs before they reach database queries', () => {
+    expect(tripIdSchema.safeParse('not-a-uuid').success).toBe(false)
+  })
+
   it('allows incomplete data to be saved as a draft', () => {
     expect(tripDraftSchema.parse(blankDraft)).toMatchObject({ name: '', startDate: '', pace: '' })
   })

@@ -3,11 +3,10 @@ import { type NextRequest } from 'next/server'
 import { ROUTES } from '@/constants/routes'
 import { AuthErrorCode, AuthConfirmationFailure } from '@/features/auth/constants/auth'
 import { confirmationSchema, getConfirmationRedirect } from '@/features/auth/schemas/callback'
-import { generateLocalizedUrl } from '@/features/auth/utils/common'
+import { getAuthSystemErrorUrl } from '@/features/auth/utils/common'
 import { redirect } from '@/i18n/navigation'
 import { serverEnv } from '@/env/server'
 import { createClient } from '@/lib/supabase/server'
-import { ActionErrorKind } from '@/types/action-result'
 import { getLocaleFromPathname } from '@/utils/locale'
 
 export const GET = async (request: NextRequest) => {
@@ -55,12 +54,7 @@ export const GET = async (request: NextRequest) => {
   }
 
   if (failure === AuthConfirmationFailure.System) {
-    return redirect({
-      href: generateLocalizedUrl(locale, ROUTES.PUBLIC.AUTH.ERROR, {
-        queryParams: new URLSearchParams({ type: ActionErrorKind.System }),
-      }),
-      locale,
-    })
+    return redirect({ href: getAuthSystemErrorUrl(locale), locale })
   }
 
   return redirect(confirmationRedirect)

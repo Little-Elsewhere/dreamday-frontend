@@ -14,18 +14,15 @@ import { Link, useRouter } from '@/i18n/navigation'
 
 import { signUp } from '@/features/auth/actions/auth'
 import { AuthField } from '@/features/auth/constants/auth'
-import { generateLocalizedUrl } from '@/features/auth/utils/common'
+import { getAuthSystemErrorUrl } from '@/features/auth/utils/common'
 import { registrationSchema, type RegistrationFormValues } from '@/features/auth/schemas/auth'
-import { ActionErrorKind } from '@/types/action-result'
 import { handleFormActionError } from '@/utils/form-action-error'
 
 export const RegisterForm = (): ReactElement => {
   const t = useTranslations('auth')
   const locale = useLocale()
   const router = useRouter()
-  const systemErrorUrl = generateLocalizedUrl(locale, ROUTES.PUBLIC.AUTH.ERROR, {
-    queryParams: new URLSearchParams({ type: ActionErrorKind.System }),
-  })
+  const systemErrorUrl = getAuthSystemErrorUrl(locale)
   const errorSummary = useRef<HTMLDivElement>(null)
   const [message, setMessage] = useState<string | null>(null)
   const form = useForm<RegistrationFormValues>({

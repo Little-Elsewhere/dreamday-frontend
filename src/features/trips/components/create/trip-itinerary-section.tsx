@@ -16,6 +16,7 @@ type Props = {
   activities: TripActivity[]
   canAddActivity: boolean
   dates: string[]
+  pending: boolean
   onDeleteActivity: (activityId: string) => Promise<void>
   onMoveActivity: (activity: TripActivity, targetDate: string) => void
   onOpenActivity: (activity?: TripActivity, date?: string) => void
@@ -29,6 +30,7 @@ export const TripItinerarySection = ({
   activities,
   canAddActivity,
   dates,
+  pending,
   onDeleteActivity,
   onMoveActivity,
   onOpenActivity,
@@ -50,7 +52,7 @@ export const TripItinerarySection = ({
           </p>
         </div>
         <Button
-          disabled={!canAddActivity || dates.length === 0}
+          disabled={pending || !canAddActivity || dates.length === 0}
           onClick={() => onOpenActivity()}
           type="button"
         >
@@ -78,7 +80,7 @@ export const TripItinerarySection = ({
                   event.preventDefault()
                   const id = event.dataTransfer.getData('text/plain')
                   const activity = activities.find((item) => item.id === id)
-                  if (activity) onMoveActivity(activity, date)
+                  if (activity && !pending) onMoveActivity(activity, date)
                 }}
               >
                 <div className="flex items-center justify-between gap-3">
@@ -86,6 +88,7 @@ export const TripItinerarySection = ({
                     {formatTripActivityDate(date, locale)}
                   </h3>
                   <Button
+                    disabled={pending}
                     onClick={() => onOpenActivity(undefined, date)}
                     size="sm"
                     type="button"
@@ -103,7 +106,7 @@ export const TripItinerarySection = ({
                     {dayActivities.map((activity) => (
                       <li key={activity.id}>
                         <article
-                          draggable
+                          draggable={!pending}
                           onDragStart={(event) =>
                             event.dataTransfer.setData('text/plain', activity.id)
                           }
@@ -111,6 +114,7 @@ export const TripItinerarySection = ({
                         >
                           <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-start">
                             <button
+                              disabled={pending}
                               className="min-w-0 text-left focus-visible:outline-2 focus-visible:outline-offset-2"
                               onClick={() => onOpenActivity(activity)}
                               type="button"
@@ -136,7 +140,7 @@ export const TripItinerarySection = ({
                                 aria-label={t('create.actions.moveDayEarlier', {
                                   title: activity.title,
                                 })}
-                                disabled={dates.indexOf(date) <= 0}
+                                disabled={pending || dates.indexOf(date) <= 0}
                                 onClick={() =>
                                   onMoveActivity(activity, dates[dates.indexOf(date) - 1] ?? date)
                                 }
@@ -150,7 +154,7 @@ export const TripItinerarySection = ({
                                 aria-label={t('create.actions.moveDayLater', {
                                   title: activity.title,
                                 })}
-                                disabled={dates.indexOf(date) >= dates.length - 1}
+                                disabled={pending || dates.indexOf(date) >= dates.length - 1}
                                 onClick={() =>
                                   onMoveActivity(activity, dates[dates.indexOf(date) + 1] ?? date)
                                 }
@@ -164,7 +168,7 @@ export const TripItinerarySection = ({
                                 aria-label={t('create.actions.shiftEarlier', {
                                   title: activity.title,
                                 })}
-                                disabled={activity.startMinute < 15}
+                                disabled={pending || activity.startMinute < 15}
                                 onClick={() =>
                                   void onUpdateActivity(activity, {
                                     startMinute: activity.startMinute - 15,
@@ -181,7 +185,7 @@ export const TripItinerarySection = ({
                                 aria-label={t('create.actions.shiftLater', {
                                   title: activity.title,
                                 })}
-                                disabled={activity.endMinute > 1425}
+                                disabled={pending || activity.endMinute > 1425}
                                 onClick={() =>
                                   void onUpdateActivity(activity, {
                                     startMinute: activity.startMinute + 15,
@@ -198,7 +202,9 @@ export const TripItinerarySection = ({
                                 aria-label={t('create.actions.shorten', {
                                   title: activity.title,
                                 })}
-                                disabled={activity.endMinute - activity.startMinute <= 15}
+                                disabled={
+                                  pending || activity.endMinute - activity.startMinute <= 15
+                                }
                                 onClick={() =>
                                   void onUpdateActivity(activity, {
                                     endMinute: activity.endMinute - 15,
@@ -214,7 +220,7 @@ export const TripItinerarySection = ({
                                 aria-label={t('create.actions.extend', {
                                   title: activity.title,
                                 })}
-                                disabled={activity.endMinute >= 1440}
+                                disabled={pending || activity.endMinute >= 1440}
                                 onClick={() =>
                                   void onUpdateActivity(activity, {
                                     endMinute: activity.endMinute + 15,
@@ -227,6 +233,7 @@ export const TripItinerarySection = ({
                                 {t('create.actions.longer')}
                               </Button>
                               <Button
+                                disabled={pending}
                                 onClick={() => void onDeleteActivity(activity.id)}
                                 size="sm"
                                 type="button"
