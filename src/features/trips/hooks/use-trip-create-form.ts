@@ -12,6 +12,7 @@ import { useRouter } from '@/i18n/navigation'
 import { useTripActivities } from '@/features/trips/hooks/use-trip-activities'
 import { useTripCover } from '@/features/trips/hooks/use-trip-cover'
 import { getTripDatesInRange } from '@/features/trips/utils/trip'
+import { ActionErrorKind } from '@/types/action-result'
 
 export const useTripCreateForm = (initialDraft: TripDraft | null) => {
   const t = useTranslations('trips')
@@ -166,28 +167,22 @@ export const useTripCreateForm = (initialDraft: TripDraft | null) => {
       if (!tripId || !(await persistPendingCover(tripId))) return
 
       const result = await publishTrip({ tripId })
-      if (!result.success) {
-        if (result.error.kind === 'system') {
-          setError(t('errors.saveFailed'))
-          return
-        }
-        if (result.error.kind === 'message') {
-          setError(
-            result.error.key === 'trips.errors.sessionExpired'
-              ? t('errors.sessionExpired')
-              : t('errors.saveFailed'),
-          )
-          return
-        }
-
-        const translationKey =
-          PUBLISH_ERROR_TRANSLATION_KEYS[result.error.key] ?? 'create.errors.publishRequired'
-        setError(t(translationKey))
+      if (result.error.kind === ActionErrorKind.System) {
+        setError(t('errors.saveFailed'))
+        return
+      }
+      if (result.error.kind === ActionErrorKind.Message) {
+        setError(
+          result.error.key === 'trips.errors.sessionExpired'
+            ? t('errors.sessionExpired')
+            : t('errors.saveFailed'),
+        )
         return
       }
 
-      router.push(ROUTES.PRIVATE.TRIP_DETAIL(result.data.id))
-      router.refresh()
+      const translationKey =
+        PUBLISH_ERROR_TRANSLATION_KEYS[result.error.key] ?? 'create.errors.publishRequired'
+      setError(t(translationKey))
     } catch {
       setError(t('errors.saveFailed'))
     } finally {

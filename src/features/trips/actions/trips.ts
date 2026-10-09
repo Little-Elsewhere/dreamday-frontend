@@ -1,7 +1,9 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
+import { getLocale } from 'next-intl/server'
 
+import { ROUTES } from '@/constants/routes'
 import {
   deleteTripActivitySchema,
   publishTripFieldsSchema,
@@ -11,6 +13,7 @@ import {
   tripNoteSchema,
 } from '@/features/trips/schemas/trip'
 import { getSupabaseContext } from '@/lib/supabase/server'
+import { redirect } from '@/i18n/navigation'
 import { fieldError, messageError, systemError } from '@/utils/action-result'
 import type { ActionFailure, ActionResult } from '@/types/action-result'
 import type { ServerSupabaseClient } from '@/types/supabase'
@@ -35,7 +38,10 @@ const getDraft = async (supabase: ServerSupabaseClient, tripId: string, ownerId:
   return data
 }
 
-const publishFieldError = (field: unknown, message: string | undefined): ActionFailure => {
+const publishFieldError = (
+  field: unknown,
+  message: string | undefined,
+): ActionFailure<keyof TripDraft> => {
   if (field === 'endDate' && message === 'trips.create.errors.endBeforeStart') {
     return fieldError('endDate', message)
   }
@@ -209,7 +215,7 @@ export const saveTripNote = async (values: unknown): Promise<ActionResult<null>>
   }
 }
 
-export const publishTrip = async (values: unknown): Promise<ActionResult<{ id: string }>> => {
+export const publishTrip = async (values: unknown): Promise<ActionFailure<keyof TripDraft>> => {
   const validated = publishTripSchema.parse(values)
 
   try {
@@ -262,8 +268,10 @@ export const publishTrip = async (values: unknown): Promise<ActionResult<{ id: s
     if (error) return systemError()
     if (!data) return messageError('trips.errors.draftNotFound')
     revalidateTrips(validated.tripId)
-    return { success: true, data: { id: validated.tripId } }
   } catch {
     return systemError()
   }
+
+  const locale = await getLocale()
+  return redirect({ href: ROUTES.PRIVATE.TRIP_DETAIL(validated.tripId), locale })
 }
