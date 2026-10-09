@@ -37,19 +37,15 @@ export const LoginForm = (): ReactElement => {
 
     try {
       const result = await signIn(values)
-      if (result.success) {
-        router.replace(ROUTES.PRIVATE.TRIPS)
-      } else {
-        handleFormActionError(result.error, {
-          fields: [AuthField.Email, AuthField.Password],
-          setError: loginForm.setError,
-          onMessage: (key) => {
-            setMessage(t(key))
-            requestAnimationFrame(() => errorSummary.current?.focus())
-          },
-          onSystemError: () => router.replace(systemErrorUrl),
-        })
-      }
+      handleFormActionError(result.error, {
+        fields: [AuthField.Email, AuthField.Password],
+        setError: loginForm.setError,
+        onMessage: (key) => {
+          setMessage(t(key))
+          requestAnimationFrame(() => errorSummary.current?.focus())
+        },
+        onSystemError: () => router.replace(systemErrorUrl),
+      })
     } catch {
       router.replace(systemErrorUrl)
     }

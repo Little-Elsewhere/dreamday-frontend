@@ -19,8 +19,5 @@
     "viewTrips": "Mở chuyến đi của tôi",
     "signOut": "Đăng xuất",
     "signingOut": "Đang đăng xuất…"
-  },
-  "messages": {
-    "signOutFailed": "Không thể đăng xuất. Vui lòng thử lại."
   }
 }
