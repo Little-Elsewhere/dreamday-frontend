@@ -77,7 +77,7 @@ export const TripsList = ({ trips }: Props): ReactElement => {
               strokeWidth={1.7}
             />
             <input
-              className="border-line-strong bg-surface text-ink placeholder:text-ink-soft focus-visible:border-primary focus-visible:ring-primary/15 rounded-auth hover:border-primary min-h-[3.25rem] w-full border py-3 pr-4 pl-12 text-base transition outline-none focus-visible:ring-3"
+              className="border-line-strong bg-surface text-ink placeholder:text-ink-soft focus-visible:border-primary focus-visible:ring-primary/15 rounded-auth hover:border-primary min-h-13 w-full border py-3 pr-4 pl-12 text-base transition outline-none focus-visible:ring-3"
               id="trip-search"
               onChange={(event) => setQuery(event.target.value)}
               placeholder={t('list.searchPlaceholder')}
@@ -89,7 +89,7 @@ export const TripsList = ({ trips }: Props): ReactElement => {
 
         <div
           aria-label={t('list.filterLabel')}
-          className="flex min-w-0 [scrollbar-width:none] gap-2 overflow-x-auto py-0.5 md:justify-end [&::-webkit-scrollbar]:hidden"
+          className="flex min-w-0 scrollbar-none gap-2 overflow-x-auto py-0.5 md:justify-end [&::-webkit-scrollbar]:hidden"
           role="group"
         >
           {TRIP_LIST_FILTERS.map((value) => (
@@ -163,7 +163,7 @@ export const TripsList = ({ trips }: Props): ReactElement => {
                 className="group border-line bg-surface focus-visible:outline-focus rounded-auth hover:border-line-strong overflow-hidden border shadow-[0_8px_28px_rgba(23,54,46,0.05)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_16px_38px_rgba(23,54,46,0.1)] focus-visible:outline-2 focus-visible:outline-offset-4 motion-reduce:transform-none motion-reduce:transition-none"
                 href={ROUTES.PRIVATE.TRIP_DETAIL(trip.id)}
               >
-                <div className="bg-muted relative aspect-[16/10] overflow-hidden">
+                <div className="bg-muted relative aspect-16/10 overflow-hidden">
                   {trip.coverUrl ? (
                     <Image
                       alt=""
@@ -186,7 +186,7 @@ export const TripsList = ({ trips }: Props): ReactElement => {
                 <div className="grid content-start gap-4 p-5">
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div className="min-w-0">
-                      <h3 className="text-primary text-[1.375rem] leading-snug font-medium tracking-tight break-words">
+                      <h3 className="text-primary text-[1.375rem] leading-snug font-medium tracking-tight wrap-break-word">
                         {trip.name}
                       </h3>
                       <p className="text-champagne-ink mt-1 text-xs font-semibold tracking-[0.14em] uppercase">
