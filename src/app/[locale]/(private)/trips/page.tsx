@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
-import type { ReactElement } from 'react'
 import { getTranslations } from 'next-intl/server'
+import type { ReactElement } from 'react'
 
 import { TripHeader } from '@/features/trips/components/trip-header'
 import { TripsList } from '@/features/trips/components/trips-list'

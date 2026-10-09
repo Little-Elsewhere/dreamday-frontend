@@ -1,6 +1,6 @@
 import Image from 'next/image'
-import type { ReactElement, ReactNode } from 'react'
 import { getTranslations } from 'next-intl/server'
+import type { ReactElement, ReactNode } from 'react'
 
 import { Footer } from '@/components/common/footer'
 

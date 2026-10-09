@@ -12,13 +12,13 @@ import {
   tripDraftSchema,
   tripNoteSchema,
 } from '@/features/trips/schemas/trip'
-import { getSupabaseContext } from '@/lib/supabase/server'
-import { redirect } from '@/i18n/navigation'
-import { fieldError, messageError, systemError } from '@/utils/action-result'
-import type { ActionFailure, ActionResult } from '@/types/action-result'
-import type { ServerSupabaseClient } from '@/types/supabase'
 import type { TripActivity, TripDraft } from '@/features/trips/types/trip'
 import { toTripActivity } from '@/features/trips/utils/trip'
+import { redirect } from '@/i18n/navigation'
+import { getSupabaseContext } from '@/lib/supabase/server'
+import type { ActionFailure, ActionResult } from '@/types/action-result'
+import type { ServerSupabaseClient } from '@/types/supabase'
+import { fieldError, messageError, systemError } from '@/utils/action-result'
 
 const revalidateTrips = (tripId?: string): void => {
   revalidatePath('/[locale]/trips', 'page')

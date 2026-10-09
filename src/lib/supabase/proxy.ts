@@ -1,6 +1,7 @@
-import { serverEnv } from '@/env/server'
 import { createServerClient } from '@supabase/ssr'
-import { NextResponse, type NextRequest } from 'next/server'
+import { type NextRequest, NextResponse } from 'next/server'
+
+import { serverEnv } from '@/env/server'
 import { AuthSessionState } from '@/features/auth/constants/auth'
 import { isMissingSession } from '@/features/auth/utils/session-error'
 

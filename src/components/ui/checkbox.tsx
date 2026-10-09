@@ -1,15 +1,15 @@
 'use client'
 
-import * as React from 'react'
 import { Checkbox as CheckboxPrimitive } from '@base-ui/react/checkbox'
+import { Tick02Icon } from '@hugeicons/core-free-icons'
+import { HugeiconsIcon } from '@hugeicons/react'
 import { useTranslations } from 'next-intl'
+import * as React from 'react'
 import type { FieldPath, FieldValues } from 'react-hook-form'
 import { Controller, useFormContext } from 'react-hook-form'
 
 import { Label } from '@/components/ui/label'
 import { cn } from '@/utils/cn'
-import { HugeiconsIcon } from '@hugeicons/react'
-import { Tick02Icon } from '@hugeicons/core-free-icons'
 
 interface CheckboxProps<TFieldValues extends FieldValues> extends Omit<
   CheckboxPrimitive.Root.Props,

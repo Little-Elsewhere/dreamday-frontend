@@ -1,5 +1,5 @@
-import { describe, expect, it, vi } from 'vitest'
 import type { AuthError as SupabaseAuthError } from '@supabase/supabase-js'
+import { describe, expect, it, vi } from 'vitest'
 
 import { AuthAction, AuthErrorCode, AuthField } from '@/features/auth/constants/auth'
 import { authError } from '@/features/auth/utils/auth-error'

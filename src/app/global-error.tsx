@@ -1,16 +1,18 @@
 'use client'
 
-import { useEffect, Suspense } from 'react'
+import '@/app/globals.css'
+
 import { usePathname } from 'next/navigation'
+import { Suspense, useEffect } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { DEFAULT_LOCALE, Locale } from '@/constants/locale'
 import { beVietnamPro } from '@/fonts'
 import { cn } from '@/utils/cn'
 import { getPathnameLocale } from '@/utils/locale'
+
 import englishError from '../../messages/en/common/error.json'
 import vietnameseError from '../../messages/vi/common/error.json'
-import '@/app/globals.css'
 
 const errorMessages = {
   en: englishError,

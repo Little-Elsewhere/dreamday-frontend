@@ -1,5 +1,5 @@
-import { ROUTES } from '@/constants/routes'
 import { type Locale } from '@/constants/locale'
+import { ROUTES } from '@/constants/routes'
 import { getPathnameLocale, removeLocalePrefix } from '@/utils/locale'
 
 export const getConfirmationRedirect = (

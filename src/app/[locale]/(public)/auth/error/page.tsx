@@ -1,13 +1,13 @@
 import type { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
 import type { ReactElement } from 'react'
 import { Suspense } from 'react'
-import { getTranslations } from 'next-intl/server'
 
 import { ROUTES } from '@/constants/routes'
 import { AuthLoading } from '@/features/auth/components/common/auth-loading'
 import { AuthEmailOtpType } from '@/features/auth/constants/auth'
-import { ActionErrorKind } from '@/types/action-result'
 import { Link } from '@/i18n/navigation'
+import { ActionErrorKind } from '@/types/action-result'
 
 type Props = {
   searchParams: Promise<Record<string, string | string[] | undefined>>

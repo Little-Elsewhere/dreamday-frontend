@@ -1,8 +1,8 @@
 import 'server-only'
 
-import type { ReactElement } from 'react'
-import { getTranslations } from 'next-intl/server'
 import { cacheLife } from 'next/cache'
+import { getTranslations } from 'next-intl/server'
+import type { ReactElement } from 'react'
 
 export const Footer = async (): Promise<ReactElement> => {
   'use cache'

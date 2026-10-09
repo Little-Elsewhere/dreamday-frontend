@@ -1,5 +1,5 @@
-import { z } from 'zod'
 import type { EmailOtpType as SupabaseEmailOtpType } from '@supabase/supabase-js'
+import { z } from 'zod'
 
 import { AuthEmailOtpType } from '@/features/auth/constants/auth'
 
