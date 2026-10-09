@@ -78,7 +78,7 @@ export const signUp = async (values: RegistrationFormValues): Promise<AuthAction
       password,
       options: {
         data: { full_name: name, locale },
-        emailRedirectTo: generateLocalizedUrl(ROUTES.PRIVATE.ACCOUNT, {
+        emailRedirectTo: generateLocalizedUrl(ROUTES.PRIVATE.TRIPS, {
           locale: locale as Locale,
           fullUrl: true,
         }),
