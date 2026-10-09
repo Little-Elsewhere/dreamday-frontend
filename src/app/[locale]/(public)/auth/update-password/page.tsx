@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
 import type { ReactElement } from 'react'
 import { Suspense } from 'react'
-import { getTranslations } from 'next-intl/server'
 
 import { AuthLoading } from '@/features/auth/components/common/auth-loading'
 import { RequireSession } from '@/features/auth/components/common/require-session'

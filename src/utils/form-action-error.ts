@@ -1,6 +1,6 @@
 import type { FieldPath, FieldValues, UseFormSetError } from 'react-hook-form'
 
-import { ActionErrorKind, type ActionError } from '@/types/action-result'
+import { type ActionError, ActionErrorKind } from '@/types/action-result'
 
 interface FormActionErrorOptions<TValues extends FieldValues> {
   fields: readonly FieldPath<TValues>[]

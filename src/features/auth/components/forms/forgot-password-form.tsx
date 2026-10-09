@@ -4,11 +4,11 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Cancel01Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { useTranslations } from 'next-intl'
-import { useRef, useState, type ReactElement } from 'react'
+import { type ReactElement, useRef, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
-import { Button } from '@/components/ui/button'
 import { FeedbackMessage } from '@/components/common/feedback-message'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogClose,
@@ -18,12 +18,11 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
-import { useRouter } from '@/i18n/navigation'
-
 import { forgotPassword } from '@/features/auth/actions/auth'
 import { AuthField } from '@/features/auth/constants/auth'
+import { type PasswordResetFormValues, passwordResetSchema } from '@/features/auth/schemas/auth'
 import { getAuthSystemErrorUrl } from '@/features/auth/utils/common'
-import { passwordResetSchema, type PasswordResetFormValues } from '@/features/auth/schemas/auth'
+import { useRouter } from '@/i18n/navigation'
 import { handleFormActionError } from '@/utils/form-action-error'
 
 type Props = {

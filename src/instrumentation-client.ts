@@ -1,4 +1,5 @@
 import posthog from 'posthog-js'
+
 import { clientEnv } from '@/env/client'
 
 if (clientEnv.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN) {

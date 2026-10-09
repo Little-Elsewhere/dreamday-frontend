@@ -1,17 +1,17 @@
 'use client'
 
-import { useState, type FormEvent } from 'react'
 import { useTranslations } from 'next-intl'
+import { type FormEvent, useState } from 'react'
 
-import type { TripDraftFormValues } from '@/features/trips/types/components'
-import type { TripDraft } from '@/features/trips/types/trip'
-import { PUBLISH_ERROR_TRANSLATION_KEYS } from '@/features/trips/constants/trips'
-import { publishTrip, saveTripDraft, saveTripNote } from '@/features/trips/actions/trips'
 import { ROUTES } from '@/constants/routes'
-import { useRouter } from '@/i18n/navigation'
+import { publishTrip, saveTripDraft, saveTripNote } from '@/features/trips/actions/trips'
+import { PUBLISH_ERROR_TRANSLATION_KEYS } from '@/features/trips/constants/trips'
 import { useTripActivities } from '@/features/trips/hooks/use-trip-activities'
 import { useTripCover } from '@/features/trips/hooks/use-trip-cover'
+import type { TripDraftFormValues } from '@/features/trips/types/components'
+import type { TripDraft } from '@/features/trips/types/trip'
 import { getTripDatesInRange } from '@/features/trips/utils/trip'
+import { useRouter } from '@/i18n/navigation'
 import { ActionErrorKind } from '@/types/action-result'
 
 export const useTripCreateForm = (initialDraft: TripDraft | null) => {

@@ -1,4 +1,5 @@
 import type { AuthError } from '@supabase/supabase-js'
+
 import {
   MISSING_SESSION_ERROR_CODES,
   MISSING_SESSION_ERROR_NAMES,

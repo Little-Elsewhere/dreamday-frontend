@@ -1,5 +1,5 @@
 import { AuthField } from '@/features/auth/constants/auth'
-import { ActionErrorKind, type ActionError, type ActionResult } from '@/types/action-result'
+import { type ActionError, ActionErrorKind, type ActionResult } from '@/types/action-result'
 
 export type AuthResult = ActionResult<null, AuthField>
 

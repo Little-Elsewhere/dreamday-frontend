@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
-import type { ReactElement } from 'react'
 import { getTranslations } from 'next-intl/server'
+import type { ReactElement } from 'react'
 
 import { TripCreateForm } from '@/features/trips/components/trip-create-form'
 import { TripHeader } from '@/features/trips/components/trip-header'

@@ -1,13 +1,15 @@
-import { routing } from '@/i18n/routing'
-import { hasLocale, NextIntlClientProvider } from 'next-intl'
-import { notFound } from 'next/navigation'
-import type { Metadata, Viewport } from 'next'
-import { ReactNode } from 'react'
-import { SerwistProvider } from '@/app/serwist'
-import { beVietnamPro } from '@/fonts'
-import { cn } from '@/utils/cn'
 import '@/app/globals.css'
+
+import type { Metadata, Viewport } from 'next'
+import { notFound } from 'next/navigation'
+import { hasLocale, NextIntlClientProvider } from 'next-intl'
+import { ReactNode } from 'react'
+
+import { SerwistProvider } from '@/app/serwist'
 import { serverEnv } from '@/env/server'
+import { beVietnamPro } from '@/fonts'
+import { routing } from '@/i18n/routing'
+import { cn } from '@/utils/cn'
 
 const appName = serverEnv.NEXT_PUBLIC_APP_NAME
 const appDefaultTitle = serverEnv.NEXT_PUBLIC_APP_DEFAULT_TITLE

@@ -1,17 +1,17 @@
 'use client'
 
-import Image from 'next/image'
-import { Search01Icon, Image01Icon, ArrowRight01Icon } from '@hugeicons/core-free-icons'
+import { ArrowRight01Icon, Image01Icon, Search01Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
-import { useEffect, useRef, useState, type ReactElement } from 'react'
+import Image from 'next/image'
 import { useLocale, useTranslations } from 'next-intl'
+import { type ReactElement, useEffect, useRef, useState } from 'react'
 
 import { Button, buttonVariants } from '@/components/ui/button'
 import { ROUTES } from '@/constants/routes'
-import { Link } from '@/i18n/navigation'
 import { TRIP_LIST_FILTERS, TRIP_LIST_PAGE_SIZE } from '@/features/trips/constants/trips'
-import { filterTrips, formatTripDate } from '@/features/trips/utils/trip'
 import type { TripCard, TripListFilter } from '@/features/trips/types/trip'
+import { filterTrips, formatTripDate } from '@/features/trips/utils/trip'
+import { Link } from '@/i18n/navigation'
 
 type Props = {
   trips: TripCard[]

@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest'
 import type { AuthError } from '@supabase/supabase-js'
+import { describe, expect, it } from 'vitest'
 
 import { AuthErrorCode, AuthErrorName } from '@/features/auth/constants/auth'
 import { isMissingSession } from '@/features/auth/utils/session-error'

@@ -1,18 +1,18 @@
 import 'server-only'
 
-import { cache } from 'react'
 import { io } from 'next/cache'
+import { cache } from 'react'
 
 import { tripIdSchema } from '@/features/trips/schemas/trip'
-import { getSupabaseContext } from '@/lib/supabase/server'
 import type { TripCard, TripDetail, TripDraft, TripRow } from '@/features/trips/types/trip'
-import type { ServerSupabaseClient } from '@/types/supabase'
 import {
   getAppDate,
   getTripDuration,
   getTripStatus,
   toTripActivity,
 } from '@/features/trips/utils/trip'
+import { getSupabaseContext } from '@/lib/supabase/server'
+import type { ServerSupabaseClient } from '@/types/supabase'
 
 type TripCardRow = Pick<
   TripRow,
