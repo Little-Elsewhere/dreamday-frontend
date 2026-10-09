@@ -299,7 +299,7 @@ pnpm supabase:reset:local # Build templates, then reset the local database
 pnpm lint                # Run ESLint
 pnpm typecheck           # Run TypeScript checks
 pnpm test:unit           # Run unit tests in Node.js
-pnpm test:e2e:trips      # Run trip flows in Playwright
+pnpm test:e2e            # Run all Playwright flows under e2e/
 pnpm format              # Format the project with Prettier
 pnpm format:check        # Check formatting without changing files
 pnpm storybook           # Start Storybook at http://localhost:6006
@@ -308,8 +308,13 @@ pnpm clean               # Remove .next and node_modules
 pnpm commitlint          # Validate commit messages
 ```
 
-Vitest runs colocated unit tests in Node.js with `pnpm test:unit`. Trip browser
-flows use Playwright through `pnpm test:e2e:trips`.
+Vitest runs colocated unit tests in Node.js with `pnpm test:unit`. Playwright
+discovers E2E specs recursively under `e2e/`; run all of them with
+`pnpm test:e2e`. It starts a separate local Next.js dev server on port 4001, so
+it does not reuse the app server on port 4000. Each spec runs in desktop,
+tablet (iPad) and mobile (iPhone) Chromium emulation. Specs run fully parallel
+with a maximum of four workers.
+Authenticated trip flows also require `TRIPS_E2E_EMAIL` and `TRIPS_E2E_PASSWORD`.
 
 ## Project Structure
 
