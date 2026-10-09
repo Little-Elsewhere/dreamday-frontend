@@ -5,7 +5,7 @@ import type { ReactElement } from 'react'
 import { ROUTES } from '@/constants/routes'
 import { Link } from '@/i18n/navigation'
 
-interface AuthEmailSuccessProps {
+type Props = {
   eyebrow: string
   title: string
   description: string
@@ -19,7 +19,7 @@ export const AuthEmailSuccess = ({
   description,
   helper,
   actionLabel,
-}: AuthEmailSuccessProps): ReactElement => {
+}: Props): ReactElement => {
   return (
     <section aria-labelledby="auth-title">
       <div

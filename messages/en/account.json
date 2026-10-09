@@ -19,8 +19,5 @@
     "viewTrips": "Open my trips",
     "signOut": "Sign out",
     "signingOut": "Signing out…"
-  },
-  "messages": {
-    "signOutFailed": "We couldn’t sign you out. Please try again."
   }
 }

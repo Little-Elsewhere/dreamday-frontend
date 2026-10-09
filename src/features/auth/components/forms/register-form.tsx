@@ -1,7 +1,7 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useLocale, useTranslations } from 'next-intl'
+import { useTranslations } from 'next-intl'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useRef, useState, type ReactElement } from 'react'
 
@@ -20,7 +20,6 @@ import { handleFormActionError } from '@/utils/form-action-error'
 
 export const RegisterForm = (): ReactElement => {
   const t = useTranslations('auth')
-  const locale = useLocale()
   const router = useRouter()
   const systemErrorUrl = getAuthSystemErrorUrl()
   const errorSummary = useRef<HTMLDivElement>(null)
@@ -34,20 +33,16 @@ export const RegisterForm = (): ReactElement => {
     setMessage(null)
 
     try {
-      const result = await signUp(values, locale)
-      if (result.success) {
-        router.replace(ROUTES.PUBLIC.AUTH.REGISTER_SUCCESS)
-      } else {
-        handleFormActionError(result.error, {
-          fields: [AuthField.Name, AuthField.Email, AuthField.Password, AuthField.ConfirmPassword],
-          setError: form.setError,
-          onMessage: (key) => {
-            setMessage(t(key))
-            requestAnimationFrame(() => errorSummary.current?.focus())
-          },
-          onSystemError: () => router.replace(systemErrorUrl),
-        })
-      }
+      const result = await signUp(values)
+      handleFormActionError(result.error, {
+        fields: [AuthField.Name, AuthField.Email, AuthField.Password, AuthField.ConfirmPassword],
+        setError: form.setError,
+        onMessage: (key) => {
+          setMessage(t(key))
+          requestAnimationFrame(() => errorSummary.current?.focus())
+        },
+        onSystemError: () => router.replace(systemErrorUrl),
+      })
     } catch {
       router.replace(systemErrorUrl)
     }

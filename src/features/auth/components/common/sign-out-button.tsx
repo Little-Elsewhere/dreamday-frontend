@@ -6,37 +6,25 @@ import { Logout01Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
 
 import { Button } from '@/components/ui/button'
-import { FeedbackMessage } from '@/components/common/feedback-message'
-import { ROUTES } from '@/constants/routes'
 import { useRouter } from '@/i18n/navigation'
 import { signOut } from '@/features/auth/actions/auth'
 import { getAuthSystemErrorUrl } from '@/features/auth/utils/common'
-import { ActionErrorKind } from '@/types/action-result'
 
-interface SignOutButtonProps {
+type Props = {
   compactLabel?: boolean
 }
 
-export const SignOutButton = ({ compactLabel = false }: SignOutButtonProps): ReactElement => {
+export const SignOutButton = ({ compactLabel = false }: Props): ReactElement => {
   const t = useTranslations('account')
   const router = useRouter()
   const systemErrorUrl = getAuthSystemErrorUrl()
   const [pending, setPending] = useState(false)
-  const [error, setError] = useState(false)
 
   const handleSignOut = async (): Promise<void> => {
     setPending(true)
-    setError(false)
 
     try {
-      const result = await signOut()
-      if (result.success) {
-        router.replace(ROUTES.PUBLIC.AUTH.LOGIN)
-      } else if (result.error.kind === ActionErrorKind.System) {
-        router.replace(systemErrorUrl)
-      } else {
-        setError(true)
-      }
+      await signOut()
     } catch {
       router.replace(systemErrorUrl)
     } finally {
@@ -45,30 +33,25 @@ export const SignOutButton = ({ compactLabel = false }: SignOutButtonProps): Rea
   }
 
   return (
-    <div className="flex flex-col items-start gap-3">
-      <Button
-        type="button"
-        variant="outline"
-        className={compactLabel ? 'min-h-11 gap-2 px-3 sm:px-4' : undefined}
-        aria-label={compactLabel ? t('actions.signOut') : undefined}
-        onClick={() => void handleSignOut()}
-        loading={pending}
-        loadingLabel={t('actions.signingOut')}
-      >
-        {compactLabel && (
-          <HugeiconsIcon
-            aria-hidden="true"
-            className="size-4"
-            icon={Logout01Icon}
-            size={16}
-            strokeWidth={1.7}
-          />
-        )}
-        <span className={compactLabel ? 'hidden sm:inline' : undefined}>
-          {t('actions.signOut')}
-        </span>
-      </Button>
-      {error && <FeedbackMessage message={t('messages.signOutFailed')} isError />}
-    </div>
+    <Button
+      type="button"
+      variant="outline"
+      className={compactLabel ? 'min-h-11 gap-2 px-3 sm:px-4' : undefined}
+      aria-label={compactLabel ? t('actions.signOut') : undefined}
+      onClick={() => void handleSignOut()}
+      loading={pending}
+      loadingLabel={t('actions.signingOut')}
+    >
+      {compactLabel && (
+        <HugeiconsIcon
+          aria-hidden="true"
+          className="size-4"
+          icon={Logout01Icon}
+          size={16}
+          strokeWidth={1.7}
+        />
+      )}
+      <span className={compactLabel ? 'hidden sm:inline' : undefined}>{t('actions.signOut')}</span>
+    </Button>
   )
 }

@@ -3,7 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Cancel01Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
-import { useLocale, useTranslations } from 'next-intl'
+import { useTranslations } from 'next-intl'
 import { useRef, useState, type ReactElement } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
@@ -18,7 +18,6 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
-import { ROUTES } from '@/constants/routes'
 import { useRouter } from '@/i18n/navigation'
 
 import { forgotPassword } from '@/features/auth/actions/auth'
@@ -34,7 +33,6 @@ type Props = {
 
 export const ForgotPasswordForm = ({ initialEmail, show }: Props): ReactElement => {
   const t = useTranslations('auth')
-  const locale = useLocale()
   const router = useRouter()
   const systemErrorUrl = getAuthSystemErrorUrl()
   const errorSummaryRef = useRef<HTMLDivElement>(null)
@@ -50,26 +48,19 @@ export const ForgotPasswordForm = ({ initialEmail, show }: Props): ReactElement 
     setRecoveryError(null)
 
     try {
-      const result = await forgotPassword(values, locale)
-      if (!result.success) {
-        handleFormActionError(result.error, {
-          fields: [AuthField.Email],
-          setError: form.setError,
-          onMessage: (key) => {
-            setRecoveryError(t(key))
-            requestAnimationFrame(() => errorSummaryRef.current?.focus())
-          },
-          onSystemError: () => router.replace(systemErrorUrl),
-        })
-        return
-      }
+      const result = await forgotPassword(values)
+      handleFormActionError(result.error, {
+        fields: [AuthField.Email],
+        setError: form.setError,
+        onMessage: (key) => {
+          setRecoveryError(t(key))
+          requestAnimationFrame(() => errorSummaryRef.current?.focus())
+        },
+        onSystemError: () => router.replace(systemErrorUrl),
+      })
     } catch {
       router.replace(systemErrorUrl)
-      return
     }
-
-    show(false)
-    router.replace(ROUTES.PUBLIC.AUTH.RECOVERY_SUCCESS)
   }
 
   return (
