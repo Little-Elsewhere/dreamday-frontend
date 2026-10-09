@@ -1,21 +1,20 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
+import { type ReactElement, useRef, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
-import { useRef, useState, type ReactElement } from 'react'
 
-import { Button } from '@/components/ui/button'
 import { FeedbackMessage } from '@/components/common/feedback-message'
+import { Button } from '@/components/ui/button'
 import { PasswordInput } from '@/components/ui/password-input'
 import { ROUTES } from '@/constants/routes'
-import { useRouter } from '@/i18n/navigation'
-
 import { updatePassword } from '@/features/auth/actions/auth'
 import { AuthField } from '@/features/auth/constants/auth'
-import { getAuthSystemErrorUrl } from '@/features/auth/utils/common'
 import { type UpdatePasswordFormValues, updatePasswordSchema } from '@/features/auth/schemas/auth'
+import { getAuthSystemErrorUrl } from '@/features/auth/utils/common'
+import { Link } from '@/i18n/navigation'
+import { useRouter } from '@/i18n/navigation'
 import { handleFormActionError } from '@/utils/form-action-error'
 
 export const UpdatePasswordForm = (): ReactElement => {

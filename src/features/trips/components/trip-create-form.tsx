@@ -1,17 +1,17 @@
 'use client'
 
-import type { ReactElement } from 'react'
 import { useTranslations } from 'next-intl'
+import type { ReactElement } from 'react'
 
-import { Button } from '@/components/ui/button'
 import { FeedbackMessage } from '@/components/common/feedback-message'
-import { cn } from '@/utils/cn'
-import type { TripDraft } from '@/features/trips/types/trip'
+import { Button } from '@/components/ui/button'
 import { TripActivityDialog } from '@/features/trips/components/create/trip-activity-dialog'
 import { TripDetailsFields } from '@/features/trips/components/create/trip-details-fields'
 import { TripItinerarySection } from '@/features/trips/components/create/trip-itinerary-section'
 import { TripNoteSection } from '@/features/trips/components/create/trip-note-section'
 import { useTripCreateForm } from '@/features/trips/hooks/use-trip-create-form'
+import type { TripDraft } from '@/features/trips/types/trip'
+import { cn } from '@/utils/cn'
 
 type Props = {
   initialDraft: TripDraft | null

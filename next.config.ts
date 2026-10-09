@@ -1,6 +1,6 @@
+import { withSerwist } from '@serwist/turbopack'
 import type { NextConfig } from 'next'
 import createNextIntlPlugin from 'next-intl/plugin'
-import { withSerwist } from '@serwist/turbopack'
 
 const withNextIntl = createNextIntlPlugin()
 const isDevelopment = process.env.DOPPLER_ENVIRONMENT === 'dev'

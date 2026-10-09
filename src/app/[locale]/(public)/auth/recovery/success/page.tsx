@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
-import type { ReactElement } from 'react'
 import { getTranslations } from 'next-intl/server'
+import type { ReactElement } from 'react'
 
 import { AuthEmailSuccess } from '@/features/auth/components/common/auth-email-success'
 

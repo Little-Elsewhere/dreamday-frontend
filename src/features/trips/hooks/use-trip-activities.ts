@@ -1,7 +1,7 @@
 'use client'
 
-import { useRef, useState, type Dispatch, type FormEvent, type SetStateAction } from 'react'
 import { useTranslations } from 'next-intl'
+import { type Dispatch, type FormEvent, type SetStateAction, useRef, useState } from 'react'
 
 import { deleteTripActivity, saveTripActivity } from '@/features/trips/actions/trips'
 import type { TripActivityFormValues } from '@/features/trips/types/components'

@@ -1,14 +1,14 @@
 'use client'
 
-import { useState, type ReactElement } from 'react'
-import { useTranslations } from 'next-intl'
 import { Logout01Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
+import { useTranslations } from 'next-intl'
+import { type ReactElement, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
-import { useRouter } from '@/i18n/navigation'
 import { signOut } from '@/features/auth/actions/auth'
 import { getAuthSystemErrorUrl } from '@/features/auth/utils/common'
+import { useRouter } from '@/i18n/navigation'
 
 type Props = {
   compactLabel?: boolean

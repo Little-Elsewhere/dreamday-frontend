@@ -2,20 +2,19 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useTranslations } from 'next-intl'
+import { type ReactElement, useRef, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
-import { useRef, useState, type ReactElement } from 'react'
 
-import { Button } from '@/components/ui/button'
 import { FeedbackMessage } from '@/components/common/feedback-message'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/ui/password-input'
 import { ROUTES } from '@/constants/routes'
-import { Link, useRouter } from '@/i18n/navigation'
-
 import { signUp } from '@/features/auth/actions/auth'
 import { AuthField } from '@/features/auth/constants/auth'
+import { type RegistrationFormValues, registrationSchema } from '@/features/auth/schemas/auth'
 import { getAuthSystemErrorUrl } from '@/features/auth/utils/common'
-import { registrationSchema, type RegistrationFormValues } from '@/features/auth/schemas/auth'
+import { Link, useRouter } from '@/i18n/navigation'
 import { handleFormActionError } from '@/utils/form-action-error'
 
 export const RegisterForm = (): ReactElement => {

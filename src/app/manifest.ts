@@ -1,4 +1,5 @@
 import type { MetadataRoute } from 'next'
+
 import { serverEnv } from '@/env/server'
 
 // TODO: replace the SVG fallback with real PNG icons (192x192, 512x512, maskable)

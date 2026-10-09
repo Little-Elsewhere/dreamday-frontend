@@ -1,6 +1,6 @@
-import { clientEnv } from '@/env/client'
 import type { Locale } from '@/constants/locale'
 import { ROUTES } from '@/constants/routes'
+import { clientEnv } from '@/env/client'
 import { routing } from '@/i18n/routing'
 import { ActionErrorKind } from '@/types/action-result'
 

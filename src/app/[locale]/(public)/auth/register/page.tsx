@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
-import type { ReactElement } from 'react'
 import { getTranslations } from 'next-intl/server'
+import type { ReactElement } from 'react'
 
 import { RegisterForm } from '@/features/auth/components/forms/register-form'
 

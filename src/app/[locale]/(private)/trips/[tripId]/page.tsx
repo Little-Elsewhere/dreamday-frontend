@@ -1,19 +1,19 @@
-import Image from 'next/image'
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import { notFound } from 'next/navigation'
-import type { ReactElement } from 'react'
 import { getLocale, getTranslations } from 'next-intl/server'
+import type { ReactElement } from 'react'
 
 import { buttonVariants } from '@/components/ui/button'
 import { TripHeader } from '@/features/trips/components/trip-header'
 import { getTripDetail } from '@/features/trips/data/trips'
+import type { TripDetail } from '@/features/trips/types/trip'
 import {
   formatMinute,
   formatTripDetailDate,
   groupTripActivitiesByDate,
 } from '@/features/trips/utils/trip'
 import { Link } from '@/i18n/navigation'
-import type { TripDetail } from '@/features/trips/types/trip'
 
 type PageProps = { params: Promise<{ tripId: string }> }
 

@@ -1,3 +1,6 @@
+import { v4 as uuidv4 } from 'uuid'
+
+import { TRIP_APP_TIME_ZONE } from '@/features/trips/constants/trips'
 import type {
   TripActivity,
   TripActivityRow,
@@ -5,8 +8,6 @@ import type {
   TripListFilter,
   TripStatus,
 } from '@/features/trips/types/trip'
-import { v4 as uuidv4 } from 'uuid'
-import { TRIP_APP_TIME_ZONE } from '@/features/trips/constants/trips'
 
 export const createUuidV4 = (): string => uuidv4()
 

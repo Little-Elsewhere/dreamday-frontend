@@ -1,8 +1,8 @@
 'use client'
 
-import * as React from 'react'
 import { Input as InputPrimitive } from '@base-ui/react/input'
 import { useTranslations } from 'next-intl'
+import * as React from 'react'
 import type { FieldPath, FieldValues } from 'react-hook-form'
 import { Controller, useFormContext } from 'react-hook-form'
 

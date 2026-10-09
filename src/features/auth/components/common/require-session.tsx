@@ -6,8 +6,8 @@ import type { ReactNode } from 'react'
 import { ROUTES } from '@/constants/routes'
 import { AuthSessionState } from '@/features/auth/constants/auth'
 import { getAuthSystemErrorUrl } from '@/features/auth/utils/common'
-import { redirect } from '@/i18n/navigation'
 import { isMissingSession } from '@/features/auth/utils/session-error'
+import { redirect } from '@/i18n/navigation'
 import { createClient } from '@/lib/supabase/server'
 
 type Props = {

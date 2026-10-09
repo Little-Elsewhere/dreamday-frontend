@@ -2,17 +2,18 @@
 
 import { getLocale } from 'next-intl/server'
 
+import { Locale } from '@/constants/locale'
 import { ROUTES } from '@/constants/routes'
 import { AuthAction, AuthErrorCode } from '@/features/auth/constants/auth'
 import {
-  loginSchema,
-  passwordResetSchema,
-  registrationSchema,
-  updatePasswordSchema,
   type LoginFormValues,
+  loginSchema,
   type PasswordResetFormValues,
+  passwordResetSchema,
   type RegistrationFormValues,
+  registrationSchema,
   type UpdatePasswordFormValues,
+  updatePasswordSchema,
 } from '@/features/auth/schemas/auth'
 import type {
   AuthActionFailure,
@@ -26,7 +27,6 @@ import { redirect } from '@/i18n/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { ActionErrorKind } from '@/types/action-result'
 import { messageError, systemError } from '@/utils/action-result'
-import { Locale } from '@/constants/locale'
 
 const executeAuthAction = async (
   operation: () => Promise<AuthResult>,

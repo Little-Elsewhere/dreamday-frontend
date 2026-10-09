@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest'
 
 import { Locale } from '@/constants/locale'
 import { ROUTES } from '@/constants/routes'
-import { getAuthSystemErrorUrl, generateLocalizedUrl } from '@/features/auth/utils/common'
+import { generateLocalizedUrl, getAuthSystemErrorUrl } from '@/features/auth/utils/common'
 import { ActionErrorKind } from '@/types/action-result'
 
 vi.mock('@/env/client', () => ({

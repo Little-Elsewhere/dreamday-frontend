@@ -1,10 +1,10 @@
 'use client'
 
+import { Image01Icon } from '@hugeicons/core-free-icons'
+import { HugeiconsIcon } from '@hugeicons/react'
 import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 import type { ReactElement } from 'react'
-import { HugeiconsIcon } from '@hugeicons/react'
-import { Image01Icon } from '@hugeicons/core-free-icons'
 
 import { Button } from '@/components/ui/button'
 import { TRIP_PACES } from '@/features/trips/constants/trips'

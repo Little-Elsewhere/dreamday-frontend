@@ -1,8 +1,8 @@
+import { type NextRequest, NextResponse } from 'next/server'
 import createMiddleware from 'next-intl/middleware'
-import { NextResponse, type NextRequest } from 'next/server'
 
-import { DEFAULT_LOCALE } from '@/constants/locale'
 import { HTTP_STATUS } from '@/constants/httpStatuses'
+import { DEFAULT_LOCALE } from '@/constants/locale'
 import { ROUTES } from '@/constants/routes'
 import { serverEnv } from '@/env/server'
 import { AuthSessionState } from '@/features/auth/constants/auth'
