@@ -108,7 +108,7 @@ const TripDetailPage = async ({ params }: PageProps): Promise<ReactElement> => {
           {t('backToTrips')}
         </Link>
         <article className="border-line bg-surface mt-5 overflow-hidden rounded-3xl border">
-          <div className="bg-paper relative aspect-video max-h-[32rem] min-h-56 overflow-hidden">
+          <div className="bg-paper relative aspect-video max-h-128 min-h-56 overflow-hidden">
             {trip.coverUrl ? (
               <Image
                 alt={t('coverAlt', { name: trip.name })}
@@ -121,18 +121,18 @@ const TripDetailPage = async ({ params }: PageProps): Promise<ReactElement> => {
               />
             ) : (
               <div
-                className="text-primary/50 from-champagne-soft via-paper to-muted grid h-full place-items-center bg-gradient-to-br text-6xl font-light"
+                className="text-primary/50 from-champagne-soft via-paper to-muted grid h-full place-items-center bg-linear-to-br text-6xl font-light"
                 aria-hidden="true"
               >
                 {trip.destination.slice(0, 1)}
               </div>
             )}
-            <div className="from-primary/75 via-primary/10 absolute inset-0 bg-gradient-to-t to-transparent" />
+            <div className="from-primary/75 via-primary/10 absolute inset-0 bg-linear-to-t to-transparent" />
             <div className="absolute inset-x-0 bottom-0 p-6 text-white sm:p-10">
               <p className="text-sm font-semibold tracking-[0.16em] uppercase">
                 {trip.destination}
               </p>
-              <h1 className="mt-2 max-w-4xl text-3xl leading-tight font-medium tracking-[-0.05em] sm:text-5xl">
+              <h1 className="mt-2 max-w-4xl text-3xl leading-tight font-medium tracking-tighter sm:text-5xl">
                 {trip.name}
               </h1>
               {trip.description && (
