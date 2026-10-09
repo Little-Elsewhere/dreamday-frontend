@@ -4,7 +4,7 @@ import type { ReactElement } from 'react'
 import { Skeleton } from '@/components/ui/skeleton'
 import { AuthLoading } from '@/features/auth/components/common/auth-loading'
 
-const PublicLoading = (): ReactElement => (
+const AuthRouteLoading = (): ReactElement => (
   <main
     className="bg-surface text-ink auth-wide:grid-cols-[minmax(560px,52%)_minmax(600px,48%)] grid min-h-screen grid-cols-1 antialiased lg:grid-cols-[minmax(390px,46%)_minmax(520px,54%)]"
     aria-busy="true"
@@ -47,4 +47,4 @@ const PublicLoading = (): ReactElement => (
   </main>
 )
 
-export default PublicLoading
+export default AuthRouteLoading
