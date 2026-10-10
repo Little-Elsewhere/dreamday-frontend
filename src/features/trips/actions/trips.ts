@@ -1,8 +1,8 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { getLocale } from 'next-intl/server'
 
+import type { Locale } from '@/constants/locale'
 import { ROUTES } from '@/constants/routes'
 import {
   deleteTripActivitySchema,
@@ -16,6 +16,7 @@ import type { TripActivity, TripDraft } from '@/features/trips/types/trip'
 import { toTripActivity } from '@/features/trips/utils/trip'
 import { redirect } from '@/i18n/navigation'
 import { getSupabaseContext } from '@/lib/supabase/server'
+import { localeSchema } from '@/schemas/locale'
 import type { ActionFailure, ActionResult } from '@/types/action-result'
 import type { ServerSupabaseClient } from '@/types/supabase'
 import { fieldError, messageError, systemError } from '@/utils/action-result'
@@ -56,8 +57,10 @@ const publishFieldError = (
 
 export const saveTripDraft = async (
   values: unknown,
+  locale: Locale,
 ): Promise<ActionResult<{ id: string }, keyof TripDraft>> => {
   const validated = tripDraftSchema.parse(values)
+  localeSchema.parse(locale)
 
   try {
     const { supabase, userId: ownerId } = await getSupabaseContext()
@@ -114,8 +117,10 @@ export const saveTripDraft = async (
 
 export const saveTripActivity = async (
   values: unknown,
+  locale: Locale,
 ): Promise<ActionResult<TripActivity, keyof TripActivity>> => {
   const validated = tripActivitySchema.parse(values)
+  localeSchema.parse(locale)
 
   try {
     const { supabase, userId: ownerId } = await getSupabaseContext()
@@ -166,8 +171,12 @@ export const saveTripActivity = async (
   }
 }
 
-export const deleteTripActivity = async (values: unknown): Promise<ActionResult<null>> => {
+export const deleteTripActivity = async (
+  values: unknown,
+  locale: Locale,
+): Promise<ActionResult<null>> => {
   const validated = deleteTripActivitySchema.parse(values)
+  localeSchema.parse(locale)
 
   try {
     const { supabase, userId: ownerId } = await getSupabaseContext()
@@ -191,8 +200,12 @@ export const deleteTripActivity = async (values: unknown): Promise<ActionResult<
   }
 }
 
-export const saveTripNote = async (values: unknown): Promise<ActionResult<null>> => {
+export const saveTripNote = async (
+  values: unknown,
+  locale: Locale,
+): Promise<ActionResult<null>> => {
   const validated = tripNoteSchema.parse(values)
+  localeSchema.parse(locale)
 
   try {
     const { supabase, userId: ownerId } = await getSupabaseContext()
@@ -215,8 +228,12 @@ export const saveTripNote = async (values: unknown): Promise<ActionResult<null>>
   }
 }
 
-export const publishTrip = async (values: unknown): Promise<ActionFailure<keyof TripDraft>> => {
+export const publishTrip = async (
+  values: unknown,
+  locale: Locale,
+): Promise<ActionFailure<keyof TripDraft>> => {
   const validated = publishTripSchema.parse(values)
+  const validatedLocale = localeSchema.parse(locale)
 
   try {
     const { supabase, userId: ownerId } = await getSupabaseContext()
@@ -272,6 +289,5 @@ export const publishTrip = async (values: unknown): Promise<ActionFailure<keyof 
     return systemError()
   }
 
-  const locale = await getLocale()
-  return redirect({ href: ROUTES.PRIVATE.TRIP_DETAIL(validated.tripId), locale })
+  return redirect({ href: ROUTES.PRIVATE.TRIP_DETAIL(validated.tripId), locale: validatedLocale })
 }

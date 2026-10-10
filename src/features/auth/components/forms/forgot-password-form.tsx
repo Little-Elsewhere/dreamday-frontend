@@ -3,7 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Cancel01Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { type ReactElement, useRef, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
@@ -18,6 +18,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
+import type { Locale } from '@/constants/locale'
 import { forgotPassword } from '@/features/auth/actions/auth'
 import { AuthField } from '@/features/auth/constants/auth'
 import { type PasswordResetFormValues, passwordResetSchema } from '@/features/auth/schemas/auth'
@@ -32,6 +33,7 @@ type Props = {
 
 export const ForgotPasswordForm = ({ initialEmail, show }: Props): ReactElement => {
   const t = useTranslations('auth')
+  const locale = useLocale() as Locale
   const router = useRouter()
   const systemErrorUrl = getAuthSystemErrorUrl()
   const errorSummaryRef = useRef<HTMLDivElement>(null)
@@ -46,20 +48,16 @@ export const ForgotPasswordForm = ({ initialEmail, show }: Props): ReactElement 
   const handlePasswordReset = async (values: PasswordResetFormValues): Promise<void> => {
     setRecoveryError(null)
 
-    try {
-      const result = await forgotPassword(values)
-      handleFormActionError(result.error, {
-        fields: [AuthField.Email],
-        setError: form.setError,
-        onMessage: (key) => {
-          setRecoveryError(t(key))
-          requestAnimationFrame(() => errorSummaryRef.current?.focus())
-        },
-        onSystemError: () => router.replace(systemErrorUrl),
-      })
-    } catch {
-      router.replace(systemErrorUrl)
-    }
+    const result = await forgotPassword(values, locale)
+    handleFormActionError(result.error, {
+      fields: [AuthField.Email],
+      setError: form.setError,
+      onMessage: (key) => {
+        setRecoveryError(t(key))
+        requestAnimationFrame(() => errorSummaryRef.current?.focus())
+      },
+      onSystemError: () => router.replace(systemErrorUrl),
+    })
   }
 
   return (

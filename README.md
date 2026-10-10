@@ -19,7 +19,7 @@ A bilingual travel planning app for creating private trips, organizing itinerari
 | PWA and offline      | Serwist 9.5, a service worker, web app manifest, and a locale-aware offline fallback          |
 | Security             | Content Security Policy, CSP reporting endpoint, and standard security response headers       |
 | Component workshop   | Storybook 10 with the Next.js + Vite framework, Chromatic, docs, and accessibility add-ons    |
-| Testing              | Vitest 4 unit tests and Playwright 1.62 for trip browser flows                                |
+| Testing              | Vitest 4 unit tests and Playwright 1.62 for browser E2E flows                                 |
 | Code quality         | ESLint 10 (Next.js Core Web Vitals and Storybook rules) and Prettier with Tailwind CSS plugin |
 | Git workflow         | Husky, lint-staged, Commitlint, Conventional Commits, and release-please                      |
 
@@ -310,11 +310,19 @@ pnpm commitlint          # Validate commit messages
 
 Vitest runs colocated unit tests in Node.js with `pnpm test:unit`. Playwright
 discovers E2E specs recursively under `e2e/`; run all of them with
-`pnpm test:e2e`. It starts a separate local Next.js dev server on port 4001, so
-it does not reuse the app server on port 4000. Each spec runs in desktop,
+`pnpm test:e2e`. Playwright runs `pnpm dev` to start the Docker development
+stack and targets `NEXT_PUBLIC_APP_URL` from `.env.local` (default:
+`http://dreamday.local`). Outside CI, it reuses an app already responding at
+that URL; in CI, it starts the stack for the run. Each spec runs in desktop,
 tablet (iPad) and mobile (iPhone) Chromium emulation. Specs run fully parallel
 with a maximum of four workers.
-Authenticated trip flows also require `TRIPS_E2E_EMAIL` and `TRIPS_E2E_PASSWORD`.
+Run `make setup` before Playwright so local Supabase, Mailpit, and `.env.local`
+are ready. The registration spec creates a unique account through the UI,
+confirms it from Mailpit, and removes that temporary account afterward.
+Authenticated specs can import `test` from
+`e2e/fixtures/authenticated-test`; each worker registers a unique temporary
+account, saves its session for the worker's tests, and deletes the account when
+the worker finishes.
 
 ## Project Structure
 

@@ -1,7 +1,7 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { type ReactElement, useRef, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
@@ -9,6 +9,7 @@ import { FeedbackMessage } from '@/components/common/feedback-message'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/ui/password-input'
+import type { Locale } from '@/constants/locale'
 import { ROUTES } from '@/constants/routes'
 import { signIn } from '@/features/auth/actions/auth'
 import { AuthField } from '@/features/auth/constants/auth'
@@ -21,6 +22,7 @@ import { ForgotPasswordForm } from './forgot-password-form'
 
 export const LoginForm = (): ReactElement => {
   const t = useTranslations('auth')
+  const locale = useLocale() as Locale
   const router = useRouter()
   const systemErrorUrl = getAuthSystemErrorUrl()
   const errorSummary = useRef<HTMLDivElement>(null)
@@ -35,20 +37,16 @@ export const LoginForm = (): ReactElement => {
   const handleLogin = async (values: LoginFormValues): Promise<void> => {
     setMessage(null)
 
-    try {
-      const result = await signIn(values)
-      handleFormActionError(result.error, {
-        fields: [AuthField.Email, AuthField.Password],
-        setError: loginForm.setError,
-        onMessage: (key) => {
-          setMessage(t(key))
-          requestAnimationFrame(() => errorSummary.current?.focus())
-        },
-        onSystemError: () => router.replace(systemErrorUrl),
-      })
-    } catch {
-      router.replace(systemErrorUrl)
-    }
+    const result = await signIn(values, locale)
+    handleFormActionError(result.error, {
+      fields: [AuthField.Email, AuthField.Password],
+      setError: loginForm.setError,
+      onMessage: (key) => {
+        setMessage(t(key))
+        requestAnimationFrame(() => errorSummary.current?.focus())
+      },
+      onSystemError: () => router.replace(systemErrorUrl),
+    })
   }
 
   return (
