@@ -2,13 +2,12 @@
 
 import { Logout01Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { type ReactElement, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
+import type { Locale } from '@/constants/locale'
 import { signOut } from '@/features/auth/actions/auth'
-import { getAuthSystemErrorUrl } from '@/features/auth/utils/common'
-import { useRouter } from '@/i18n/navigation'
 
 type Props = {
   compactLabel?: boolean
@@ -16,17 +15,14 @@ type Props = {
 
 export const SignOutButton = ({ compactLabel = false }: Props): ReactElement => {
   const t = useTranslations('account')
-  const router = useRouter()
-  const systemErrorUrl = getAuthSystemErrorUrl()
+  const locale = useLocale() as Locale
   const [pending, setPending] = useState(false)
 
   const handleSignOut = async (): Promise<void> => {
     setPending(true)
 
     try {
-      await signOut()
-    } catch {
-      router.replace(systemErrorUrl)
+      await signOut(locale)
     } finally {
       setPending(false)
     }

@@ -1,13 +1,14 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { type ReactElement, useRef, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
 import { FeedbackMessage } from '@/components/common/feedback-message'
 import { Button } from '@/components/ui/button'
 import { PasswordInput } from '@/components/ui/password-input'
+import type { Locale } from '@/constants/locale'
 import { ROUTES } from '@/constants/routes'
 import { updatePassword } from '@/features/auth/actions/auth'
 import { AuthField } from '@/features/auth/constants/auth'
@@ -19,6 +20,7 @@ import { handleFormActionError } from '@/utils/form-action-error'
 
 export const UpdatePasswordForm = (): ReactElement => {
   const t = useTranslations('auth')
+  const locale = useLocale() as Locale
   const router = useRouter()
   const systemErrorUrl = getAuthSystemErrorUrl()
   const summary = useRef<HTMLDivElement>(null)
@@ -32,24 +34,20 @@ export const UpdatePasswordForm = (): ReactElement => {
   const handleSubmit = async (values: UpdatePasswordFormValues): Promise<void> => {
     setMessage(null)
 
-    try {
-      const result = await updatePassword(values)
-      if (result.success) {
-        form.reset()
-        setUpdated(true)
-      } else {
-        handleFormActionError(result.error, {
-          fields: [AuthField.Password, AuthField.ConfirmPassword],
-          setError: form.setError,
-          onMessage: (key) => {
-            setMessage(t(key))
-            requestAnimationFrame(() => summary.current?.focus())
-          },
-          onSystemError: () => router.replace(systemErrorUrl),
-        })
-      }
-    } catch {
-      router.replace(systemErrorUrl)
+    const result = await updatePassword(values, locale)
+    if (result.success) {
+      form.reset()
+      setUpdated(true)
+    } else {
+      handleFormActionError(result.error, {
+        fields: [AuthField.Password, AuthField.ConfirmPassword],
+        setError: form.setError,
+        onMessage: (key) => {
+          setMessage(t(key))
+          requestAnimationFrame(() => summary.current?.focus())
+        },
+        onSystemError: () => router.replace(systemErrorUrl),
+      })
     }
   }
 

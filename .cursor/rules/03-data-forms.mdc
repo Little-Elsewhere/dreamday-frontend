@@ -12,8 +12,10 @@ alwaysApply: true
 - Fetch data in Server Components using async/await.
 - Use Server Actions for ALL mutations (forms, writes, deletes). Server Actions live in src/app/actions.ts or co-located as actions.ts inside feature folders.
 - Validate ALL inputs in Server Actions using Zod.
-- Validate form values with `schema.parse(...)` immediately when a Server Action starts, before its `try/catch`. Invalid form values MUST throw `ZodError`; do not use `safeParse()` or convert that error to an Action result.
-- After form validation succeeds, handle domain and service failures with the Action result contract. Validate non-form inputs according to their own boundary requirements.
+- Validate form values with `schema.parse(...)` immediately when a Server Action starts, before calling `runValidatedAction`. Invalid form values MUST throw `ZodError`; do not use `safeParse()` or convert that error to an Action result.
+- After form validation succeeds, run the operation through `runValidatedAction` from `@/utils/server-action`. It catches unexpected exceptions, logs safe context, and returns a system error result. Map expected domain and service failures to the Action result contract inside the operation.
+- Keep `redirect()` and other Next.js control-flow APIs outside `runValidatedAction`; call them after checking its result so its internal error is never caught as an operation failure.
+- Validate non-form inputs according to their own boundary requirements.
 - Use revalidatePath() or revalidateTag() after mutations to clear cache.
 - NEVER fetch initial page data inside useEffect.
 
@@ -23,19 +25,19 @@ alwaysApply: true
 
 import { revalidatePath } from 'next/cache'
 import { createPostSchema } from '@/features/posts/schemas/post'
+import type { ActionResult } from '@/types/action-result'
+import { runValidatedAction } from '@/utils/server-action'
 
-type CreatePostResult = { success: true } | { success: false; error: 'saveFailed' }
+type CreatePostResult = ActionResult<null>
 
 export async function createPost(input: unknown): Promise<CreatePostResult> {
   const validated = createPostSchema.parse(input)
 
-  try {
+  return runValidatedAction('posts.create', async () => {
     await db.post.create({ data: validated })
     revalidatePath('/posts')
-    return { success: true }
-  } catch {
-    return { success: false, error: 'saveFailed' }
-  }
+    return { success: true, data: null }
+  })
 }
 ```
 
@@ -44,7 +46,7 @@ export async function createPost(input: unknown): Promise<CreatePostResult> {
 - Use React Hook Form (`useForm`, `register`, and `handleSubmit`) to manage interactive form state and submission.
 - Define each form's validation with a Zod schema in the feature's `schemas/` folder and connect it to React Hook Form with `zodResolver` from `@hookform/resolvers/zod`.
 - Export schema-derived input/output types next to the schema when components or actions need them. Use `z.input<typeof schema>` and `z.output<typeof schema>` when Zod transforms make the input and validated output differ.
-- Submit validated values through a Server Action. Client-side validation improves feedback but does not replace server validation: the Server Action must call `schema.parse(...)` immediately, before its `try/catch`, as described above.
+- Submit validated values through a Server Action. Client-side validation improves feedback but does not replace server validation: the Server Action must call `schema.parse(...)` immediately, before `runValidatedAction`, as described above.
 - Use React Hook Form's `formState.isSubmitting` for pending UI and display client-side validation errors next to their fields. Server-side `ZodError` must propagate to the caller or framework error handler; it is not a field-error Action result.
 
 ```ts

@@ -1,8 +1,9 @@
 'use client'
 
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { type Dispatch, type FormEvent, type SetStateAction, useRef, useState } from 'react'
 
+import type { Locale } from '@/constants/locale'
 import { deleteTripActivity, saveTripActivity } from '@/features/trips/actions/trips'
 import type { TripActivityFormValues } from '@/features/trips/types/components'
 import type { TripActivity } from '@/features/trips/types/trip'
@@ -18,6 +19,7 @@ type Props = {
 
 export const useTripActivities = ({ initialActivities, tripId, dates, setError }: Props) => {
   const t = useTranslations('trips')
+  const locale = useLocale() as Locale
   const [activities, setActivities] = useState<TripActivity[]>(initialActivities)
   const [activityOpen, setActivityOpen] = useState(false)
   const [activityValues, setActivityValues] = useState<TripActivityFormValues>(
@@ -65,11 +67,14 @@ export const useTripActivities = ({ initialActivities, tripId, dates, setError }
     event.preventDefault()
     await runActivityMutation(
       (currentTripId) =>
-        saveTripActivity({
-          ...activityValues,
-          tripId: currentTripId,
-          activityId: activityValues.id,
-        }),
+        saveTripActivity(
+          {
+            ...activityValues,
+            tripId: currentTripId,
+            activityId: activityValues.id,
+          },
+          locale,
+        ),
       (savedActivity) => {
         setActivities((current) => {
           const exists = current.some((activity) => activity.id === savedActivity.id)
@@ -87,7 +92,7 @@ export const useTripActivities = ({ initialActivities, tripId, dates, setError }
 
   const handleDeleteActivity = async (activityId: string): Promise<void> => {
     await runActivityMutation(
-      (currentTripId) => deleteTripActivity({ tripId: currentTripId, activityId }),
+      (currentTripId) => deleteTripActivity({ tripId: currentTripId, activityId }, locale),
       () => setActivities((current) => current.filter((activity) => activity.id !== activityId)),
     )
   }
@@ -98,12 +103,15 @@ export const useTripActivities = ({ initialActivities, tripId, dates, setError }
   ): Promise<void> => {
     await runActivityMutation(
       (currentTripId) =>
-        saveTripActivity({
-          ...activity,
-          ...patch,
-          tripId: currentTripId,
-          activityId: activity.id,
-        }),
+        saveTripActivity(
+          {
+            ...activity,
+            ...patch,
+            tripId: currentTripId,
+            activityId: activity.id,
+          },
+          locale,
+        ),
       (savedActivity) =>
         setActivities((current) =>
           sortTripActivities(
