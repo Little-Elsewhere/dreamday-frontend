@@ -21,9 +21,13 @@ help: ## Show available local development commands
 	@grep -E '^[a-zA-Z0-9_-]+:.*## ' $(MAKEFILE_LIST) | \
 	  awk 'BEGIN {FS = ":.*## "} {printf "%-20s %s\n", $$1, $$2}'
 
-dev: check-dev ## Start the development app in Docker, reusing the existing image
-	@printf '\n[dev] Starting the Docker development stack. A first run may build the app image.\n'
-	@$(DOPPLER_RUN) $(DEV_COMPOSE) up
+dev: check-dev ## Start the development app in the background, reusing an already running container
+	@if $(DOPPLER_RUN) $(DEV_COMPOSE) ps --status running -q app | grep -q .; then \
+	  printf '\n[dev] App container is already running; skipping startup.\n'; \
+	else \
+	  printf '\n[dev] Starting the Docker development stack in the background. A first run may build the app image.\n'; \
+	  $(DOPPLER_RUN) $(DEV_COMPOSE) up -d; \
+	fi
 
 dev-build: check-dev ## Rebuild and start the development app in Docker
 	@printf '\n[dev] Rebuilding the app image, then starting the Docker development stack.\n'

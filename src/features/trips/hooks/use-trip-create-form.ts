@@ -1,8 +1,9 @@
 'use client'
 
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { type FormEvent, useState } from 'react'
 
+import type { Locale } from '@/constants/locale'
 import { ROUTES } from '@/constants/routes'
 import { publishTrip, saveTripDraft, saveTripNote } from '@/features/trips/actions/trips'
 import { PUBLISH_ERROR_TRANSLATION_KEYS } from '@/features/trips/constants/trips'
@@ -16,6 +17,7 @@ import { ActionErrorKind } from '@/types/action-result'
 
 export const useTripCreateForm = (initialDraft: TripDraft | null) => {
   const t = useTranslations('trips')
+  const locale = useLocale() as Locale
   const router = useRouter()
   const [values, setValues] = useState<TripDraftFormValues>({
     name: initialDraft?.name ?? '',
@@ -52,7 +54,7 @@ export const useTripCreateForm = (initialDraft: TripDraft | null) => {
 
   const persistDraft = async (showNotice = true): Promise<string | null> => {
     setError('')
-    const result = await saveTripDraft({ ...values })
+    const result = await saveTripDraft({ ...values }, locale)
     if (!result.success) {
       setError(t('errors.saveFailed'))
       return null
@@ -141,7 +143,7 @@ export const useTripCreateForm = (initialDraft: TripDraft | null) => {
     setError('')
     setNotice('')
     try {
-      const result = await saveTripNote({ tripId: draftId, note: values.note })
+      const result = await saveTripNote({ tripId: draftId, note: values.note }, locale)
       if (!result.success) {
         setError(t('errors.saveFailed'))
         return
@@ -166,7 +168,7 @@ export const useTripCreateForm = (initialDraft: TripDraft | null) => {
       const tripId = await persistDraft(false)
       if (!tripId || !(await persistPendingCover(tripId))) return
 
-      const result = await publishTrip({ tripId })
+      const result = await publishTrip({ tripId }, locale)
       if (result.error.kind === ActionErrorKind.System) {
         setError(t('errors.saveFailed'))
         return

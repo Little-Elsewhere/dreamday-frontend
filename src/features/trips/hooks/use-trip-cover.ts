@@ -1,7 +1,9 @@
 'use client'
 
+import { useLocale } from 'next-intl'
 import { useEffect, useRef, useState } from 'react'
 
+import type { Locale } from '@/constants/locale'
 import { saveTripDraft } from '@/features/trips/actions/trips'
 import { MAX_TRIP_COVER_SIZE_BYTES } from '@/features/trips/constants/trips'
 import type { TripDraftFormValues } from '@/features/trips/types/components'
@@ -11,6 +13,7 @@ import { createClient } from '@/lib/supabase/client'
 type OnDraftSaved = (coverPath: string | null, draftId: string) => void
 
 export const useTripCover = (initialCoverUrl: string | null) => {
+  const locale = useLocale() as Locale
   const [coverUrl, setCoverUrl] = useState<string | null>(initialCoverUrl)
   const [isUploading, setIsUploading] = useState(false)
   const pendingFileRef = useRef<File | null>(null)
@@ -78,7 +81,7 @@ export const useTripCover = (initialCoverUrl: string | null) => {
       if (uploadError) throw new Error('Upload failed')
 
       uploadedPath = path
-      const result = await saveTripDraft({ ...values, coverPath: path })
+      const result = await saveTripDraft({ ...values, coverPath: path }, locale)
       if (!result.success) throw new Error('Could not save cover')
 
       uploadedPath = null
@@ -113,7 +116,7 @@ export const useTripCover = (initialCoverUrl: string | null) => {
   ): Promise<boolean> => {
     if (!values.coverPath) return false
 
-    const result = await saveTripDraft({ ...values, coverPath: null })
+    const result = await saveTripDraft({ ...values, coverPath: null }, locale)
     if (!result.success) return false
 
     const previousPath = values.coverPath

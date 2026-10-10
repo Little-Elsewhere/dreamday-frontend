@@ -3,7 +3,48 @@ import path from 'node:path'
 
 import { defineConfig, devices } from 'playwright/test'
 
-const baseURL = 'http://127.0.0.1:4001'
+import { E2E_BASE_URL, SUPABASE_URL } from './e2e/support/constants/urls'
+import { readLocalEnv } from './e2e/support/local-env'
+
+const localEnv = readLocalEnv()
+const supabasePublishableKey = localEnv.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+
+if (!supabasePublishableKey) {
+  throw new Error('The generated .env.local file is missing NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY.')
+}
+
+const isSupabaseSecret = (key: string): boolean =>
+  /SUPABASE/i.test(key) && /SECRET|SERVICE_ROLE|ACCESS_TOKEN/i.test(key)
+
+const webServerEnv = Object.fromEntries(
+  Object.entries(process.env).filter(
+    ([key]) =>
+      !key.startsWith('E2E_') &&
+      !isSupabaseSecret(key) &&
+      key !== 'NEXT_PUBLIC_SUPABASE_URL' &&
+      key !== 'NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY',
+  ),
+)
+webServerEnv.NEXT_PUBLIC_APP_URL = E2E_BASE_URL
+webServerEnv.NEXT_PUBLIC_SUPABASE_URL = SUPABASE_URL
+webServerEnv.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY = supabasePublishableKey
+
+// Chromium only receives operating-system settings, never the full test-runner environment.
+const browserEnv = {
+  PATH: process.env.PATH,
+  HOME: process.env.HOME,
+  TMPDIR: process.env.TMPDIR,
+  TEMP: process.env.TEMP,
+  TMP: process.env.TMP,
+  SystemRoot: process.env.SystemRoot,
+  LANG: process.env.LANG,
+  LC_ALL: process.env.LC_ALL,
+  DISPLAY: process.env.DISPLAY,
+  WAYLAND_DISPLAY: process.env.WAYLAND_DISPLAY,
+  XDG_RUNTIME_DIR: process.env.XDG_RUNTIME_DIR,
+  LD_LIBRARY_PATH: process.env.LD_LIBRARY_PATH,
+  DYLD_LIBRARY_PATH: process.env.DYLD_LIBRARY_PATH,
+}
 
 export default defineConfig({
   testDir: './e2e',
@@ -13,9 +54,10 @@ export default defineConfig({
   expect: { timeout: 3_000 },
   reporter: 'list',
   use: {
-    baseURL,
+    baseURL: E2E_BASE_URL,
     browserName: 'chromium',
     headless: true,
+    launchOptions: { env: browserEnv },
     trace: 'retain-on-failure',
   },
   projects: [
@@ -33,10 +75,14 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'pnpm exec next dev --turbopack --hostname 127.0.0.1 --port 4001',
-    url: 'http://127.0.0.1:4001/en/auth/login',
+    command:
+      'pnpm dev && docker compose --progress plain -f docker/dev/compose.yaml logs --follow --tail 0 app',
+    url: `${E2E_BASE_URL}/en/auth/login`,
     reuseExistingServer: !process.env.CI,
-    env: { SWC_NATIVE_BINDING_CACHE: path.join(os.tmpdir(), 'dreamday-swc-native') },
+    env: {
+      ...webServerEnv,
+      SWC_NATIVE_BINDING_CACHE: path.join(os.tmpdir(), 'dreamday-swc-native'),
+    },
     timeout: 30_000,
   },
 })

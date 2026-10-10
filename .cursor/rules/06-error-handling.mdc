@@ -73,8 +73,10 @@ export default function GlobalError({ retry }: GlobalErrorProps): JSX.Element {
 
 ## 3. Server Actions — Form Validation and Type-Safe Results
 
-- Validate form values with `schema.parse(...)` as the first operation, outside `try/catch`. Invalid values MUST throw `ZodError` immediately; do not turn them into an Action result.
-- After form validation succeeds, return a discriminated union for handled outcomes: { success: true, data: T } | { success: false, error: string }.
+- Validate form values with `schema.parse(...)` as the first operation, before `runValidatedAction`. Invalid values MUST throw `ZodError` immediately; do not turn them into an Action result.
+- After validation, pass only the operation to `runValidatedAction` from `@/utils/server-action`. It catches unexpected exceptions and logs safe diagnostic context. Return expected domain failures as a discriminated union.
+- Call `redirect()` and other Next.js control-flow APIs after `runValidatedAction` returns; they throw internal control-flow errors and must not be swallowed by a catch.
+- In Client Components, handle the returned action result. Avoid a broad `try/catch` around actions that can redirect; it can turn navigation into an error path.
 - NEVER expose raw values, secrets, internal paths, SQL errors, or stack traces to the client. Client-side form validation provides field-level feedback during normal use.
 
 ```tsx
@@ -82,39 +84,23 @@ export default function GlobalError({ retry }: GlobalErrorProps): JSX.Element {
 'use server'
 
 import { z } from 'zod'
+import type { ActionResult } from '@/types/action-result'
+import { runValidatedAction } from '@/utils/server-action'
 
 const submitAnswerSchema = z.object({
   exerciseId: z.string().uuid(),
   answer: z.string().min(1),
 })
 
-interface ActionSuccess<T> {
-  success: true
-  data: T
-}
-
-interface ActionError {
-  success: false
-  error: string
-}
-
-type ActionResult<T> = ActionSuccess<T> | ActionError
-
 export async function submitAnswer(
   formData: FormData,
 ): Promise<ActionResult<{ correct: boolean; xp: number }>> {
   const validated = submitAnswerSchema.parse(Object.fromEntries(formData))
 
-  try {
+  return runValidatedAction('exercise.submitAnswer', async () => {
     const result = await gradeExercise(validated)
-
     return { success: true, data: result }
-  } catch {
-    return {
-      success: false,
-      error: 'Unable to submit answer. Please try again.',
-    }
-  }
+  })
 }
 ```
 
@@ -251,23 +237,23 @@ export async function submitAnswer(formData: FormData) {
 ## 10. Example - GOOD
 
 ```tsx
-// Good: invalid form values throw ZodError before handled results are returned
+// Good: validation runs before the shared exception boundary
 'use server'
 
 import { z } from 'zod'
+import type { ActionResult } from '@/types/action-result'
+import { runValidatedAction } from '@/utils/server-action'
 
 const schema = z.object({ answer: z.string().min(1, 'Answer is required') })
 
 export async function submitAnswer(
   formData: FormData,
-): Promise<{ success: true; data: { correct: boolean } } | { success: false; error: string }> {
+): Promise<ActionResult<{ correct: boolean }>> {
   const validated = schema.parse(Object.fromEntries(formData))
 
-  try {
+  return runValidatedAction('exercise.submitAnswer', async () => {
     const result = await gradeExercise(validated)
     return { success: true, data: result }
-  } catch {
-    return { success: false, error: 'Unable to grade answer. Please retry.' }
-  }
+  })
 }
 ```
