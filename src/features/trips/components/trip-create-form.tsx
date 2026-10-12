@@ -20,7 +20,7 @@ type Props = {
 export const TripCreateForm = ({ initialDraft }: Props): ReactElement => {
   const t = useTranslations('trips')
   const {
-    data: { activityOpen, activityValues, activities, coverUrl, dates, draftId, step, values },
+    data: { activityOpen, activityValues, activities, coverUrl, dates, step, values },
     handlers: {
       handleActivitySubmit,
       handleCancel,
@@ -160,7 +160,7 @@ export const TripCreateForm = ({ initialDraft }: Props): ReactElement => {
         <div className="grid gap-6">
           <TripItinerarySection
             activities={activities}
-            canAddActivity={Boolean(draftId)}
+            canAddActivity
             dates={dates}
             pending={pending}
             onDeleteActivity={handleDeleteActivity}

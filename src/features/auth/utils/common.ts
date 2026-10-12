@@ -1,8 +1,6 @@
 import type { Locale } from '@/constants/locale'
-import { ROUTES } from '@/constants/routes'
 import { clientEnv } from '@/env/client'
 import { routing } from '@/i18n/routing'
-import { ActionErrorKind } from '@/types/action-result'
 
 type UrlOptions = {
   locale?: Locale
@@ -27,8 +25,3 @@ export const generateLocalizedUrl = (pathname: string, options: UrlOptions = {})
 
   return options.fullUrl ? url.toString() : `${url.pathname}${url.search}${url.hash}`
 }
-
-export const getAuthSystemErrorUrl = (): string =>
-  generateLocalizedUrl(ROUTES.PUBLIC.AUTH.ERROR, {
-    queryParams: new URLSearchParams({ type: ActionErrorKind.System }),
-  })
