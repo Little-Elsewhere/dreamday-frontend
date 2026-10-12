@@ -2,8 +2,7 @@ import { describe, expect, it, vi } from 'vitest'
 
 import { Locale } from '@/constants/locale'
 import { ROUTES } from '@/constants/routes'
-import { generateLocalizedUrl, getAuthSystemErrorUrl } from '@/features/auth/utils/common'
-import { ActionErrorKind } from '@/types/action-result'
+import { generateLocalizedUrl } from '@/features/auth/utils/common'
 
 vi.mock('@/env/client', () => ({
   clientEnv: { NEXT_PUBLIC_APP_URL: 'https://dreamday.example' },
@@ -64,11 +63,5 @@ describe('generateLocalizedUrl', () => {
         fullUrl: true,
       }),
     ).toBe('https://dreamday.example/vi/trips?destination=Ha+Noi&page=2')
-  })
-})
-
-describe('getAuthSystemErrorUrl', () => {
-  it('returns the auth error path with the system error type', () => {
-    expect(getAuthSystemErrorUrl()).toBe(`/auth/error?type=${ActionErrorKind.System}`)
   })
 })

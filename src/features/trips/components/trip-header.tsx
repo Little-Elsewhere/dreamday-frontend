@@ -1,36 +1,22 @@
 import { Add01Icon, ArrowLeft02Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
-import { io } from 'next/cache'
 import { getTranslations } from 'next-intl/server'
 import type { ReactElement } from 'react'
 
 import { ROUTES } from '@/constants/routes'
 import { SignOutButton } from '@/features/auth/components/common/sign-out-button'
 import { Link } from '@/i18n/navigation'
-import { createClient } from '@/lib/supabase/server'
 
 type Props = {
   showCreate?: boolean
   showTripsLink?: boolean
 }
 
-const getAccountName = async (): Promise<string | null> => {
-  await io()
-  const supabase = await createClient()
-  const { data } = await supabase.auth.getClaims()
-  const metadata = data?.claims?.user_metadata
-
-  if (typeof metadata !== 'object' || metadata === null || Array.isArray(metadata)) return null
-
-  const fullName = (metadata as Record<string, unknown>).full_name
-  return typeof fullName === 'string' && fullName.trim() ? fullName : null
-}
-
 export const TripHeader = async ({
   showCreate = false,
   showTripsLink = false,
 }: Props): Promise<ReactElement> => {
-  const [t, accountName] = await Promise.all([getTranslations('trips'), getAccountName()])
+  const t = await getTranslations('trips')
 
   return (
     <header className="border-line bg-surface/95 sticky top-0 z-20 border-b backdrop-blur">
@@ -79,7 +65,7 @@ export const TripHeader = async ({
           )}
           <div className="hidden min-w-0 text-right sm:block">
             <strong className="text-primary block truncate text-sm font-medium">
-              {accountName ?? t('navigation.accountNameFallback')}
+              {t('navigation.accountNameFallback')}
             </strong>
             <span className="text-ink-soft block text-xs">{t('navigation.accountRole')}</span>
           </div>

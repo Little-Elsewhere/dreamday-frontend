@@ -1,35 +1,8 @@
-import os from 'node:os'
-import path from 'node:path'
-
 import { defineConfig, devices } from 'playwright/test'
 
-import { E2E_BASE_URL, SUPABASE_URL } from './e2e/support/constants/urls'
-import { readLocalEnv } from './e2e/support/local-env'
+const E2E_BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:4000'
 
-const localEnv = readLocalEnv()
-const supabasePublishableKey = localEnv.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
-
-if (!supabasePublishableKey) {
-  throw new Error('The generated .env.local file is missing NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY.')
-}
-
-const isSupabaseSecret = (key: string): boolean =>
-  /SUPABASE/i.test(key) && /SECRET|SERVICE_ROLE|ACCESS_TOKEN/i.test(key)
-
-const webServerEnv = Object.fromEntries(
-  Object.entries(process.env).filter(
-    ([key]) =>
-      !key.startsWith('E2E_') &&
-      !isSupabaseSecret(key) &&
-      key !== 'NEXT_PUBLIC_SUPABASE_URL' &&
-      key !== 'NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY',
-  ),
-)
-webServerEnv.NEXT_PUBLIC_APP_URL = E2E_BASE_URL
-webServerEnv.NEXT_PUBLIC_SUPABASE_URL = SUPABASE_URL
-webServerEnv.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY = supabasePublishableKey
-
-// Chromium only receives operating-system settings, never the full test-runner environment.
+// Auth E2E cases remain skipped until the API and account setup are ready.
 const browserEnv = {
   PATH: process.env.PATH,
   HOME: process.env.HOME,
@@ -74,15 +47,4 @@ export default defineConfig({
       use: { ...devices['iPhone 13'], browserName: 'chromium' },
     },
   ],
-  webServer: {
-    command:
-      'pnpm dev && docker compose --progress plain -f docker/dev/compose.yaml logs --follow --tail 0 app',
-    url: `${E2E_BASE_URL}/en/auth/login`,
-    reuseExistingServer: !process.env.CI,
-    env: {
-      ...webServerEnv,
-      SWC_NATIVE_BINDING_CACHE: path.join(os.tmpdir(), 'dreamday-swc-native'),
-    },
-    timeout: 30_000,
-  },
 })

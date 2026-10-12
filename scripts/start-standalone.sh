@@ -9,7 +9,7 @@ if [ ! -f "$standalone_dir/server.js" ]; then
   exit 1
 fi
 
-PORT="${NEXT_PUBLIC_APP_PORT:-${PORT:-4000}}"
+PORT=4000
 HOSTNAME=0.0.0.0
 NODE_ENV=production
 export PORT HOSTNAME NODE_ENV

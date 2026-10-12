@@ -1,52 +1,30 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useLocale, useTranslations } from 'next-intl'
-import { type ReactElement, useRef, useState } from 'react'
+import { useTranslations } from 'next-intl'
+import { type ReactElement, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
-import { FeedbackMessage } from '@/components/common/feedback-message'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/ui/password-input'
-import type { Locale } from '@/constants/locale'
 import { ROUTES } from '@/constants/routes'
-import { signIn } from '@/features/auth/actions/auth'
-import { AuthField } from '@/features/auth/constants/auth'
 import { type LoginFormValues, loginSchema } from '@/features/auth/schemas/auth'
-import { getAuthSystemErrorUrl } from '@/features/auth/utils/common'
-import { Link, useRouter } from '@/i18n/navigation'
-import { handleFormActionError } from '@/utils/form-action-error'
+import { Link } from '@/i18n/navigation'
 
 import { ForgotPasswordForm } from './forgot-password-form'
 
 export const LoginForm = (): ReactElement => {
   const t = useTranslations('auth')
-  const locale = useLocale() as Locale
-  const router = useRouter()
-  const systemErrorUrl = getAuthSystemErrorUrl()
-  const errorSummary = useRef<HTMLDivElement>(null)
   const [resetDialogOpen, setResetDialogOpen] = useState(false)
   const [resetInitialEmail, setResetInitialEmail] = useState('')
-  const [message, setMessage] = useState<string | null>(null)
   const loginForm = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: { email: '', password: '' },
   })
 
-  const handleLogin = async (values: LoginFormValues): Promise<void> => {
-    setMessage(null)
-
-    const result = await signIn(values, locale)
-    handleFormActionError(result.error, {
-      fields: [AuthField.Email, AuthField.Password],
-      setError: loginForm.setError,
-      onMessage: (key) => {
-        setMessage(t(key))
-        requestAnimationFrame(() => errorSummary.current?.focus())
-      },
-      onSystemError: () => router.replace(systemErrorUrl),
-    })
+  const handleLogin = (): void => {
+    // TODO: Connect sign-in to the API.
   }
 
   return (
@@ -62,8 +40,6 @@ export const LoginForm = (): ReactElement => {
         {t('login.content.title')}
       </h1>
       <p className="text-ink-soft mt-4 max-w-[42ch]">{t('login.content.intro')}</p>
-
-      {message && <FeedbackMessage message={message} isError focusRef={errorSummary} />}
 
       <FormProvider {...loginForm}>
         <form

@@ -30,10 +30,9 @@ vitest.shims.d.ts
 *.log
 .DS_Store
 
-# Local-only documentation, Supabase setup, and maintenance files
+# Local-only documentation and maintenance files
 documents
 design
-supabase
 README.md
 AGENTS.md
 CLAUDE.md

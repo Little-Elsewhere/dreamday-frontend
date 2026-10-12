@@ -3,8 +3,8 @@
 ## Project Overview
 
 **Project**: Dreamday travel planning app
-**Stack**: Next.js 16 App Router, React 19, TypeScript 6, Tailwind v4, shadcn/ui on Base UI, next-intl, Zod, Supabase
-**Architecture**: Server Components by default, small Client Components for interaction, Server Actions for mutations, Cache Components, and Supabase SQL migrations with RLS.
+**Stack**: Next.js 16 App Router, React 19, TypeScript 6, Tailwind v4, shadcn/ui on Base UI, next-intl, Zod
+**Architecture**: Server Components by default, small Client Components for interaction, Cache Components, and a API. Auth and trip API calls are TODOs until those endpoints are available.
 
 ---
 
@@ -284,7 +284,7 @@ release-please automatically bumps version based on commit types:
 **Scenario A**: "Create a trip draft form"
 
 - Architect: Decides the Server Action and Client Component boundary
-- Security & Data: Zod schema for draft values and Supabase ownership checks
+- Security & Data: Zod schemas in the frontend and ownership checks in the API
 - UI/UX: Form layout with Tailwind and shadcn Button/Input
 - Accessibility: Semantic form fields, labels, and error announcements
 - i18n: All labels and errors translated

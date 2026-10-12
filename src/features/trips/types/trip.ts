@@ -1,16 +1,10 @@
 import { ACTIVITY_TYPES, TRIP_PACES } from '@/features/trips/constants/trips'
-import type { Database } from '@/types/database'
 
 export type TripPace = (typeof TRIP_PACES)[number]
-
 export type ActivityType = (typeof ACTIVITY_TYPES)[number]
-
 export type TripLifecycle = 'draft' | 'published'
 export type TripStatus = 'upcoming' | 'past'
 export type TripListFilter = 'all' | TripStatus
-
-export type TripRow = Database['public']['Tables']['trips']['Row']
-export type TripActivityRow = Database['public']['Tables']['trip_activities']['Row']
 
 export interface TripActivity {
   id: string

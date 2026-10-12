@@ -2,12 +2,10 @@
 
 FROM node:22-alpine
 
-ARG NEXT_PUBLIC_APP_PORT=4000
-
 WORKDIR /app
 ENV NEXT_TELEMETRY_DISABLED=1 \
     NODE_ENV=development \
-    PORT=${NEXT_PUBLIC_APP_PORT}
+    PORT=4000
 
 RUN wget -T 15 -t 3 'https://packages.doppler.com/public/cli/rsa.8004D9FF50437357.key' \
       -O /etc/apk/keys/cli@doppler-8004D9FF50437357.rsa.pub \
@@ -26,14 +24,14 @@ COPY --chmod=755 docker/doppler-entrypoint.sh /usr/local/bin/doppler-entrypoint.
 RUN mkdir -p /app/.next && chown -R node:node /app
 USER node
 
-EXPOSE ${NEXT_PUBLIC_APP_PORT} 9229 9230
+EXPOSE 4000 9229 9230
 ENTRYPOINT ["/usr/local/bin/doppler-entrypoint.sh"]
 CMD ["--project", \
   "dreamday", \
   "--config", \
   "dev", \
   "--no-fallback", \
-  "--preserve-env=DOPPLER_ENVIRONMENT,NEXT_PUBLIC_APP_URL,NEXT_PUBLIC_APP_PORT,PORT,NEXT_PUBLIC_SUPABASE_URL,NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY", \
+  "--preserve-env=DOPPLER_ENVIRONMENT,NEXT_PUBLIC_APP_URL,PORT", \
   "--", \
   "env", \
   "-u", \
