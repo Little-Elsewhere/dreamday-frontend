@@ -5,26 +5,19 @@ services:
     build:
       context: ../..
       dockerfile: docker/dev/Dockerfile
-      args:
-        NEXT_PUBLIC_APP_PORT: ${NEXT_PUBLIC_APP_PORT:-4000}
     init: true
-    depends_on:
-      - local-domains
     env_file:
       - ../../.env.local
     ports:
-      - '${NEXT_PUBLIC_APP_PORT:-4000}:${NEXT_PUBLIC_APP_PORT:-4000}'
-      # Keep Node inspector ports local to this machine; the app stays on dreamday.local.
+      - '127.0.0.1:4000:4000'
+      # Keep Node inspector ports local to this machine.
       - '127.0.0.1:9229:9229'
       - '127.0.0.1:9230:9230'
     environment:
       DOPPLER_ENVIRONMENT: dev
-      NEXT_PUBLIC_APP_PORT: ${NEXT_PUBLIC_APP_PORT:-4000}
-      PORT: ${NEXT_PUBLIC_APP_PORT:-4000}
+      PORT: 4000
     secrets:
       - doppler_token
-    networks:
-      - local
     volumes:
       - type: bind
         source: ../..
@@ -36,26 +29,6 @@ services:
         source: dev_next
         target: /app/.next
 
-  local-domains:
-    image: nginx:alpine
-    restart: unless-stopped
-    ports:
-      - '127.0.0.1:80:80'
-    environment:
-      NEXT_PUBLIC_APP_PORT: ${NEXT_PUBLIC_APP_PORT:-4000}
-    volumes:
-      - ./nginx.conf.template:/etc/nginx/templates/default.conf.template:ro
-      - ./proxy-headers.conf:/etc/nginx/proxy-headers.conf:ro
-    extra_hosts:
-      - 'host.docker.internal:host-gateway'
-    networks:
-      local:
-        aliases:
-          - dreamday.local
-          - supabase.local
-          - studio.supabase.local
-          - mailpit.local
-
 volumes:
   dev_node_modules:
   dev_next:
@@ -63,8 +36,3 @@ volumes:
 secrets:
   doppler_token:
     environment: DOPPLER_TOKEN
-
-networks:
-  local:
-    external: true
-    name: ${SUPABASE_NETWORK:-dreamday-local-network}

@@ -1,48 +1,26 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useLocale, useTranslations } from 'next-intl'
-import { type ReactElement, useRef, useState } from 'react'
+import { useTranslations } from 'next-intl'
+import { type ReactElement } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
-import { FeedbackMessage } from '@/components/common/feedback-message'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/ui/password-input'
-import type { Locale } from '@/constants/locale'
 import { ROUTES } from '@/constants/routes'
-import { signUp } from '@/features/auth/actions/auth'
-import { AuthField } from '@/features/auth/constants/auth'
 import { type RegistrationFormValues, registrationSchema } from '@/features/auth/schemas/auth'
-import { getAuthSystemErrorUrl } from '@/features/auth/utils/common'
-import { Link, useRouter } from '@/i18n/navigation'
-import { handleFormActionError } from '@/utils/form-action-error'
+import { Link } from '@/i18n/navigation'
 
 export const RegisterForm = (): ReactElement => {
   const t = useTranslations('auth')
-  const locale = useLocale() as Locale
-  const router = useRouter()
-  const systemErrorUrl = getAuthSystemErrorUrl()
-  const errorSummary = useRef<HTMLDivElement>(null)
-  const [message, setMessage] = useState<string | null>(null)
   const form = useForm<RegistrationFormValues>({
     resolver: zodResolver(registrationSchema),
     defaultValues: { name: '', email: '', password: '', confirmPassword: '' },
   })
 
-  const handleRegistration = async (values: RegistrationFormValues): Promise<void> => {
-    setMessage(null)
-
-    const result = await signUp(values, locale)
-    handleFormActionError(result.error, {
-      fields: [AuthField.Name, AuthField.Email, AuthField.Password, AuthField.ConfirmPassword],
-      setError: form.setError,
-      onMessage: (key) => {
-        setMessage(t(key))
-        requestAnimationFrame(() => errorSummary.current?.focus())
-      },
-      onSystemError: () => router.replace(systemErrorUrl),
-    })
+  const handleRegistration = (): void => {
+    // TODO: Connect registration to the API.
   }
 
   return (
@@ -58,8 +36,6 @@ export const RegisterForm = (): ReactElement => {
         {t('register.content.title')}
       </h1>
       <p className="text-ink-soft mt-4 max-w-[42ch]">{t('register.content.intro')}</p>
-
-      {message && <FeedbackMessage message={message} isError focusRef={errorSummary} />}
 
       <FormProvider {...form}>
         <form

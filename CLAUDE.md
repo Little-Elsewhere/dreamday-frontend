@@ -5,7 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Commands
 
 ```bash
-pnpm dev           # Start dev server on NEXT_PUBLIC_APP_PORT (default 4000)
+pnpm dev           # Start dev server on port 4000
 pnpm build        # Production build
 pnpm start        # Start production server
 pnpm lint         # Run ESLint (flat config)

@@ -1,32 +1,26 @@
 'use client'
 
-import { useLocale, useTranslations } from 'next-intl'
-import { type Dispatch, type FormEvent, type SetStateAction, useRef, useState } from 'react'
+import { type FormEvent, useState } from 'react'
 
-import type { Locale } from '@/constants/locale'
-import { deleteTripActivity, saveTripActivity } from '@/features/trips/actions/trips'
 import type { TripActivityFormValues } from '@/features/trips/types/components'
 import type { TripActivity } from '@/features/trips/types/trip'
-import { createInitialTripActivity, sortTripActivities } from '@/features/trips/utils/trip'
-import type { ActionResult } from '@/types/action-result'
+import {
+  createInitialTripActivity,
+  createUuidV4,
+  sortTripActivities,
+} from '@/features/trips/utils/trip'
 
 type Props = {
   initialActivities: TripActivity[]
-  tripId: string | null
   dates: string[]
-  setError: Dispatch<SetStateAction<string>>
 }
 
-export const useTripActivities = ({ initialActivities, tripId, dates, setError }: Props) => {
-  const t = useTranslations('trips')
-  const locale = useLocale() as Locale
+export const useTripActivities = ({ initialActivities, dates }: Props) => {
   const [activities, setActivities] = useState<TripActivity[]>(initialActivities)
   const [activityOpen, setActivityOpen] = useState(false)
   const [activityValues, setActivityValues] = useState<TripActivityFormValues>(
     createInitialTripActivity(''),
   )
-  const [isPending, setIsPending] = useState(false)
-  const mutationPendingRef = useRef(false)
 
   const patchActivityValues = (patch: Partial<TripActivityFormValues>): void =>
     setActivityValues((current) => ({ ...current, ...patch }))
@@ -38,97 +32,44 @@ export const useTripActivities = ({ initialActivities, tripId, dates, setError }
     setActivityOpen(true)
   }
 
-  const runActivityMutation = async <TData>(
-    mutation: (tripId: string) => Promise<ActionResult<TData>>,
-    onSuccess: (data: TData) => void,
-  ): Promise<void> => {
-    if (!tripId || mutationPendingRef.current) return
-
-    mutationPendingRef.current = true
-    setIsPending(true)
-    try {
-      const result = await mutation(tripId)
-      if (!result.success) {
-        setError(t('create.errors.activitySaveFailed'))
-        return
-      }
-
-      onSuccess(result.data)
-      setError('')
-    } catch {
-      setError(t('create.errors.activitySaveFailed'))
-    } finally {
-      mutationPendingRef.current = false
-      setIsPending(false)
-    }
-  }
-
-  const handleActivitySubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
+  const handleActivitySubmit = (event: FormEvent<HTMLFormElement>): void => {
     event.preventDefault()
-    await runActivityMutation(
-      (currentTripId) =>
-        saveTripActivity(
-          {
-            ...activityValues,
-            tripId: currentTripId,
-            activityId: activityValues.id,
-          },
-          locale,
-        ),
-      (savedActivity) => {
-        setActivities((current) => {
-          const exists = current.some((activity) => activity.id === savedActivity.id)
-          const nextActivities = exists
-            ? current.map((activity) =>
-                activity.id === savedActivity.id ? savedActivity : activity,
-              )
-            : [...current, savedActivity]
-          return sortTripActivities(nextActivities)
-        })
-        setActivityOpen(false)
-      },
-    )
+    // TODO: Persist the activity with the API.
+    const activity = { ...activityValues, id: activityValues.id ?? createUuidV4() }
+    setActivities((current) => {
+      const exists = current.some((item) => item.id === activity.id)
+      return sortTripActivities(
+        exists
+          ? current.map((item) => (item.id === activity.id ? activity : item))
+          : [...current, activity],
+      )
+    })
+    setActivityOpen(false)
   }
 
-  const handleDeleteActivity = async (activityId: string): Promise<void> => {
-    await runActivityMutation(
-      (currentTripId) => deleteTripActivity({ tripId: currentTripId, activityId }, locale),
-      () => setActivities((current) => current.filter((activity) => activity.id !== activityId)),
-    )
+  const handleDeleteActivity = (activityId: string): void => {
+    // TODO: Delete the activity through the API.
+    setActivities((current) => current.filter((activity) => activity.id !== activityId))
   }
 
-  const updateActivity = async (
-    activity: TripActivity,
-    patch: Partial<TripActivityFormValues>,
-  ): Promise<void> => {
-    await runActivityMutation(
-      (currentTripId) =>
-        saveTripActivity(
-          {
-            ...activity,
-            ...patch,
-            tripId: currentTripId,
-            activityId: activity.id,
-          },
-          locale,
+  const updateActivity = (activity: TripActivity, patch: Partial<TripActivityFormValues>): void => {
+    // TODO: Persist activity edits through the API.
+    setActivities((current) =>
+      sortTripActivities(
+        current.map((item) =>
+          item.id === activity.id ? { ...item, ...patch, id: activity.id } : item,
         ),
-      (savedActivity) =>
-        setActivities((current) =>
-          sortTripActivities(
-            current.map((item) => (item.id === activity.id ? savedActivity : item)),
-          ),
-        ),
+      ),
     )
   }
 
   const moveActivity = (activity: TripActivity, targetDate: string): void => {
-    if (targetDate !== activity.activityDate)
-      void updateActivity(activity, { activityDate: targetDate })
+    if (targetDate !== activity.activityDate) updateActivity(activity, { activityDate: targetDate })
   }
 
   return {
     data: { activities, activityOpen, activityValues },
-    statuses: { isPending },
+    statuses: { isPending: false },
     handlers: {
       handleActivitySubmit,
       handleDeleteActivity,

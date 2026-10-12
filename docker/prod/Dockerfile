@@ -20,24 +20,19 @@ RUN --mount=type=cache,id=dreamday-pnpm-store-prod,target=/pnpm/store \
 
 FROM dependencies AS builder
 
-ARG NEXT_PUBLIC_APP_PORT=4000
-
 ENV NODE_ENV=production
-ENV NEXT_PUBLIC_APP_PORT=${NEXT_PUBLIC_APP_PORT}
 COPY . .
 RUN --mount=type=secret,id=doppler_token,required=true \
     export DOPPLER_TOKEN="$(cat /run/secrets/doppler_token)" \
     && export DOPPLER_ENVIRONMENT=prod \
     && doppler run --project dreamday --config prod --no-fallback \
-      --preserve-env=DOPPLER_ENVIRONMENT,NEXT_PUBLIC_APP_PORT -- \
+      --preserve-env=DOPPLER_ENVIRONMENT -- \
       env -u DOPPLER_TOKEN pnpm exec next build
 
 FROM base AS runner
 
-ARG NEXT_PUBLIC_APP_PORT=4000
-
 ENV NODE_ENV=production \
-    PORT=${NEXT_PUBLIC_APP_PORT} \
+    PORT=4000 \
     HOSTNAME=0.0.0.0
 
 COPY --from=builder --chown=node:node /app/.next/standalone ./
@@ -47,14 +42,14 @@ COPY --chmod=755 docker/doppler-entrypoint.sh /usr/local/bin/doppler-entrypoint.
 RUN mkdir -p .next/cache && chown node:node .next/cache
 
 USER node
-EXPOSE ${NEXT_PUBLIC_APP_PORT}
+EXPOSE 4000
 ENTRYPOINT ["/usr/local/bin/doppler-entrypoint.sh"]
 CMD ["--project", \
   "dreamday", \
   "--config", \
   "prod", \
   "--no-fallback", \
-  "--preserve-env=DOPPLER_ENVIRONMENT,NEXT_PUBLIC_APP_PORT,PORT", \
+  "--preserve-env=DOPPLER_ENVIRONMENT,PORT", \
   "--", \
   "env", \
   "-u", \

@@ -3,11 +3,10 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Cancel01Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
-import { useLocale, useTranslations } from 'next-intl'
-import { type ReactElement, useRef, useState } from 'react'
+import { useTranslations } from 'next-intl'
+import { type ReactElement } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
-import { FeedbackMessage } from '@/components/common/feedback-message'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -18,13 +17,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
-import type { Locale } from '@/constants/locale'
-import { forgotPassword } from '@/features/auth/actions/auth'
-import { AuthField } from '@/features/auth/constants/auth'
 import { type PasswordResetFormValues, passwordResetSchema } from '@/features/auth/schemas/auth'
-import { getAuthSystemErrorUrl } from '@/features/auth/utils/common'
-import { useRouter } from '@/i18n/navigation'
-import { handleFormActionError } from '@/utils/form-action-error'
 
 type Props = {
   initialEmail: string
@@ -33,11 +26,6 @@ type Props = {
 
 export const ForgotPasswordForm = ({ initialEmail, show }: Props): ReactElement => {
   const t = useTranslations('auth')
-  const locale = useLocale() as Locale
-  const router = useRouter()
-  const systemErrorUrl = getAuthSystemErrorUrl()
-  const errorSummaryRef = useRef<HTMLDivElement>(null)
-  const [recoveryError, setRecoveryError] = useState<string | null>(null)
   const form = useForm<PasswordResetFormValues>({
     resolver: zodResolver(passwordResetSchema),
     defaultValues: { email: initialEmail },
@@ -45,19 +33,8 @@ export const ForgotPasswordForm = ({ initialEmail, show }: Props): ReactElement 
   const { formState, handleSubmit } = form
   const pending = formState.isSubmitting
 
-  const handlePasswordReset = async (values: PasswordResetFormValues): Promise<void> => {
-    setRecoveryError(null)
-
-    const result = await forgotPassword(values, locale)
-    handleFormActionError(result.error, {
-      fields: [AuthField.Email],
-      setError: form.setError,
-      onMessage: (key) => {
-        setRecoveryError(t(key))
-        requestAnimationFrame(() => errorSummaryRef.current?.focus())
-      },
-      onSystemError: () => router.replace(systemErrorUrl),
-    })
+  const handlePasswordReset = (): void => {
+    // TODO: Connect password recovery to the API.
   }
 
   return (
@@ -103,9 +80,6 @@ export const ForgotPasswordForm = ({ initialEmail, show }: Props): ReactElement 
                 void handleSubmit(handlePasswordReset)(event)
               }}
             >
-              {recoveryError && (
-                <FeedbackMessage message={recoveryError} isError focusRef={errorSummaryRef} />
-              )}
               <Input
                 name="email"
                 id="reset-email"

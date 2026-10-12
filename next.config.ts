@@ -5,31 +5,15 @@ import createNextIntlPlugin from 'next-intl/plugin'
 const withNextIntl = createNextIntlPlugin()
 const isDevelopment = process.env.DOPPLER_ENVIRONMENT === 'dev'
 const isProduction = process.env.DOPPLER_ENVIRONMENT === 'prod'
-const supabaseConnectionSources = (() => {
-  const value = process.env.NEXT_PUBLIC_SUPABASE_URL
-
-  if (!value) {
-    return []
-  }
-
-  const url = new URL(value)
-  const webSocketProtocol =
-    url.protocol === 'https:' ? 'wss:' : url.protocol === 'http:' ? 'ws:' : null
-
-  return [url.origin, ...(webSocketProtocol ? [`${webSocketProtocol}//${url.host}`] : [])]
-})()
-const supabaseImageSource = supabaseConnectionSources[0]
+const allowedDevOrigins = process.env.NEXT_DEV_ALLOWED_ORIGINS?.split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean)
 const posthogSource = process.env.NEXT_PUBLIC_POSTHOG_HOST
   ? new URL(process.env.NEXT_PUBLIC_POSTHOG_HOST).origin
   : null
 const posthogSources = ['https://*.posthog.com', ...(posthogSource ? [posthogSource] : [])]
-const connectSources = ["'self'", ...supabaseConnectionSources, ...posthogSources].join(' ')
-const imageSources = [
-  "'self'",
-  'blob:',
-  'data:',
-  ...(supabaseImageSource ? [supabaseImageSource] : []),
-].join(' ')
+const connectSources = ["'self'", ...posthogSources].join(' ')
+const imageSources = ["'self'", 'blob:', 'data:'].join(' ')
 
 const contentSecurityPolicy = [
   "default-src 'self'",
@@ -109,7 +93,7 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   output: 'standalone',
   reactCompiler: true,
-  ...(isDevelopment ? { allowedDevOrigins: ['dreamday.local'] } : {}),
+  ...(isDevelopment && allowedDevOrigins?.length ? { allowedDevOrigins } : {}),
   experimental: {
     turbopackRustReactCompiler: true,
     turbopackLocalPostcssConfig: true,

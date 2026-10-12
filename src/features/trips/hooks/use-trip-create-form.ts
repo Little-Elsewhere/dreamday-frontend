@@ -1,23 +1,18 @@
 'use client'
 
-import { useLocale, useTranslations } from 'next-intl'
+import { useTranslations } from 'next-intl'
 import { type FormEvent, useState } from 'react'
 
-import type { Locale } from '@/constants/locale'
 import { ROUTES } from '@/constants/routes'
-import { publishTrip, saveTripDraft, saveTripNote } from '@/features/trips/actions/trips'
-import { PUBLISH_ERROR_TRANSLATION_KEYS } from '@/features/trips/constants/trips'
 import { useTripActivities } from '@/features/trips/hooks/use-trip-activities'
 import { useTripCover } from '@/features/trips/hooks/use-trip-cover'
 import type { TripDraftFormValues } from '@/features/trips/types/components'
 import type { TripDraft } from '@/features/trips/types/trip'
 import { getTripDatesInRange } from '@/features/trips/utils/trip'
 import { useRouter } from '@/i18n/navigation'
-import { ActionErrorKind } from '@/types/action-result'
 
 export const useTripCreateForm = (initialDraft: TripDraft | null) => {
   const t = useTranslations('trips')
-  const locale = useLocale() as Locale
   const router = useRouter()
   const [values, setValues] = useState<TripDraftFormValues>({
     name: initialDraft?.name ?? '',
@@ -29,131 +24,49 @@ export const useTripCreateForm = (initialDraft: TripDraft | null) => {
     coverPath: initialDraft?.coverPath ?? null,
     note: initialDraft?.note ?? '',
   })
-  const [draftId, setDraftId] = useState<string | null>(initialDraft?.id ?? null)
   const [step, setStep] = useState(1)
-  const [formPending, setFormPending] = useState(false)
-  const [notice, setNotice] = useState('')
   const [error, setError] = useState('')
   const dates = getTripDatesInRange(values.startDate, values.endDate)
   const cover = useTripCover(initialDraft?.coverUrl ?? null)
   const activities = useTripActivities({
     initialActivities: initialDraft?.activities ?? [],
-    tripId: draftId,
     dates,
-    setError,
   })
-  const pending = formPending || activities.statuses.isPending
 
   const patchValues = (patch: Partial<TripDraftFormValues>): void =>
     setValues((current) => ({ ...current, ...patch }))
 
-  const onDraftSaved = (coverPath: string | null, savedDraftId: string): void => {
-    patchValues({ coverPath })
-    setDraftId(savedDraftId)
-  }
-
-  const persistDraft = async (showNotice = true): Promise<string | null> => {
-    setError('')
-    const result = await saveTripDraft({ ...values }, locale)
-    if (!result.success) {
-      setError(t('errors.saveFailed'))
-      return null
-    }
-
-    setDraftId(result.data.id)
-    if (showNotice) setNotice(t('create.draftSaved'))
-    return result.data.id
-  }
-
-  const persistPendingCover = async (tripId: string): Promise<boolean> => {
-    const saved = await cover.handlers.persistPendingCover(tripId, values, onDraftSaved)
-    if (!saved) setError(t('create.errors.coverUploadFailed'))
-    return saved
-  }
-
   const handleSaveDraft = async (): Promise<void> => {
-    setFormPending(true)
-    try {
-      const tripId = await persistDraft()
-      if (tripId) await persistPendingCover(tripId)
-    } catch {
-      setError(t('errors.saveFailed'))
-    } finally {
-      setFormPending(false)
-    }
+    // TODO: Save the trip draft through the API.
   }
 
-  const handleContinue = async (event?: FormEvent<HTMLFormElement>): Promise<void> => {
+  const handleContinue = (event?: FormEvent<HTMLFormElement>): void => {
     event?.preventDefault()
     if (values.startDate && values.endDate && values.endDate < values.startDate) {
       setError(t('create.errors.endBeforeStart'))
       return
     }
 
-    setFormPending(true)
-    try {
-      const tripId = await persistDraft()
-      if (tripId) {
-        setStep(2)
-        setError('')
-      }
-    } catch {
-      setError(t('errors.saveFailed'))
-    } finally {
-      setFormPending(false)
-    }
+    // TODO: Save the trip draft through the API.
+    setError('')
+    setStep(2)
   }
 
   const handleCover = (file: File | undefined): void => {
     if (!file) return
-
-    setNotice('')
     setError('')
     if (!cover.handlers.chooseCover(file)) setError(t('create.errors.invalidCover'))
   }
 
   const handleRemoveCover = async (): Promise<void> => {
-    if (!values.coverPath) {
-      if (!cover.handlers.clearPendingCover()) return
-      setError('')
-      setNotice('')
-      return
-    }
-
-    setFormPending(true)
+    // TODO: Persist cover removal through the API.
+    cover.handlers.removeCover()
+    patchValues({ coverPath: null })
     setError('')
-    setNotice('')
-    try {
-      const saved = await cover.handlers.removeSavedCover(values, onDraftSaved)
-      if (!saved) setError(t('errors.saveFailed'))
-    } catch {
-      setError(t('errors.saveFailed'))
-    } finally {
-      setFormPending(false)
-    }
   }
 
   const handleSaveNote = async (): Promise<void> => {
-    if (!draftId) {
-      await handleSaveDraft()
-      return
-    }
-
-    setFormPending(true)
-    setError('')
-    setNotice('')
-    try {
-      const result = await saveTripNote({ tripId: draftId, note: values.note }, locale)
-      if (!result.success) {
-        setError(t('errors.saveFailed'))
-        return
-      }
-      setNotice(t('create.noteSaved'))
-    } catch {
-      setError(t('errors.saveFailed'))
-    } finally {
-      setFormPending(false)
-    }
+    // TODO: Save the trip note through the API.
   }
 
   const handlePublish = async (): Promise<void> => {
@@ -162,34 +75,7 @@ export const useTripCreateForm = (initialDraft: TripDraft | null) => {
       return
     }
 
-    setFormPending(true)
-    setError('')
-    try {
-      const tripId = await persistDraft(false)
-      if (!tripId || !(await persistPendingCover(tripId))) return
-
-      const result = await publishTrip({ tripId }, locale)
-      if (result.error.kind === ActionErrorKind.System) {
-        setError(t('errors.saveFailed'))
-        return
-      }
-      if (result.error.kind === ActionErrorKind.Message) {
-        setError(
-          result.error.key === 'trips.errors.sessionExpired'
-            ? t('errors.sessionExpired')
-            : t('errors.saveFailed'),
-        )
-        return
-      }
-
-      const translationKey =
-        PUBLISH_ERROR_TRANSLATION_KEYS[result.error.key] ?? 'create.errors.publishRequired'
-      setError(t(translationKey))
-    } catch {
-      setError(t('errors.saveFailed'))
-    } finally {
-      setFormPending(false)
-    }
+    // TODO: Publish the trip through the API.
   }
 
   return {
@@ -197,7 +83,6 @@ export const useTripCreateForm = (initialDraft: TripDraft | null) => {
       ...activities.data,
       coverUrl: cover.data.coverUrl,
       dates,
-      draftId,
       step,
       values,
     },
@@ -215,8 +100,8 @@ export const useTripCreateForm = (initialDraft: TripDraft | null) => {
     },
     statuses: {
       error,
-      notice,
-      pending,
+      notice: '',
+      pending: activities.statuses.isPending,
       coverUploading: cover.statuses.isUploading,
     },
   }
