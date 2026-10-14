@@ -15,7 +15,6 @@ services:
       - '127.0.0.1:9230:9230'
     environment:
       DOPPLER_ENVIRONMENT: dev
-      PORT: 4000
     secrets:
       - doppler_token
     volumes:

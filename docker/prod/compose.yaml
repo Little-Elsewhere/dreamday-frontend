@@ -13,7 +13,6 @@ services:
       - '4000:4000'
     environment:
       DOPPLER_ENVIRONMENT: prod
-      PORT: 4000
     secrets:
       - doppler_token
 

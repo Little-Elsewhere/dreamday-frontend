@@ -80,7 +80,6 @@ export const LoginForm = (): ReactElement => {
               type="button"
               disabled={loginForm.formState.isSubmitting}
               onClick={() => {
-                setMessage(null)
                 setResetInitialEmail(loginForm.getValues('email'))
                 setResetDialogOpen(true)
               }}
