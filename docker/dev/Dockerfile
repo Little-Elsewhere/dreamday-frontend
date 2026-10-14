@@ -30,7 +30,7 @@ CMD ["--project", \
   "--config", \
   "dev", \
   "--no-fallback", \
-  "--preserve-env=DOPPLER_ENVIRONMENT,NEXT_PUBLIC_APP_URL", \
+  "--preserve-env=DOPPLER_ENVIRONMENT,NEXT_PUBLIC_APP_URL,NEXT_DEV_ALLOWED_ORIGINS", \
   "--", \
   "env", \
   "-u", \
