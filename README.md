@@ -45,8 +45,8 @@ Application variables are loaded through Doppler. The frontend validates them wi
 
 ```bash
 pnpm dev                 # Run Next.js directly on the host
-pnpm build:dev           # Build with Doppler dreamday/dev
-pnpm build:prod          # Build with Doppler dreamday/prod
+pnpm build:dev           # Build with Doppler dreamday-frontend/dev
+pnpm build:prod          # Build with Doppler dreamday-frontend/prod
 pnpm start               # Start the standalone build
 pnpm lint                # Run ESLint
 pnpm typecheck           # Run TypeScript checks

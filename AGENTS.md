@@ -238,11 +238,11 @@ When working on this codebase, adopt the appropriate agent persona based on the 
 
 ### GitHub Actions Workflows
 
-| Workflow      | Trigger         | Purpose                                                               |
-| ------------- | --------------- | --------------------------------------------------------------------- |
-| `ci.yml`      | PR to `develop` | Commitlint, lint, format, typecheck, and Doppler `dreamday/dev` build |
-| `release.yml` | Push to `main`  | Release-please: version bump, CHANGELOG, tags                         |
-| `cd.yml`      | PR to `main`    | Production build with Doppler `dreamday/prod`                         |
+| Workflow      | Trigger         | Purpose                                                                        |
+| ------------- | --------------- | ------------------------------------------------------------------------------ |
+| `ci.yml`      | PR to `develop` | Commitlint, lint, format, typecheck, and Doppler `dreamday-frontend/dev` build |
+| `release.yml` | Push to `main`  | Release-please: version bump, CHANGELOG, tags                                  |
+| `cd.yml`      | PR to `main`    | Production build with Doppler `dreamday-frontend/prod`                         |
 
 ### CI Checks
 
