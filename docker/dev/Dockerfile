@@ -4,8 +4,7 @@ FROM node:22-alpine
 
 WORKDIR /app
 ENV NEXT_TELEMETRY_DISABLED=1 \
-    NODE_ENV=development \
-    PORT=4000
+    NODE_ENV=development
 
 RUN wget -T 15 -t 3 'https://packages.doppler.com/public/cli/rsa.8004D9FF50437357.key' \
       -O /etc/apk/keys/cli@doppler-8004D9FF50437357.rsa.pub \
@@ -31,7 +30,7 @@ CMD ["--project", \
   "--config", \
   "dev", \
   "--no-fallback", \
-  "--preserve-env=DOPPLER_ENVIRONMENT,NEXT_PUBLIC_APP_URL,PORT", \
+  "--preserve-env=DOPPLER_ENVIRONMENT,NEXT_PUBLIC_APP_URL", \
   "--", \
   "env", \
   "-u", \
@@ -42,4 +41,6 @@ CMD ["--project", \
   "dev", \
   "--hostname", \
   "0.0.0.0", \
-  "--inspect=0.0.0.0"]
+  "--inspect=0.0.0.0", \
+  "--port", \
+  "4000"]

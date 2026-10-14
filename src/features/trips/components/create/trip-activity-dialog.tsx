@@ -1,7 +1,7 @@
 'use client'
 
 import { useLocale, useTranslations } from 'next-intl'
-import type { FormEvent, ReactElement } from 'react'
+import type { ReactElement, SubmitEvent } from 'react'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -20,7 +20,7 @@ type Props = {
   dates: string[]
   onChange: (patch: Partial<TripActivityFormValues>) => void
   onOpenChange: (open: boolean) => void
-  onSubmit: (event: FormEvent<HTMLFormElement>) => Promise<void>
+  onSubmit: (event: SubmitEvent<HTMLFormElement>) => void
   open: boolean
   pending: boolean
   values: TripActivityFormValues

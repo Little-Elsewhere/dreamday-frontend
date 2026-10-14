@@ -17,13 +17,10 @@ type Props = {
   canAddActivity: boolean
   dates: string[]
   pending: boolean
-  onDeleteActivity: (activityId: string) => Promise<void>
+  onDeleteActivity: (activityId: string) => void
   onMoveActivity: (activity: TripActivity, targetDate: string) => void
   onOpenActivity: (activity?: TripActivity, date?: string) => void
-  onUpdateActivity: (
-    activity: TripActivity,
-    patch: Partial<TripActivityFormValues>,
-  ) => Promise<void>
+  onUpdateActivity: (activity: TripActivity, patch: Partial<TripActivityFormValues>) => void
 }
 
 export const TripItinerarySection = ({

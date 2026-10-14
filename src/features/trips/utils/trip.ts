@@ -3,7 +3,6 @@ import { v4 as uuidv4 } from 'uuid'
 import { TRIP_APP_TIME_ZONE } from '@/features/trips/constants/trips'
 import type {
   TripActivity,
-  TripActivityRow,
   TripCard,
   TripListFilter,
   TripStatus,
@@ -119,13 +118,3 @@ export const parseMinute = (value: string, allowMidnight = false): number => {
   if (!match) return Number.NaN
   return Number(match[1]) * 60 + Number(match[2])
 }
-
-export const toTripActivity = (row: TripActivityRow): TripActivity => ({
-  id: row.id,
-  title: row.title,
-  activityDate: row.activity_date,
-  activityType: row.activity_type as TripActivity['activityType'],
-  startMinute: row.start_minute,
-  endMinute: row.end_minute,
-  note: row.note,
-})

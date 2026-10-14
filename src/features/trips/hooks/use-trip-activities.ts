@@ -1,6 +1,6 @@
 'use client'
 
-import { type FormEvent, useState } from 'react'
+import { type SubmitEvent, useState } from 'react'
 
 import type { TripActivityFormValues } from '@/features/trips/types/components'
 import type { TripActivity } from '@/features/trips/types/trip'
@@ -22,17 +22,17 @@ export const useTripActivities = ({ initialActivities, dates }: Props) => {
     createInitialTripActivity(''),
   )
 
-  const patchActivityValues = (patch: Partial<TripActivityFormValues>): void =>
+  const patchActivityValues = (patch: Partial<TripActivityFormValues>) =>
     setActivityValues((current) => ({ ...current, ...patch }))
 
-  const openActivity = (activity?: TripActivity, date?: string): void => {
+  const openActivity = (activity?: TripActivity, date?: string) => {
     setActivityValues(
       activity ? { ...activity } : createInitialTripActivity(date ?? dates[0] ?? ''),
     )
     setActivityOpen(true)
   }
 
-  const handleActivitySubmit = (event: FormEvent<HTMLFormElement>): void => {
+  const handleActivitySubmit = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault()
     // TODO: Persist the activity with the API.
     const activity = { ...activityValues, id: activityValues.id ?? createUuidV4() }
@@ -47,12 +47,12 @@ export const useTripActivities = ({ initialActivities, dates }: Props) => {
     setActivityOpen(false)
   }
 
-  const handleDeleteActivity = (activityId: string): void => {
+  const handleDeleteActivity = (activityId: string) => {
     // TODO: Delete the activity through the API.
     setActivities((current) => current.filter((activity) => activity.id !== activityId))
   }
 
-  const updateActivity = (activity: TripActivity, patch: Partial<TripActivityFormValues>): void => {
+  const updateActivity = (activity: TripActivity, patch: Partial<TripActivityFormValues>) => {
     // TODO: Persist activity edits through the API.
     setActivities((current) =>
       sortTripActivities(
@@ -63,7 +63,7 @@ export const useTripActivities = ({ initialActivities, dates }: Props) => {
     )
   }
 
-  const moveActivity = (activity: TripActivity, targetDate: string): void => {
+  const moveActivity = (activity: TripActivity, targetDate: string) => {
     if (targetDate !== activity.activityDate) updateActivity(activity, { activityDate: targetDate })
   }
 
