@@ -1,7 +1,7 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { type FormEvent, useState } from 'react'
+import { type SubmitEvent, useState } from 'react'
 
 import { ROUTES } from '@/constants/routes'
 import { useTripActivities } from '@/features/trips/hooks/use-trip-activities'
@@ -33,14 +33,14 @@ export const useTripCreateForm = (initialDraft: TripDraft | null) => {
     dates,
   })
 
-  const patchValues = (patch: Partial<TripDraftFormValues>): void =>
+  const patchValues = (patch: Partial<TripDraftFormValues>) =>
     setValues((current) => ({ ...current, ...patch }))
 
   const handleSaveDraft = async (): Promise<void> => {
     // TODO: Save the trip draft through the API.
   }
 
-  const handleContinue = (event?: FormEvent<HTMLFormElement>): void => {
+  const handleContinue = (event?: SubmitEvent<HTMLFormElement>) => {
     event?.preventDefault()
     if (values.startDate && values.endDate && values.endDate < values.startDate) {
       setError(t('create.errors.endBeforeStart'))
@@ -52,7 +52,7 @@ export const useTripCreateForm = (initialDraft: TripDraft | null) => {
     setStep(2)
   }
 
-  const handleCover = (file: File | undefined): void => {
+  const handleCover = (file: File | undefined) => {
     if (!file) return
     setError('')
     if (!cover.handlers.chooseCover(file)) setError(t('create.errors.invalidCover'))
@@ -88,7 +88,7 @@ export const useTripCreateForm = (initialDraft: TripDraft | null) => {
     },
     handlers: {
       ...activities.handlers,
-      handleCancel: (): void => router.push(ROUTES.PRIVATE.TRIPS),
+      handleCancel: () => router.push(ROUTES.PRIVATE.TRIPS),
       handleContinue,
       handleCover,
       handlePublish,

@@ -32,7 +32,6 @@ RUN --mount=type=secret,id=doppler_token,required=true \
 FROM base AS runner
 
 ENV NODE_ENV=production \
-    PORT=4000 \
     HOSTNAME=0.0.0.0
 
 COPY --from=builder --chown=node:node /app/.next/standalone ./
@@ -49,10 +48,11 @@ CMD ["--project", \
   "--config", \
   "prod", \
   "--no-fallback", \
-  "--preserve-env=DOPPLER_ENVIRONMENT,PORT", \
+  "--preserve-env=DOPPLER_ENVIRONMENT", \
   "--", \
   "env", \
   "-u", \
   "DOPPLER_TOKEN", \
+  "PORT=4000", \
   "node", \
   "server.js"]
