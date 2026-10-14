@@ -25,7 +25,7 @@ COPY . .
 RUN --mount=type=secret,id=doppler_token,required=true \
     export DOPPLER_TOKEN="$(cat /run/secrets/doppler_token)" \
     && export DOPPLER_ENVIRONMENT=prod \
-    && doppler run --project dreamday --config prod --no-fallback \
+    && doppler run --project dreamday-frontend --config prod --no-fallback \
       --preserve-env=DOPPLER_ENVIRONMENT -- \
       env -u DOPPLER_TOKEN pnpm exec next build
 
@@ -44,7 +44,7 @@ USER node
 EXPOSE 4000
 ENTRYPOINT ["/usr/local/bin/doppler-entrypoint.sh"]
 CMD ["--project", \
-  "dreamday", \
+  "dreamday-frontend", \
   "--config", \
   "prod", \
   "--no-fallback", \

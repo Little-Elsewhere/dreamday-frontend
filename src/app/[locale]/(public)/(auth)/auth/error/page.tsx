@@ -7,7 +7,6 @@ import { ROUTES } from '@/constants/routes'
 import { AuthLoading } from '@/features/auth/components/common/auth-loading'
 import { AuthFlowType } from '@/features/auth/constants/auth'
 import { Link } from '@/i18n/navigation'
-import { ActionErrorKind } from '@/types/action-result'
 
 type Props = {
   searchParams: Promise<Record<string, string | string[] | undefined>>
