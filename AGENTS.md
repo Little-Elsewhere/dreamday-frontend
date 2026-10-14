@@ -254,10 +254,10 @@ Every PR must pass all checks before merge:
 - ✅ Type check
 - ✅ Build with env from Doppler (`dev` for CI, `prod` for production)
 
-GitHub Actions reads the repository-level `DOPPLER_TOKEN` secret in its build
-jobs. It must be a read-only Doppler Service Token with access to the `dev` and
-`prod` configs used by those jobs. The application env values are loaded from
-Doppler.
+The CI build job uses the GitHub Environment `dev`; the production build job uses
+`prod`. Add a read-only `DOPPLER_TOKEN` secret to each environment, scoped to
+`dreamday-frontend/dev` and `dreamday-frontend/prod`, respectively. The
+application env values are loaded from Doppler.
 
 ### Version Bump (release-please)
 
