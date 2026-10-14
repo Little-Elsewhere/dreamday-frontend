@@ -7,10 +7,10 @@
     "node": ">=22.22.1"
   },
   "scripts": {
-    "dev": "doppler run --project dreamday --config dev --no-fallback -- next dev --hostname 0.0.0.0 --port 4000",
-    "build:dev": "doppler run --project dreamday --config dev -- next build",
-    "build:prod": "doppler run --project dreamday --config prod -- next build",
-    "start": "doppler run --project dreamday --config dev --no-fallback -- sh scripts/start-standalone.sh",
+    "dev": "doppler run --project dreamday-frontend --config dev --no-fallback -- next dev --hostname 0.0.0.0 --port 4000",
+    "build:dev": "doppler run --project dreamday-frontend --config dev -- next build",
+    "build:prod": "doppler run --project dreamday-frontend --config prod -- next build",
+    "start": "doppler run --project dreamday-frontend --config dev --no-fallback -- sh scripts/start-standalone.sh",
     "lint": "eslint",
     "test:unit": "vitest run",
     "test:e2e": "playwright test",
@@ -64,6 +64,7 @@
     "eslint-config-next": "16.3.8",
     "eslint-plugin-simple-import-sort": "^14.0.0",
     "eslint-plugin-storybook": "^10.6.1",
+    "eslint-plugin-unused-imports": "^4.4.1",
     "husky": "^9.1.7",
     "lint-staged": "^17.5.1",
     "playwright": "^1.62.1",

@@ -26,7 +26,7 @@ USER node
 EXPOSE 4000 9229 9230
 ENTRYPOINT ["/usr/local/bin/doppler-entrypoint.sh"]
 CMD ["--project", \
-  "dreamday", \
+  "dreamday-frontend", \
   "--config", \
   "dev", \
   "--no-fallback", \
