@@ -11,9 +11,9 @@ pnpm install
 pnpm dev
 ```
 
-`pnpm dev` runs on port 4000. Keep that port in `NEXT_PUBLIC_APP_URL` for local development.
+`pnpm dev` loads the `dreamday-frontend/dev` Doppler config and runs on port 4000. Authenticate the Doppler CLI first, either with `doppler login` or a read-only `DOPPLER_TOKEN`. Keep port 4000 in `NEXT_PUBLIC_APP_URL` for local development.
 
-To run the development container, provide the values listed in the Environment section in `.env.local`, export `DOPPLER_TOKEN`, then run:
+To run the development container, put any local overrides such as `NEXT_PUBLIC_APP_URL` in `.env.local`, export `DOPPLER_TOKEN` in your shell, then run:
 
 ```bash
 docker compose -f docker/dev/compose.yaml up --build
@@ -27,19 +27,22 @@ The auth and trip screens remain available with client-side form validation and 
 
 ## Environment
 
-Application variables are loaded through Doppler. The frontend validates them with Zod in `src/schemas/env.ts`.
+Application settings are loaded through the `dreamday-frontend/dev` or `dreamday-frontend/prod` Doppler config. The frontend validates application settings with Zod in `src/schemas/env.ts`; `DOPPLER_ENVIRONMENT` and `NEXT_DEV_ALLOWED_ORIGINS` are also read by `next.config.ts`.
 
-| Variable                          | Required | Description                                          |
-| --------------------------------- | :------: | ---------------------------------------------------- |
-| DOPPLER_ENVIRONMENT               |   Yes    | App mode (`dev` or `prod`)                           |
-| NEXT_PUBLIC_APP_NAME              |   Yes    | Application name                                     |
-| NEXT_PUBLIC_APP_DEFAULT_TITLE     |   Yes    | Default page title                                   |
-| NEXT_PUBLIC_APP_TITLE_TEMPLATE    |   Yes    | Page title template; `%s` is the page title          |
-| NEXT_PUBLIC_APP_DESCRIPTION       |   Yes    | Application and metadata description                 |
-| NEXT_PUBLIC_APP_URL               |   Yes    | Canonical application origin                         |
-| MAINTENANCE_MODE                  |    No    | Enables the maintenance page                         |
-| NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN |    No    | Omit to disable analytics                            |
-| NEXT_PUBLIC_POSTHOG_HOST          |    No    | PostHog host; defaults to `https://us.i.posthog.com` |
+| Variable                          | Required | Description                                                                          |
+| --------------------------------- | :------: | ------------------------------------------------------------------------------------ |
+| DOPPLER_ENVIRONMENT               |   Yes    | App mode (`dev` or `prod`); Docker Compose sets this for its environment             |
+| NEXT_DEV_ALLOWED_ORIGINS          |    No    | Comma-separated entries passed to Next.js `allowedDevOrigins`; used only in dev mode |
+| NEXT_PUBLIC_APP_NAME              |   Yes    | Application name                                                                     |
+| NEXT_PUBLIC_APP_DEFAULT_TITLE     |   Yes    | Default page title                                                                   |
+| NEXT_PUBLIC_APP_TITLE_TEMPLATE    |   Yes    | Page title template; `%s` is the page title                                          |
+| NEXT_PUBLIC_APP_DESCRIPTION       |   Yes    | Application and metadata description                                                 |
+| NEXT_PUBLIC_APP_URL               |   Yes    | Canonical application origin                                                         |
+| MAINTENANCE_MODE                  |    No    | Enables the maintenance page; defaults to `false`                                    |
+| NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN |    No    | Omit to disable analytics                                                            |
+| NEXT_PUBLIC_POSTHOG_HOST          |    No    | PostHog host; defaults to `https://us.i.posthog.com`                                 |
+
+`DOPPLER_TOKEN` is the credential used by Doppler CLI for `pnpm dev`, build and start commands, and Docker/CI. Docker Compose passes it as a secret. Provide it through your shell or secret manager; do not commit it to `.env.local`.
 
 ## Scripts
 
