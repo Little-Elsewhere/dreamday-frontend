@@ -1,5 +1,67 @@
 # Changelog
 
+## [0.4.0](https://github.com/Little-Elsewhere/dreamday-frontend/compare/v0.3.0...v0.4.0) (2026-10-15)
+
+
+### Features
+
+* add maintenance mode ([b34ff20](https://github.com/Little-Elsewhere/dreamday-frontend/commit/b34ff209434a3ca07fe3fba29faedad6b03fe909))
+* implement trip list and create screen ([60a0746](https://github.com/Little-Elsewhere/dreamday-frontend/commit/60a0746e78afbad798f60ed969deed9ef1310ef0))
+* update ui ([64aec78](https://github.com/Little-Elsewhere/dreamday-frontend/commit/64aec78dfc68bd6ebedc7af0efdec2e5cb1646fa))
+
+
+### Bug Fixes
+
+* **docker:** preserve allowed origins in dev container ([d9aad1b](https://github.com/Little-Elsewhere/dreamday-frontend/commit/d9aad1b50ec604ec8eb56442c5031450696be9a2))
+* redirect sign-in to trip list ([5af5b5c](https://github.com/Little-Elsewhere/dreamday-frontend/commit/5af5b5ca7bcc23a91468c49fde0f9205fcebbc89))
+* require publishable key for local env ([5a30dee](https://github.com/Little-Elsewhere/dreamday-frontend/commit/5a30deeb6e462475a926e015767fd6e7bd823b2a))
+* restore build and hardcode Docker port ([7efa066](https://github.com/Little-Elsewhere/dreamday-frontend/commit/7efa06692cf46b2c1dbfe6f248a528990efbec7f))
+* scope auth loading and signup redirect ([242c56c](https://github.com/Little-Elsewhere/dreamday-frontend/commit/242c56c4b9527730bfde3733d499754c3ee8a205))
+* upgrade vulnerable dependencies ([e0ef4c4](https://github.com/Little-Elsewhere/dreamday-frontend/commit/e0ef4c48fcaa71cfea72c2ba469c71d81717ad87))
+
+
+### Performance
+
+* enable route prefetching ([2213277](https://github.com/Little-Elsewhere/dreamday-frontend/commit/22132775023dbf5f6fbd1f70cc9a8f6366297d08))
+
+
+### Documentation
+
+* document frontend environment variables ([ebffd37](https://github.com/Little-Elsewhere/dreamday-frontend/commit/ebffd377f44165286a18615623718bb3a7e3e02c))
+* remove stale standalone asset comment ([bdcaaa6](https://github.com/Little-Elsewhere/dreamday-frontend/commit/bdcaaa6c31d74bd226ef6f1e5df0cc224ec449ba))
+
+
+### Code Refactoring
+
+* **auth:** use constant for system error type ([bb20ff9](https://github.com/Little-Elsewhere/dreamday-frontend/commit/bb20ff995b48ecbd480cab8e9105c6fa02c4c559))
+* centralize dynamic route builders ([321add0](https://github.com/Little-Elsewhere/dreamday-frontend/commit/321add08e8b27fae9fe4aeae482feae7eb905af0))
+* centralize Supabase context and test setup ([9b22a04](https://github.com/Little-Elsewhere/dreamday-frontend/commit/9b22a04e84454a0d1cb3eee3c362ef9d7135bff5))
+* colocate account loading skeleton ([22cfea0](https://github.com/Little-Elsewhere/dreamday-frontend/commit/22cfea052ed417a031daf768ebddfa9c874befd5))
+* colocate trip loading skeletons ([64570f7](https://github.com/Little-Elsewhere/dreamday-frontend/commit/64570f7f4d36265d4e01247bb875a1787780615d))
+* consolidate locale and auth callback handling ([f78540a](https://github.com/Little-Elsewhere/dreamday-frontend/commit/f78540a5963428c992350c259c3efea11f99f16f))
+* keep auth and trip flows local ([d3658d4](https://github.com/Little-Elsewhere/dreamday-frontend/commit/d3658d4194212a521f19cf13bbabe49c405acee8))
+* move auth and trip redirects into server actions ([90a9a12](https://github.com/Little-Elsewhere/dreamday-frontend/commit/90a9a126485e6a11e5b8885ed5f078ccb9725bdc))
+* normalize trip Tailwind classes ([797d6ed](https://github.com/Little-Elsewhere/dreamday-frontend/commit/797d6ed6d7842af82a636d7c7af2865ddb207bb9))
+* refine auth utility helpers ([e2afe3d](https://github.com/Little-Elsewhere/dreamday-frontend/commit/e2afe3dc24c66730e1b237c7debfe3adbcb83086))
+* standardize server action handling ([a4dbb52](https://github.com/Little-Elsewhere/dreamday-frontend/commit/a4dbb523fbc6733b04f6f05b582ee76ae279a9bf))
+
+
+### Tests
+
+* run unit tests in lint-staged ([aef9594](https://github.com/Little-Elsewhere/dreamday-frontend/commit/aef95949a8dcd1983dac465ad39d37f390b18baa))
+
+
+### Build System
+
+* fix dev scripts ([a8f9946](https://github.com/Little-Elsewhere/dreamday-frontend/commit/a8f99463acb631746af1032d1100010879fedf11))
+* update dev scripts ([b8c58fe](https://github.com/Little-Elsewhere/dreamday-frontend/commit/b8c58fe5d0016e9e641d27cf4ed959472d09799a))
+
+
+### Continuous Integration
+
+* install chromium for browser tests ([329c896](https://github.com/Little-Elsewhere/dreamday-frontend/commit/329c896a532b8e2b36ac9cb7d9f177037762406a))
+* use dev and prod GitHub environments ([0740291](https://github.com/Little-Elsewhere/dreamday-frontend/commit/074029116e01be8e394e7f1a14bfbdf4b24a8033))
+
 ## [0.3.0](https://github.com/Little-Elsewhere/dreamday-frontend/compare/v0.2.2...v0.3.0) (2026-10-06)
 
 
