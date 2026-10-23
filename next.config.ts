@@ -3,8 +3,8 @@ import type { NextConfig } from 'next'
 import createNextIntlPlugin from 'next-intl/plugin'
 
 const withNextIntl = createNextIntlPlugin()
-const isDevelopment = process.env.DOPPLER_ENVIRONMENT === 'dev'
-const isProduction = process.env.DOPPLER_ENVIRONMENT === 'prod'
+const isDevelopment = process.env.NODE_ENV === 'development'
+const isProduction = process.env.NODE_ENV === 'production'
 const allowedDevOrigins = process.env.NEXT_DEV_ALLOWED_ORIGINS?.split(',')
   .map((origin) => origin.trim())
   .filter(Boolean)

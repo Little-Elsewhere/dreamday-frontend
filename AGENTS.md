@@ -240,9 +240,9 @@ When working on this codebase, adopt the appropriate agent persona based on the 
 
 | Workflow      | Trigger         | Purpose                                                                        |
 | ------------- | --------------- | ------------------------------------------------------------------------------ |
-| `ci.yml`      | PR to `develop` | Commitlint, lint, format, typecheck, and Doppler `dreamday-frontend/dev` build |
+| `ci.yml`      | PR to `develop` | Commitlint, lint, format, typecheck, unit tests, and build from `.env.example` |
 | `release.yml` | Push to `main`  | Release-please: version bump, CHANGELOG, tags                                  |
-| `cd.yml`      | PR to `main`    | Production build with Doppler `dreamday-frontend/prod`                         |
+| `cd.yml`      | PR to `main`    | Production build from `.env.example`                                           |
 
 ### CI Checks
 
@@ -252,12 +252,13 @@ Every PR must pass all checks before merge:
 - ✅ Format check
 - ✅ Lint
 - ✅ Type check
-- ✅ Build with env from Doppler (`dev` for CI, `prod` for production)
+- ✅ Build with the committed `.env.example`; keep environment-specific values in local ignored `.env` files
 
-The CI build job uses the GitHub Environment `dev`; the production build job uses
-`prod`. Add a read-only `DOPPLER_TOKEN` secret to each environment, scoped to
-`dreamday-frontend/dev` and `dreamday-frontend/prod`, respectively. The
-application env values are loaded from Doppler.
+The CI and production build jobs copy the committed `.env.example` to an ignored
+`.env` before building. Keep examples free of secrets. For a production Docker
+image, provide environment-specific values in a local `.env` file; Compose uses
+the public frontend settings as build arguments and loads the file again at
+runtime.
 
 ### Version Bump (release-please)
 
