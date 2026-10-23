@@ -4,16 +4,17 @@ This repository contains a Next.js application and its development and productio
 
 ## Getting started
 
-Install dependencies and run the app with Doppler:
+Create a local environment file from the committed example, then install dependencies and run the app:
 
 ```bash
+cp .env.example .env
 pnpm install
 pnpm dev
 ```
 
-`pnpm dev` loads the `dreamday-frontend/dev` Doppler config and runs on port 4000. Authenticate the Doppler CLI first, either with `doppler login` or a read-only `DOPPLER_TOKEN`. Keep port 4000 in `NEXT_PUBLIC_APP_URL` for local development.
+`pnpm dev` loads values from `.env` and runs on port 4000. Keep port 4000 in `NEXT_PUBLIC_APP_URL` for local development. Local `.env` files are ignored by Git; commit changes to `.env.example` only when adding or changing configuration keys.
 
-To run the development container, put any local overrides such as `NEXT_PUBLIC_APP_URL` in `.env.local`, export `DOPPLER_TOKEN` in your shell, then run:
+To run the development container, use the same `.env` file:
 
 ```bash
 docker compose -f docker/dev/compose.yaml up --build
@@ -27,29 +28,23 @@ The auth and trip screens remain available with client-side form validation and 
 
 ## Environment
 
-Application settings are loaded through the `dreamday-frontend/dev` or `dreamday-frontend/prod` Doppler config. The frontend validates application settings with Zod in `src/schemas/env.ts`; `DOPPLER_ENVIRONMENT` and `NEXT_DEV_ALLOWED_ORIGINS` are also read by `next.config.ts`.
+The frontend validates application settings with Zod in `src/schemas/env.ts`. Next.js loads `.env` files automatically. It sets `NODE_ENV` to `development` for `next dev` and `production` for builds and production starts.
 
-| Variable                          | Required | Description                                                                          |
-| --------------------------------- | :------: | ------------------------------------------------------------------------------------ |
-| DOPPLER_ENVIRONMENT               |   Yes    | App mode (`dev` or `prod`); Docker Compose sets this for its environment             |
-| NEXT_DEV_ALLOWED_ORIGINS          |    No    | Comma-separated entries passed to Next.js `allowedDevOrigins`; used only in dev mode |
-| NEXT_PUBLIC_APP_NAME              |   Yes    | Application name                                                                     |
-| NEXT_PUBLIC_APP_DEFAULT_TITLE     |   Yes    | Default page title                                                                   |
-| NEXT_PUBLIC_APP_TITLE_TEMPLATE    |   Yes    | Page title template; `%s` is the page title                                          |
-| NEXT_PUBLIC_APP_DESCRIPTION       |   Yes    | Application and metadata description                                                 |
-| NEXT_PUBLIC_APP_URL               |   Yes    | Canonical application origin                                                         |
-| MAINTENANCE_MODE                  |    No    | Enables the maintenance page; defaults to `false`                                    |
-| NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN |    No    | Omit to disable analytics                                                            |
-| NEXT_PUBLIC_POSTHOG_HOST          |    No    | PostHog host; defaults to `https://us.i.posthog.com`                                 |
+| Group | Variables |
+| --- | --- |
+| Public application metadata | `NEXT_PUBLIC_APP_NAME`, `NEXT_PUBLIC_APP_DEFAULT_TITLE`, `NEXT_PUBLIC_APP_TITLE_TEMPLATE`, `NEXT_PUBLIC_APP_DESCRIPTION`, `NEXT_PUBLIC_APP_URL` |
+| Runtime behavior | `MAINTENANCE_MODE` (defaults to `false`) |
+| Client-side analytics | `NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN` (optional; omit to disable), `NEXT_PUBLIC_POSTHOG_HOST` (defaults to `https://us.i.posthog.com`) |
+| Development server | `NEXT_DEV_ALLOWED_ORIGINS` (optional comma-separated hostnames) |
 
-`DOPPLER_TOKEN` is the credential used by Doppler CLI for `pnpm dev`, build and start commands, and Docker/CI. Docker Compose passes it as a secret. Provide it through your shell or secret manager; do not commit it to `.env.local`.
+All `NEXT_PUBLIC_*` values are included in browser-facing output. Do not place secrets in them. The current frontend configuration contains no server credentials. For production Docker builds, `NEXT_PUBLIC_*` settings are read from the local `.env` file at build time; the same file is passed to the running container. Keep that host file out of Git.
 
 ## Scripts
 
 ```bash
 pnpm dev                 # Run Next.js directly on the host
-pnpm build:dev           # Build with Doppler dreamday-frontend/dev
-pnpm build:prod          # Build with Doppler dreamday-frontend/prod
+pnpm build:dev           # Build using the local .env file
+pnpm build:prod          # Build using the local .env file
 pnpm start               # Start the standalone build
 pnpm lint                # Run ESLint
 pnpm typecheck           # Run TypeScript checks
@@ -88,4 +83,9 @@ The auth and private-trip cases in `e2e/auth` are marked skipped while authentic
 
 ## Docker
 
-Development and production Dockerfiles and Compose files are in `docker/`.
+Development and production Dockerfiles and Compose files are in `docker/`. The production build needs a local `.env` file in this repository because public application settings are compiled into the frontend. Create it from `.env.example`, set the environment-specific public values, and start the production Compose file from this directory:
+
+```bash
+cp .env.example .env
+docker compose --env-file .env -f docker/prod/compose.yaml up --build
+```

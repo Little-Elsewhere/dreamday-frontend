@@ -7,16 +7,12 @@ services:
       dockerfile: docker/dev/Dockerfile
     init: true
     env_file:
-      - ../../.env.local
+      - ../../.env
     ports:
       - '127.0.0.1:4000:4000'
       # Keep Node inspector ports local to this machine.
       - '127.0.0.1:9229:9229'
       - '127.0.0.1:9230:9230'
-    environment:
-      DOPPLER_ENVIRONMENT: dev
-    secrets:
-      - doppler_token
     volumes:
       - type: bind
         source: ../..
@@ -31,7 +27,3 @@ services:
 volumes:
   dev_node_modules:
   dev_next:
-
-secrets:
-  doppler_token:
-    environment: DOPPLER_TOKEN

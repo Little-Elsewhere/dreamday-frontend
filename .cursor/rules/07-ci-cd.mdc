@@ -22,21 +22,18 @@ Jobs:
 - **Lint**: `pnpm lint`
 - **Type Check**: `pnpm typecheck`
 - **Unit Tests**: `pnpm test:unit`
-- **Build**: `pnpm build:dev` using Doppler `dreamday-frontend/dev`
+- **Build**: `pnpm build:dev` using the committed `.env.example`
 
-The build job references the GitHub Environment `dev`. Store a read-only
-`DOPPLER_TOKEN` secret in that environment with access to
-`dreamday-frontend/dev`. Application environment values are fetched from
-Doppler, not stored in GitHub Actions variables.
+The workflow copies `.env.example` to an ignored `.env` before building. Keep
+the example file free of secrets.
 
 ### 2. cd.yml (Production Build)
 
 Runs on: **pull requests to `main`**
 
-Purpose: Validate the production Next.js build with `pnpm build:prod` and
-Doppler `dreamday-frontend/prod`. The build job references the GitHub Environment
-`prod`; store a read-only `DOPPLER_TOKEN` secret there with access to the prod
-config.
+Purpose: Validate the production Next.js build with `pnpm build:prod` using the
+committed `.env.example`. Production Docker builds use a local `.env` file for
+build-time public settings and runtime application configuration.
 
 ---
 

@@ -7,10 +7,10 @@
     "node": ">=22.22.1"
   },
   "scripts": {
-    "dev": "doppler run --project dreamday-frontend --config dev --no-fallback -- next dev --hostname 0.0.0.0 --port 4000",
-    "build:dev": "doppler run --project dreamday-frontend --config dev -- next build",
-    "build:prod": "doppler run --project dreamday-frontend --config prod -- next build",
-    "start": "doppler run --project dreamday-frontend --config dev --no-fallback -- sh scripts/start-standalone.sh",
+    "dev": "next dev --hostname 0.0.0.0 --port 4000",
+    "build:dev": "next build",
+    "build:prod": "next build",
+    "start": "sh scripts/start-standalone.sh",
     "lint": "eslint",
     "test:unit": "vitest run",
     "test:e2e": "playwright test",
