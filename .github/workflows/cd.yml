@@ -29,10 +29,8 @@ jobs:
       - name: Install dependencies
         run: HUSKY=0 pnpm install --frozen-lockfile
 
-      - name: Install Doppler CLI
-        uses: dopplerhq/cli-action@v4
+      - name: Prepare environment
+        run: cp .env.example .env
 
       - name: Build Next.js application
         run: pnpm build:prod
-        env:
-          DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN }}
