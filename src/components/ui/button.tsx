@@ -40,10 +40,11 @@ const buttonVariants = cva(
   },
 )
 
-interface ButtonProps extends ButtonPrimitive.Props, VariantProps<typeof buttonVariants> {
-  loading?: boolean
-  loadingLabel?: ReactNode
-}
+type Props = ButtonPrimitive.Props &
+  VariantProps<typeof buttonVariants> & {
+    loading?: boolean
+    loadingLabel?: ReactNode
+  }
 
 const Button = ({
   className,
@@ -53,7 +54,7 @@ const Button = ({
   loadingLabel,
   children,
   ...props
-}: ButtonProps) => {
+}: Props) => {
   return (
     <ButtonPrimitive
       {...props}

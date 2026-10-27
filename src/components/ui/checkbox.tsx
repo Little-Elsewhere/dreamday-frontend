@@ -11,10 +11,10 @@ import { Controller, useFormContext } from 'react-hook-form'
 import { Label } from '@/components/ui/label'
 import { cn } from '@/utils/cn'
 
-interface CheckboxProps<TFieldValues extends FieldValues> extends Omit<
+type Props<TFieldValues extends FieldValues> = Omit<
   CheckboxPrimitive.Root.Props,
   'name' | 'checked' | 'defaultChecked' | 'onCheckedChange' | 'onBlur'
-> {
+> & {
   name: FieldPath<TFieldValues>
   label: React.ReactNode
   description?: React.ReactNode
@@ -26,7 +26,7 @@ const Checkbox = <TFieldValues extends FieldValues>({
   description,
   className,
   ...props
-}: CheckboxProps<TFieldValues>): React.ReactElement => {
+}: Props<TFieldValues>) => {
   const id = React.useId()
   const descriptionId = `${id}-description`
   const errorId = `${id}-error`

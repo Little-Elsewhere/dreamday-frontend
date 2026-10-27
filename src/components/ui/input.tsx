@@ -30,7 +30,7 @@ const Input = <TFieldValues extends FieldValues>({
   endAdornment,
   id,
   ...props
-}: InputProps<TFieldValues>): React.ReactElement => {
+}: InputProps<TFieldValues>) => {
   const generatedId = React.useId()
   const inputId = id ?? generatedId
   const descriptionId = `${inputId}-description`

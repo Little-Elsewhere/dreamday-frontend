@@ -1,7 +1,6 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import type { ReactElement } from 'react'
 
 import { Button } from '@/components/ui/button'
 
@@ -12,7 +11,7 @@ type Props = {
   pending: boolean
 }
 
-export const TripNoteSection = ({ note, onChange, onSave, pending }: Props): ReactElement => {
+export const TripNoteSection = ({ note, onChange, onSave, pending }: Props) => {
   const t = useTranslations('trips')
 
   return (

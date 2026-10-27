@@ -1,7 +1,6 @@
 import { Add01Icon, ArrowLeft02Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { getTranslations } from 'next-intl/server'
-import type { ReactElement } from 'react'
 
 import { ROUTES } from '@/constants/routes'
 import { SignOutButton } from '@/features/auth/components/common/sign-out-button'
@@ -12,10 +11,7 @@ type Props = {
   showTripsLink?: boolean
 }
 
-export const TripHeader = async ({
-  showCreate = false,
-  showTripsLink = false,
-}: Props): Promise<ReactElement> => {
+export const TripHeader = async ({ showCreate = false, showTripsLink = false }: Props) => {
   const t = await getTranslations('trips')
 
   return (

@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
-import type { ReactElement } from 'react'
 import { Suspense } from 'react'
 
 import { ROUTES } from '@/constants/routes'
@@ -23,7 +22,7 @@ export const generateMetadata = async ({ searchParams }: Props): Promise<Metadat
   }
 }
 
-const AuthErrorContent = async ({ searchParams }: Props): Promise<ReactElement> => {
+const AuthErrorContent = async ({ searchParams }: Props) => {
   const [t, commonT] = await Promise.all([
     getTranslations('auth.error'),
     getTranslations('auth.common'),
@@ -78,7 +77,7 @@ const AuthErrorContent = async ({ searchParams }: Props): Promise<ReactElement> 
   )
 }
 
-const AuthErrorPage = ({ searchParams }: Props): ReactElement => (
+const AuthErrorPage = ({ searchParams }: Props) => (
   <Suspense fallback={<AuthLoading variant="error" />}>
     <AuthErrorContent searchParams={searchParams} />
   </Suspense>

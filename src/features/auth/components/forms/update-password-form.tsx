@@ -2,14 +2,13 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useTranslations } from 'next-intl'
-import { type ReactElement } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
 import { Button } from '@/components/ui/button'
 import { PasswordInput } from '@/components/ui/password-input'
 import { type UpdatePasswordFormValues, updatePasswordSchema } from '@/features/auth/schemas/auth'
 
-export const UpdatePasswordForm = (): ReactElement => {
+export const UpdatePasswordForm = () => {
   const t = useTranslations('auth')
   const form = useForm<UpdatePasswordFormValues>({
     resolver: zodResolver(updatePasswordSchema),

@@ -12,15 +12,11 @@
 
 Additional project conventions are maintained in `.cursor/rules/*.mdc`. Codex does not load these Cursor rule files automatically, so before changing files, read and follow the rules relevant to the task. Use the Markdown body as guidance; the YAML frontmatter is Cursor-specific metadata.
 
-- `00-project.mdc` — project stack and global context
-- `01-core.mdc` — architecture, TypeScript, rendering, and security
-- `02-styling.mdc` — Tailwind, shadcn/ui, icons, and styling
-- `03-data-forms.mdc` — data fetching, Server Actions, forms, and state
-- `04-i18n.mdc` — next-intl and translations
-- `05-tooling.mdc` — testing, linting, and PWA
-- `06-error-handling.mdc` — error boundaries and error UX
-- `07-ci-cd.mdc` — CI/CD and release conventions
-- `08-anti-patterns.mdc` — patterns to avoid
+- `typescript.mdc` — untrusted input, return types, Props, interface vs type
+- `tailwind.mdc` — `cn()` for conditional/merged classes only
+- `i18n.mdc` — next-intl localization and formatters
+- `hooks.mdc` — group complex hook returns by data/handlers/statuses/refs
+- `react-compiler.mdc` — skip manual memo/useMemo/useCallback
 
 ---
 

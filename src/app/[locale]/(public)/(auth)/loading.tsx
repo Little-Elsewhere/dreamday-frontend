@@ -1,10 +1,9 @@
 import Image from 'next/image'
-import type { ReactElement } from 'react'
 
 import { Skeleton } from '@/components/ui/skeleton'
 import { AuthLoading } from '@/features/auth/components/common/auth-loading'
 
-const AuthRouteLoading = (): ReactElement => (
+const AuthRouteLoading = () => (
   <main
     className="bg-surface text-ink auth-wide:grid-cols-[minmax(560px,52%)_minmax(600px,48%)] grid min-h-screen grid-cols-1 antialiased lg:grid-cols-[minmax(390px,46%)_minmax(520px,54%)]"
     aria-busy="true"

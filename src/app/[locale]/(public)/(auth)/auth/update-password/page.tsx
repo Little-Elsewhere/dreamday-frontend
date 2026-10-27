@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
-import type { ReactElement } from 'react'
 import { Suspense } from 'react'
 
 import { AuthLoading } from '@/features/auth/components/common/auth-loading'
@@ -19,7 +18,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
   }
 }
 
-const UpdatePasswordPage = ({ params }: Props): ReactElement => (
+const UpdatePasswordPage = ({ params }: Props) => (
   <Suspense fallback={<AuthLoading variant="update-password" />}>
     <RequireSession params={params}>
       <UpdatePasswordForm />

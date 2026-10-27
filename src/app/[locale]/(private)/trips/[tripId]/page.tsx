@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { getLocale, getTranslations } from 'next-intl/server'
-import type { ReactElement } from 'react'
 
 import { buttonVariants } from '@/components/ui/button'
 import { TripHeader } from '@/features/trips/components/trip-header'
@@ -15,9 +14,9 @@ import {
 } from '@/features/trips/utils/trip'
 import { Link } from '@/i18n/navigation'
 
-type PageProps = { params: Promise<{ tripId: string }> }
+type Props = { params: Promise<{ tripId: string }> }
 
-export const generateMetadata = async ({ params }: PageProps): Promise<Metadata> => {
+export const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
   const [{ tripId }, t] = await Promise.all([params, getTranslations('trips.detail')])
   const trip = await getTripDetail(tripId)
   return trip
@@ -37,7 +36,7 @@ const TripSchedule = ({
   trip: TripDetail
   locale: string
   labels: (key: string) => string
-}): ReactElement => {
+}) => {
   const activitiesByDate = groupTripActivitiesByDate(trip.activities)
 
   return (
@@ -85,7 +84,7 @@ const TripSchedule = ({
   )
 }
 
-const TripDetailPage = async ({ params }: PageProps): Promise<ReactElement> => {
+const TripDetailPage = async ({ params }: Props) => {
   const [{ tripId }, locale, t] = await Promise.all([
     params,
     getLocale(),

@@ -1,9 +1,8 @@
 import { getTranslations } from 'next-intl/server'
-import type { ReactElement } from 'react'
 
 import { Skeleton } from '@/components/ui/skeleton'
 
-const OfflineLoading = async (): Promise<ReactElement> => {
+const OfflineLoading = async () => {
   const t = await getTranslations('common.offline')
 
   return (

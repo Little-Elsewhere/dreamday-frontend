@@ -1,7 +1,6 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import type { ReactElement } from 'react'
 
 import { FeedbackMessage } from '@/components/common/feedback-message'
 import { Button } from '@/components/ui/button'
@@ -17,7 +16,7 @@ type Props = {
   initialDraft: TripDraft | null
 }
 
-export const TripCreateForm = ({ initialDraft }: Props): ReactElement => {
+export const TripCreateForm = ({ initialDraft }: Props) => {
   const t = useTranslations('trips')
   const {
     data: { activityOpen, activityValues, activities, coverUrl, dates, step, values },

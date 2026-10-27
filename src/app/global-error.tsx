@@ -23,7 +23,7 @@ type Props = {
   retry: () => void
 }
 
-type ErrorContentProps = Props & {
+interface ErrorContentProps extends Props {
   locale: Locale
 }
 

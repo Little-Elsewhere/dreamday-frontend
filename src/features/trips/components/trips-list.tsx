@@ -4,7 +4,7 @@ import { ArrowRight01Icon, Image01Icon, Search01Icon } from '@hugeicons/core-fre
 import { HugeiconsIcon } from '@hugeicons/react'
 import Image from 'next/image'
 import { useLocale, useTranslations } from 'next-intl'
-import { type ReactElement, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { Button, buttonVariants } from '@/components/ui/button'
 import { ROUTES } from '@/constants/routes'
@@ -17,7 +17,7 @@ type Props = {
   trips: TripCard[]
 }
 
-export const TripsList = ({ trips }: Props): ReactElement => {
+export const TripsList = ({ trips }: Props) => {
   const t = useTranslations('trips')
   const locale = useLocale()
   const [query, setQuery] = useState('')

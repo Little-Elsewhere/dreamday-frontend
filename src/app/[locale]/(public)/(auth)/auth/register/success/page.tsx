@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
-import type { ReactElement } from 'react'
 
 import { AuthEmailSuccess } from '@/features/auth/components/common/auth-email-success'
 
@@ -16,7 +15,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
   }
 }
 
-const RegisterSuccessPage = async (): Promise<ReactElement> => {
+const RegisterSuccessPage = async () => {
   const [commonT, registerT] = await Promise.all([
     getTranslations('auth.common'),
     getTranslations('auth.register'),
