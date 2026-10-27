@@ -140,7 +140,6 @@ jobs:
       - name: Build Next.js application
         run: pnpm build
 
-  # Visible on the PR Checks tab. Do not add this job as a required status check.
   auto-merge:
     name: Auto Merge
     needs: [commitlint, format, lint, typecheck, build]
