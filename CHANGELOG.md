@@ -1,5 +1,46 @@
 # Changelog
 
+## [0.4.1](https://github.com/Little-Elsewhere/dreamday-frontend/compare/v0.4.0...v0.4.1) (2026-10-27)
+
+
+### Dependencies
+
+* upgrade vulnerable packages and pin security overrides ([09af512](https://github.com/Little-Elsewhere/dreamday-frontend/commit/09af51212b9a85d412035c6e0f6f3888d0f0a470))
+
+
+### Documentation
+
+* **rules:** remove legacy anti-patterns Cursor rule ([985c324](https://github.com/Little-Elsewhere/dreamday-frontend/commit/985c324da8c23abb4a658c397277429ba88eb01d))
+* **rules:** replace numbered Cursor rules with focused modules ([cbf2cba](https://github.com/Little-Elsewhere/dreamday-frontend/commit/cbf2cba6fcb258d05f9e0752de881af2fb3f5f7b))
+* **rules:** scope React Compiler guidance to source files ([f241ec2](https://github.com/Little-Elsewhere/dreamday-frontend/commit/f241ec2f96628f6cc21e4399b1b8f68aa55aec91))
+
+
+### Styles
+
+* **ci:** drop redundant auto-merge workflow comment ([6966a4c](https://github.com/Little-Elsewhere/dreamday-frontend/commit/6966a4ca6d5987e7da9b9fb79bb1d6b28ed1a87e))
+* **ci:** remove Auto Merge job comment ([c51d44c](https://github.com/Little-Elsewhere/dreamday-frontend/commit/c51d44c9e5a070ac76cf0cdfae0923da63b3d701))
+* format README environment table ([d10e865](https://github.com/Little-Elsewhere/dreamday-frontend/commit/d10e865ed38502cf37add8fef64fffe4e189615a))
+
+
+### Tests
+
+* **auth:** add mobile login validation e2e ([5599fbd](https://github.com/Little-Elsewhere/dreamday-frontend/commit/5599fbd9f814ec20edd8630c180fa8c48dcdd756))
+
+
+### Build System
+
+* collapse identical build:dev and build:prod into build ([ee4bd43](https://github.com/Little-Elsewhere/dreamday-frontend/commit/ee4bd43441919277a382fcf5109665ba1eddd13d))
+* simplify standalone prepare and start scripts ([c3933ad](https://github.com/Little-Elsewhere/dreamday-frontend/commit/c3933adc10d8a43207621f5028d28d69f89e24d8))
+
+
+### Continuous Integration
+
+* enable auto-merge via rebase ([6c1065b](https://github.com/Little-Elsewhere/dreamday-frontend/commit/6c1065b7158833fd4d3badb133113e4a5c47c1da))
+* merge PRs synchronously so head branches delete ([c3ab1b0](https://github.com/Little-Elsewhere/dreamday-frontend/commit/c3ab1b089278af2ee5d9ffe1117dcfa2dc8a7060))
+* run Build and Test on pull requests to main ([f4aa088](https://github.com/Little-Elsewhere/dreamday-frontend/commit/f4aa08871d6f3ffd3f023a09dcde6c3bbb03d702))
+* show Auto Merge as a PR check after CI jobs ([81b0445](https://github.com/Little-Elsewhere/dreamday-frontend/commit/81b04457e500547d490d480dd47722f3b980c9d4))
+* trigger auto-merge after Build and Test completes ([406a54d](https://github.com/Little-Elsewhere/dreamday-frontend/commit/406a54d8f110debf034baa973ea5577d213e085f))
+
 ## [0.4.0](https://github.com/Little-Elsewhere/dreamday-frontend/compare/v0.3.0...v0.4.0) (2026-10-15)
 
 
