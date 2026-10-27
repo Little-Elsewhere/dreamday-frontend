@@ -1,35 +1,46 @@
 name: Auto Merge PR
 
+# Start only after the required CI workflow finishes (no polling).
 on:
-  pull_request_target:
-    types: [opened, reopened, ready_for_review, synchronize]
+  workflow_run:
+    workflows: [Build and Test]
+    types: [completed]
 
-# Native `gh pr merge --auto` queues the merge for later. When that deferred
-# merge runs, GITHUB_TOKEN is no longer valid for branch deletion, so the
-# repo `delete_branch_on_merge` setting can silently skip removing the head
-# branch. Merge synchronously after required checks so delete succeeds.
 concurrency:
-  group: auto-merge-${{ github.event.pull_request.number }}
+  group: auto-merge-${{ github.event.workflow_run.head_branch }}
   cancel-in-progress: true
 
 permissions:
   contents: write
   pull-requests: write
-  checks: read
-  statuses: read
-  actions: read
 
 jobs:
   auto-merge:
-    if: ${{ github.event.pull_request.draft == false }}
+    if: >
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'pull_request'
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      PR_NUMBER: ${{ github.event.pull_request.number }}
       REPO: ${{ github.repository }}
+      HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
     steps:
-      - name: Wait for required checks
-        run: gh pr checks "$PR_NUMBER" --repo "$REPO" --watch --required
+      - name: Resolve pull request
+        id: pr
+        run: |
+          pr_json="$(gh api "repos/$REPO/commits/$HEAD_SHA/pulls" --jq 'map(select(.state == "open" and .base.ref == "develop")) | .[0] // empty')"
+          if [ -z "$pr_json" ]; then
+            echo 'No open develop PR for this commit; skipping.'
+            echo 'skip=true' >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          number="$(printf '%s' "$pr_json" | jq -r '.number')"
+          draft="$(printf '%s' "$pr_json" | jq -r '.draft')"
+          echo "number=$number" >> "$GITHUB_OUTPUT"
+          echo "draft=$draft" >> "$GITHUB_OUTPUT"
+          echo "skip=false" >> "$GITHUB_OUTPUT"
 
       - name: Merge rebase and delete head branch
-        run: gh pr merge "$PR_NUMBER" --repo "$REPO" --rebase --delete-branch
+        if: steps.pr.outputs.skip == 'false' && steps.pr.outputs.draft == 'false'
+        run: gh pr merge "${{ steps.pr.outputs.number }}" --repo "$REPO" --rebase --delete-branch
