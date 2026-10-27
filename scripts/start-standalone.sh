@@ -2,22 +2,23 @@
 
 set -eu
 
-standalone_dir='.next/standalone'
+root_dir=$(CDPATH= cd -- "$(dirname "$0")/.." && pwd)
+standalone_dir="$root_dir/.next/standalone"
 
 if [ ! -f "$standalone_dir/server.js" ]; then
-  printf '%s\n' 'Standalone build not found. Run a build before starting the app.' >&2
+  printf '%s\n' 'Standalone build not found. Run pnpm build first.' >&2
   exit 1
 fi
 
-PORT=4000
-HOSTNAME=0.0.0.0
-NODE_ENV=production
-export PORT HOSTNAME NODE_ENV
+cd "$root_dir"
 
-printf '[start] Preparing standalone assets...\n'
-mkdir -p "$standalone_dir/public" "$standalone_dir/.next/static"
-cp -R public/. "$standalone_dir/public/"
-cp -R .next/static/. "$standalone_dir/.next/static/"
+if [ ! -f .env.production ]; then
+  printf '%s\n' 'Missing .env.production. Create it before starting the standalone server.' >&2
+  exit 1
+fi
 
-printf '[start] Starting standalone server on port %s.\n' "$PORT"
+set -a
+. ./.env.production
+set +a
+
 exec node "$standalone_dir/server.js"
