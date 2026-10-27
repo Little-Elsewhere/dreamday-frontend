@@ -1,6 +1,5 @@
 name: Auto Merge PR
 
-# Start only after the required CI workflow finishes (no polling).
 on:
   workflow_run:
     workflows: [Build and Test]
