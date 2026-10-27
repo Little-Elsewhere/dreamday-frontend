@@ -39,7 +39,6 @@ export const proxy = (request: NextRequest): NextResponse => {
     return response
   }
 
-  // TODO: Add an API-backed auth guard when the authentication API endpoints are ready.
   const response = intlMiddleware(request)
   if (isPrivate || isLogin) {
     response.headers.set('Cache-Control', 'private, no-store')

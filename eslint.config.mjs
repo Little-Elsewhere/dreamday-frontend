@@ -2,6 +2,7 @@
 import { defineConfig, globalIgnores } from 'eslint/config'
 import nextVitals from 'eslint-config-next/core-web-vitals'
 import nextTs from 'eslint-config-next/typescript'
+import noComments from 'eslint-plugin-no-comments'
 import simpleImportSort from 'eslint-plugin-simple-import-sort'
 import storybook from 'eslint-plugin-storybook'
 import unusedImports from 'eslint-plugin-unused-imports'
@@ -38,6 +39,21 @@ const eslintConfig = defineConfig([
       'simple-import-sort/exports': 'error',
       'sort-imports': 'off',
       'import/order': 'off',
+    },
+  },
+  {
+    files: ['src/**/*.{js,jsx,ts,tsx}'],
+    ignores: ['src/app/sw.ts'],
+    plugins: {
+      'no-comments': noComments,
+    },
+    rules: {
+      'no-comments/disallowComments': [
+        'error',
+        {
+          allow: ['__no_comments_allowlist_never__'],
+        },
+      ],
     },
   },
   // Override default ignores of eslint-config-next.

@@ -36,9 +36,7 @@ export const useTripCreateForm = (initialDraft: TripDraft | null) => {
   const patchValues = (patch: Partial<TripDraftFormValues>) =>
     setValues((current) => ({ ...current, ...patch }))
 
-  const handleSaveDraft = async (): Promise<void> => {
-    // TODO: Save the trip draft through the API.
-  }
+  const handleSaveDraft = async (): Promise<void> => {}
 
   const handleContinue = (event?: SubmitEvent<HTMLFormElement>) => {
     event?.preventDefault()
@@ -47,7 +45,6 @@ export const useTripCreateForm = (initialDraft: TripDraft | null) => {
       return
     }
 
-    // TODO: Save the trip draft through the API.
     setError('')
     setStep(2)
   }
@@ -59,23 +56,18 @@ export const useTripCreateForm = (initialDraft: TripDraft | null) => {
   }
 
   const handleRemoveCover = async (): Promise<void> => {
-    // TODO: Persist cover removal through the API.
     cover.handlers.removeCover()
     patchValues({ coverPath: null })
     setError('')
   }
 
-  const handleSaveNote = async (): Promise<void> => {
-    // TODO: Save the trip note through the API.
-  }
+  const handleSaveNote = async (): Promise<void> => {}
 
   const handlePublish = async (): Promise<void> => {
     if (values.startDate && values.endDate && values.endDate < values.startDate) {
       setError(t('create.errors.endBeforeStart'))
       return
     }
-
-    // TODO: Publish the trip through the API.
   }
 
   return {
