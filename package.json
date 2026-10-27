@@ -8,8 +8,7 @@
   },
   "scripts": {
     "dev": "next dev --hostname 0.0.0.0 --port 4000",
-    "build:dev": "next build",
-    "build:prod": "next build",
+    "build": "next build",
     "start": "sh scripts/start-standalone.sh",
     "lint": "eslint",
     "test:unit": "vitest run",
