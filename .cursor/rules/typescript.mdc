@@ -1,0 +1,79 @@
+---
+description: TypeScript conventions — untrusted input, return types, Props, interface vs type
+globs: src/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# TypeScript conventions
+
+`any` is banned by ESLint (`@typescript-eslint/no-explicit-any`). Do not add disable comments to work around it.
+
+## Untrusted external data
+
+Treat external data as untrusted (API responses, FormData, search params, cookies, third-party payloads). Validate it at the appropriate boundary with an existing Zod schema or a suitable runtime check before use.
+
+```ts
+// ❌ BAD — trust the shape of external JSON
+const trip = (await res.json()) as Trip
+
+// ✅ GOOD — validate at the boundary
+const trip = tripSchema.parse(await res.json())
+```
+
+Prefer reusing feature schemas under `schemas/` over one-off casts or hand-rolled guards when a schema already exists.
+
+## Return types — infer by default
+
+Prefer inferred return types when TypeScript can infer them clearly. Do not add an explicit return type just because a function is exported.
+
+Add an explicit return type when it clarifies a public contract, resolves recursive/blocked inference, or constrains a non-obvious API.
+
+```ts
+// ❌ BAD — exported alone is not a reason for an explicit return type
+export function formatTripLabel(trip: Trip): string {
+  return `${trip.destination} · ${trip.days}d`
+}
+
+// ✅ GOOD — inference is clear
+export function formatTripLabel(trip: Trip) {
+  return `${trip.destination} · ${trip.days}d`
+}
+
+// ✅ GOOD — explicit when it constrains a contract or recursive inference
+export function getSession(): Promise<Session | null> {
+  return loadSession()
+}
+```
+
+## Object types and component props
+
+Prefer `interface` over `type` for object shapes. Use `type` for unions, intersections used as aliases, and mapped types.
+
+Exception: the primary component in a file MUST use a file-local `type Props = { ... }` (not `interface Props`, not an exported `*Props` name unless the component is shared across files).
+
+```tsx
+// ❌ BAD
+export interface TripCardProps {
+  trip: Trip
+  onOpen: (id: string) => void
+}
+
+// ✅ GOOD — file-local Props for the primary component
+type Props = {
+  trip: Trip
+  onOpen: (id: string) => void
+}
+
+export function TripCard({ trip, onOpen }: Props) {
+  return <button onClick={() => onOpen(trip.id)}>{trip.name}</button>
+}
+
+// ✅ GOOD — interface for shared object shapes; type for unions/mapped types
+interface Trip {
+  id: string
+  name: string
+}
+
+type TripStatus = 'draft' | 'planned' | 'archived'
+type Flags = { [K in TripStatus]?: boolean }
+```
