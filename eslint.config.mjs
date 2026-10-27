@@ -16,6 +16,8 @@ const eslintConfig = defineConfig([
       'unused-imports': unusedImports,
     },
     rules: {
+      '@next/next/no-img-element': 'error',
+      '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/no-unused-vars': 'off',
       'unused-imports/no-unused-imports': 'error',
       'unused-imports/no-unused-vars': 'warn',

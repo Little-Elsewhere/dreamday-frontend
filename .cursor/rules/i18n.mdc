@@ -1,0 +1,45 @@
+---
+description: Localize UI text and format dates/numbers with next-intl
+globs:
+  - src/**/*.{ts,tsx}
+  - messages/**/*.json
+alwaysApply: false
+---
+
+# Internationalization
+
+Localize all static, application-owned user-facing text with `next-intl`. Never hardcode translatable UI strings.
+
+Use `getTranslations` / `getFormatter` in Server Components and `useTranslations` / `useFormatter` in Client Components. Format user-facing dates, times, numbers, and currencies with next-intl formatters or ICU message formatting — not ad-hoc `toLocaleString` / manual string templates for display.
+
+Reuse existing translation keys when appropriate. When adding copy, update the relevant locale files under `messages/` for every supported locale (`en`, `vi`).
+
+```tsx
+// ❌ BAD — hardcoded UI string
+<button>Save trip</button>
+
+// ✅ GOOD — Server Component
+import { getTranslations } from 'next-intl/server'
+
+export default async function Page() {
+  const t = await getTranslations('trips.create')
+  return <button>{t('save')}</button>
+}
+
+// ✅ GOOD — Client Component + formatter
+'use client'
+import { useFormatter, useTranslations } from 'next-intl'
+
+export function TripMeta({ date, budget }: Props) {
+  const t = useTranslations('trips')
+  const format = useFormatter()
+  return (
+    <p>
+      {t('meta', {
+        date: format.dateTime(date, { dateStyle: 'medium' }),
+        budget: format.number(budget, { style: 'currency', currency: 'USD' }),
+      })}
+    </p>
+  )
+}
+```

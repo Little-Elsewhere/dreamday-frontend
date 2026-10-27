@@ -1,0 +1,36 @@
+---
+description: Group complex custom-hook returns by data, handlers, statuses, and refs
+globs:
+  - src/**/hooks/**/*.{ts,tsx}
+  - src/**/use-*.{ts,tsx}
+alwaysApply: false
+---
+
+# Hook return shape
+
+For complex custom hooks that expose multiple concerns, group returned values by purpose instead of a large flat object. Use these group names only when needed — never return empty groups:
+
+- `data` — source state, computed values, derived data
+- `handlers` — callbacks, event handlers, actions
+- `statuses` — loading, error, success, and other operation states
+- `refs` — React refs exposed to consumers
+
+Keep simple hooks simple: a single value or a small cohesive API should use the most natural return shape without grouping.
+
+When extending existing hooks or wrapping third-party hooks, preserve established API contracts. Do not add `useMemo` / `useCallback` only to stabilize grouped return objects — React Compiler handles memoization (see `react-compiler` rule).
+
+```ts
+// ❌ BAD — flat bag of unrelated concerns
+return { trips, selectedTrip, handleSelectTrip, handleSave, isLoading, isSaving, error, searchInputRef }
+
+// ✅ GOOD — grouped by purpose (omit unused groups)
+return {
+  data: { trips, selectedTrip },
+  handlers: { handleSelectTrip, handleSave },
+  statuses: { isLoading, isSaving, error },
+  refs: { searchInputRef },
+}
+
+// ✅ GOOD — simple hook stays ungrouped
+return value
+```
