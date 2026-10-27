@@ -17,8 +17,10 @@ const eslintConfig = defineConfig([
     },
     rules: {
       '@next/next/no-img-element': 'error',
+      '@typescript-eslint/ban-ts-comment': 'error',
       '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/no-unused-vars': 'off',
+      'react/jsx-no-comment-textnodes': 'error',
       'unused-imports/no-unused-imports': 'error',
       'unused-imports/no-unused-vars': 'warn',
       'simple-import-sort/imports': [
