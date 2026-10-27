@@ -10,6 +10,7 @@ export const getCurrentDraft = async (): Promise<TripDraft | null> => {
   return null
 }
 
-export const getTripDetail = async (_tripId: string): Promise<TripDetail | null> => {
+export const getTripDetail = async (tripId: string): Promise<TripDetail | null> => {
+  void tripId
   return null
 }

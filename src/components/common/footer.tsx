@@ -2,9 +2,8 @@ import 'server-only'
 
 import { cacheLife } from 'next/cache'
 import { getTranslations } from 'next-intl/server'
-import type { ReactElement } from 'react'
 
-export const Footer = async (): Promise<ReactElement> => {
+export const Footer = async () => {
   'use cache'
   cacheLife('days')
 

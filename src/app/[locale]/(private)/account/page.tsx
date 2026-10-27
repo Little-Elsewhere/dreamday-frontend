@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import { getTranslations } from 'next-intl/server'
-import type { ReactElement } from 'react'
 
 import { buttonVariants } from '@/components/ui/button'
 import { ROUTES } from '@/constants/routes'
@@ -13,7 +12,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
   return { title: t('metadata.title'), description: t('metadata.description') }
 }
 
-const Account = async (): Promise<ReactElement> => {
+const Account = async () => {
   const t = await getTranslations('account')
 
   return (

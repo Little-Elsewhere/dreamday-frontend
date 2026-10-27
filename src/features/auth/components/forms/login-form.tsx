@@ -2,7 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useTranslations } from 'next-intl'
-import { type ReactElement, useState } from 'react'
+import { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
 import { Button } from '@/components/ui/button'
@@ -14,7 +14,7 @@ import { Link } from '@/i18n/navigation'
 
 import { ForgotPasswordForm } from './forgot-password-form'
 
-export const LoginForm = (): ReactElement => {
+export const LoginForm = () => {
   const t = useTranslations('auth')
   const [resetDialogOpen, setResetDialogOpen] = useState(false)
   const [resetInitialEmail, setResetInitialEmail] = useState('')

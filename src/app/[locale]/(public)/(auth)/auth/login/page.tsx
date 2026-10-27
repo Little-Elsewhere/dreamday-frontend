@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
-import type { ReactElement } from 'react'
 
 import { LoginForm } from '@/features/auth/components/forms/login-form'
 
@@ -12,6 +11,6 @@ export const generateMetadata = async (): Promise<Metadata> => {
   }
 }
 
-const Login = (): ReactElement => <LoginForm />
+const Login = () => <LoginForm />
 
 export default Login

@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
-import type { ReactElement } from 'react'
 
 export const generateMetadata = async (): Promise<Metadata> => {
   const t = await getTranslations('common.maintenance')
@@ -15,7 +14,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
   }
 }
 
-const MaintenancePage = async (): Promise<ReactElement> => {
+const MaintenancePage = async () => {
   const t = await getTranslations('common.maintenance')
 
   return (

@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { getTranslations } from 'next-intl/server'
-import type { ReactElement, ReactNode } from 'react'
+import type { ReactNode } from 'react'
 
 import { Footer } from '@/components/common/footer'
 
@@ -8,7 +8,7 @@ type Props = {
   children: ReactNode
 }
 
-const AuthLayout = async ({ children }: Props): Promise<ReactElement> => {
+const AuthLayout = async ({ children }: Props) => {
   const t = await getTranslations('auth')
 
   return (

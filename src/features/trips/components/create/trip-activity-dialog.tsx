@@ -1,7 +1,7 @@
 'use client'
 
 import { useLocale, useTranslations } from 'next-intl'
-import type { ReactElement, SubmitEvent } from 'react'
+import type { SubmitEvent } from 'react'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -34,7 +34,7 @@ export const TripActivityDialog = ({
   open,
   pending,
   values,
-}: Props): ReactElement => {
+}: Props) => {
   const t = useTranslations('trips')
   const locale = useLocale()
 

@@ -1,9 +1,8 @@
 import { getTranslations } from 'next-intl/server'
-import type { ReactElement } from 'react'
 
 import { Skeleton } from '@/components/ui/skeleton'
 
-const TripDetailSkeleton = (): ReactElement => (
+const TripDetailSkeleton = () => (
   <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 md:py-12 lg:px-8">
     <Skeleton className="h-5 w-28 motion-reduce:animate-none" />
     <article className="border-line bg-surface mt-5 overflow-hidden rounded-3xl border">
@@ -39,7 +38,7 @@ const TripDetailSkeleton = (): ReactElement => (
   </div>
 )
 
-const Loading = async (): Promise<ReactElement> => {
+const Loading = async () => {
   const t = await getTranslations('trips')
 
   return (

@@ -2,17 +2,14 @@
 
 import { EyeIcon, EyeOffIcon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
-import { type ReactElement, useState } from 'react'
+import { useState } from 'react'
 import type { FieldValues } from 'react-hook-form'
 
 import { Button } from '@/components/ui/button'
 import { Input, type InputProps } from '@/components/ui/input'
 import { cn } from '@/utils/cn'
 
-interface PasswordInputProps<T extends FieldValues> extends Omit<
-  InputProps<T>,
-  'endAdornment' | 'type'
-> {
+type Props<T extends FieldValues> = Omit<InputProps<T>, 'endAdornment' | 'type'> & {
   showLabel: string
   hideLabel: string
 }
@@ -21,7 +18,7 @@ export const PasswordInput = <T extends FieldValues>({
   showLabel,
   hideLabel,
   ...props
-}: PasswordInputProps<T>): ReactElement => {
+}: Props<T>) => {
   const [shown, setShown] = useState(false)
 
   return (

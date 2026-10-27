@@ -1,9 +1,8 @@
 import { getTranslations } from 'next-intl/server'
-import type { ReactElement } from 'react'
 
 import { Skeleton } from '@/components/ui/skeleton'
 
-const Loading = async (): Promise<ReactElement> => {
+const Loading = async () => {
   const t = await getTranslations('auth.common')
 
   return (

@@ -1,6 +1,5 @@
 import { Mail01Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
-import type { ReactElement } from 'react'
 
 import { ROUTES } from '@/constants/routes'
 import { Link } from '@/i18n/navigation'
@@ -13,13 +12,7 @@ type Props = {
   actionLabel: string
 }
 
-export const AuthEmailSuccess = ({
-  eyebrow,
-  title,
-  description,
-  helper,
-  actionLabel,
-}: Props): ReactElement => {
+export const AuthEmailSuccess = ({ eyebrow, title, description, helper, actionLabel }: Props) => {
   return (
     <section aria-labelledby="auth-title">
       <div

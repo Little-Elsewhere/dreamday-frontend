@@ -1,4 +1,4 @@
-import type { ReactElement, Ref } from 'react'
+import type { Ref } from 'react'
 
 import { cn } from '@/utils/cn'
 
@@ -8,7 +8,7 @@ type Props = {
   focusRef?: Ref<HTMLDivElement>
 }
 
-export const FeedbackMessage = ({ message, isError, focusRef }: Props): ReactElement => {
+export const FeedbackMessage = ({ message, isError, focusRef }: Props) => {
   return (
     <div
       className={cn(

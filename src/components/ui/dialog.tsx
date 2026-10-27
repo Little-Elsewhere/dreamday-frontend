@@ -1,7 +1,7 @@
 'use client'
 
 import { Dialog as DialogPrimitive } from '@base-ui/react/dialog'
-import type { ComponentProps, ReactElement } from 'react'
+import type { ComponentProps } from 'react'
 
 import { cn } from '@/utils/cn'
 
@@ -17,7 +17,7 @@ interface DialogOverlayProps extends ComponentProps<typeof DialogPrimitive.Backd
   className?: string
 }
 
-const DialogOverlay = ({ className, ...props }: DialogOverlayProps): ReactElement => {
+const DialogOverlay = ({ className, ...props }: DialogOverlayProps) => {
   return (
     <DialogPrimitive.Backdrop
       data-slot="dialog-overlay"
@@ -34,12 +34,7 @@ interface DialogContentProps extends ComponentProps<typeof DialogPrimitive.Popup
   overlayClassName?: string
 }
 
-const DialogContent = ({
-  children,
-  className,
-  overlayClassName,
-  ...props
-}: DialogContentProps): ReactElement => {
+const DialogContent = ({ children, className, overlayClassName, ...props }: DialogContentProps) => {
   return (
     <DialogPrimitive.Portal>
       <DialogOverlay className={overlayClassName} />
@@ -61,7 +56,7 @@ interface DialogHeaderProps extends ComponentProps<'div'> {
   className?: string
 }
 
-const DialogHeader = ({ className, ...props }: DialogHeaderProps): ReactElement => {
+const DialogHeader = ({ className, ...props }: DialogHeaderProps) => {
   return (
     <div
       data-slot="dialog-header"
@@ -75,7 +70,7 @@ interface DialogFooterProps extends ComponentProps<'div'> {
   className?: string
 }
 
-const DialogFooter = ({ className, ...props }: DialogFooterProps): ReactElement => {
+const DialogFooter = ({ className, ...props }: DialogFooterProps) => {
   return (
     <div
       data-slot="dialog-footer"
@@ -89,7 +84,7 @@ interface DialogTitleProps extends ComponentProps<typeof DialogPrimitive.Title> 
   className?: string
 }
 
-const DialogTitle = ({ className, ...props }: DialogTitleProps): ReactElement => {
+const DialogTitle = ({ className, ...props }: DialogTitleProps) => {
   return (
     <DialogPrimitive.Title
       data-slot="dialog-title"
@@ -103,7 +98,7 @@ interface DialogDescriptionProps extends ComponentProps<typeof DialogPrimitive.D
   className?: string
 }
 
-const DialogDescription = ({ className, ...props }: DialogDescriptionProps): ReactElement => {
+const DialogDescription = ({ className, ...props }: DialogDescriptionProps) => {
   return (
     <DialogPrimitive.Description
       data-slot="dialog-description"

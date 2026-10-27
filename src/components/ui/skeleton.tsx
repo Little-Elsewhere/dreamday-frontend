@@ -1,12 +1,10 @@
-import type { ComponentProps, ReactElement } from 'react'
+import type { ComponentProps } from 'react'
 
 import { cn } from '@/utils/cn'
 
-interface SkeletonProps extends ComponentProps<'div'> {
-  className?: string
-}
+type Props = ComponentProps<'div'>
 
-function Skeleton({ className, ...props }: SkeletonProps): ReactElement {
+function Skeleton({ className, ...props }: Props) {
   return (
     <div
       data-slot="skeleton"

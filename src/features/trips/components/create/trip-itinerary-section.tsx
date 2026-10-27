@@ -1,7 +1,6 @@
 'use client'
 
 import { useLocale, useTranslations } from 'next-intl'
-import type { ReactElement } from 'react'
 
 import { Button } from '@/components/ui/button'
 import type { TripActivityFormValues } from '@/features/trips/types/components'
@@ -32,7 +31,7 @@ export const TripItinerarySection = ({
   onMoveActivity,
   onOpenActivity,
   onUpdateActivity,
-}: Props): ReactElement => {
+}: Props) => {
   const t = useTranslations('trips')
   const locale = useLocale()
   const activitiesByDate = groupTripActivitiesByDate(activities)

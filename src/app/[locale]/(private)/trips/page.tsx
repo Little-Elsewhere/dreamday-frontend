@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
-import type { ReactElement } from 'react'
 
 import { TripHeader } from '@/features/trips/components/trip-header'
 import { TripsList } from '@/features/trips/components/trips-list'
@@ -11,7 +10,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
   return { title: t('title'), description: t('description') }
 }
 
-const TripsContent = async (): Promise<ReactElement> => {
+const TripsContent = async () => {
   const [t, trips] = await Promise.all([getTranslations('trips.list'), getTrips()])
 
   return (

@@ -1,5 +1,4 @@
 import { getTranslations } from 'next-intl/server'
-import type { ReactElement } from 'react'
 
 import { Skeleton } from '@/components/ui/skeleton'
 
@@ -17,7 +16,7 @@ const FIELD_COUNTS: Record<AuthLoadingVariant, number> = {
   success: 0,
 }
 
-export const AuthLoading = async ({ variant = 'login' }: Props): Promise<ReactElement> => {
+export const AuthLoading = async ({ variant = 'login' }: Props) => {
   const t = await getTranslations('auth.common')
   const fieldCount = FIELD_COUNTS[variant]
 

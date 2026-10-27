@@ -2,7 +2,6 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useTranslations } from 'next-intl'
-import { type ReactElement } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
 import { Button } from '@/components/ui/button'
@@ -12,7 +11,7 @@ import { ROUTES } from '@/constants/routes'
 import { type RegistrationFormValues, registrationSchema } from '@/features/auth/schemas/auth'
 import { Link } from '@/i18n/navigation'
 
-export const RegisterForm = (): ReactElement => {
+export const RegisterForm = () => {
   const t = useTranslations('auth')
   const form = useForm<RegistrationFormValues>({
     resolver: zodResolver(registrationSchema),

@@ -3,7 +3,6 @@
 import { Logout01Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { useTranslations } from 'next-intl'
-import { type ReactElement } from 'react'
 
 import { Button } from '@/components/ui/button'
 
@@ -11,7 +10,7 @@ type Props = {
   compactLabel?: boolean
 }
 
-export const SignOutButton = ({ compactLabel = false }: Props): ReactElement => {
+export const SignOutButton = ({ compactLabel = false }: Props) => {
   const t = useTranslations('account')
   const handleSignOut = (): void => {}
 

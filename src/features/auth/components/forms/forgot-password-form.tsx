@@ -4,7 +4,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Cancel01Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { useTranslations } from 'next-intl'
-import { type ReactElement } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
 import { Button } from '@/components/ui/button'
@@ -24,7 +23,7 @@ type Props = {
   show: (isOpen: boolean) => void
 }
 
-export const ForgotPasswordForm = ({ initialEmail, show }: Props): ReactElement => {
+export const ForgotPasswordForm = ({ initialEmail, show }: Props) => {
   const t = useTranslations('auth')
   const form = useForm<PasswordResetFormValues>({
     resolver: zodResolver(passwordResetSchema),
