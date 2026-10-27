@@ -23,9 +23,7 @@ export const LoginForm = (): ReactElement => {
     defaultValues: { email: '', password: '' },
   })
 
-  const handleLogin = (): void => {
-    // TODO: Connect sign-in to the API.
-  }
+  const handleLogin = (): void => {}
 
   return (
     <>

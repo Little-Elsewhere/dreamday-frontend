@@ -16,9 +16,7 @@ export const UpdatePasswordForm = (): ReactElement => {
     defaultValues: { password: '', confirmPassword: '' },
   })
 
-  const handleUpdatePassword = (): void => {
-    // TODO: Connect password updates to the API.
-  }
+  const handleUpdatePassword = (): void => {}
 
   return (
     <>

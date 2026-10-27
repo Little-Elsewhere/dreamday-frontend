@@ -13,9 +13,7 @@ type Props = {
 
 export const SignOutButton = ({ compactLabel = false }: Props): ReactElement => {
   const t = useTranslations('account')
-  const handleSignOut = (): void => {
-    // TODO: Connect sign-out to the API.
-  }
+  const handleSignOut = (): void => {}
 
   return (
     <Button

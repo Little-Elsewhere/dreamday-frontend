@@ -31,7 +31,6 @@ export const useTripCover = (initialCoverUrl: string | null) => {
   }
 
   const removeCover = () => {
-    // TODO: Upload or remove trip covers through the API.
     if (previewUrlRef.current) URL.revokeObjectURL(previewUrlRef.current)
     previewUrlRef.current = null
     setCoverUrl(null)
