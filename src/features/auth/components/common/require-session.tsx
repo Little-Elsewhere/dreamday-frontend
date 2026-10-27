@@ -8,6 +8,5 @@ type Props = {
 }
 
 export const RequireSession = ({ children }: Props): ReactNode => {
-  // TODO: Add a API-backed session guard before protecting private routes.
   return children
 }

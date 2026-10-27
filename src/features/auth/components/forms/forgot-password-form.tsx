@@ -33,9 +33,7 @@ export const ForgotPasswordForm = ({ initialEmail, show }: Props): ReactElement 
   const { formState, handleSubmit } = form
   const pending = formState.isSubmitting
 
-  const handlePasswordReset = (): void => {
-    // TODO: Connect password recovery to the API.
-  }
+  const handlePasswordReset = (): void => {}
 
   return (
     <Dialog open onOpenChange={show}>

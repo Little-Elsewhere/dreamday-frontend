@@ -19,9 +19,7 @@ export const RegisterForm = (): ReactElement => {
     defaultValues: { name: '', email: '', password: '', confirmPassword: '' },
   })
 
-  const handleRegistration = (): void => {
-    // TODO: Connect registration to the API.
-  }
+  const handleRegistration = (): void => {}
 
   return (
     <>

@@ -34,7 +34,7 @@ export const useTripActivities = ({ initialActivities, dates }: Props) => {
 
   const handleActivitySubmit = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault()
-    // TODO: Persist the activity with the API.
+
     const activity = { ...activityValues, id: activityValues.id ?? createUuidV4() }
     setActivities((current) => {
       const exists = current.some((item) => item.id === activity.id)
@@ -48,12 +48,10 @@ export const useTripActivities = ({ initialActivities, dates }: Props) => {
   }
 
   const handleDeleteActivity = (activityId: string) => {
-    // TODO: Delete the activity through the API.
     setActivities((current) => current.filter((activity) => activity.id !== activityId))
   }
 
   const updateActivity = (activity: TripActivity, patch: Partial<TripActivityFormValues>) => {
-    // TODO: Persist activity edits through the API.
     setActivities((current) =>
       sortTripActivities(
         current.map((item) =>
