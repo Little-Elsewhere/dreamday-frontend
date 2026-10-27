@@ -7,9 +7,6 @@ allowBuilds:
   workerd: true
 
 minimumReleaseAgeExclude:
-  - '@posthog/types@1.404.0'
-  - posthog-js@1.417.0
-  - '@posthog/core@1.48.0'
   - baseline-browser-mapping@2.11.25
   - electron-to-chromium@1.5.431
   - node-releases@2.0.56
@@ -17,3 +14,10 @@ minimumReleaseAgeExclude:
 overrides:
   'browserslist': 'npm:browserslist@4.29.0'
   'valibot': '1.4.2'
+  'handlebars': '>=4.7.10'
+  'dompurify': '>=3.4.17'
+  'body-parser': '>=2.4.0'
+  'undici': '>=7.30.1'
+  'fast-uri': '>=3.1.9'
+  'zod': '>=4.6.6'
+  'ip-address': '>=10.7.4'
