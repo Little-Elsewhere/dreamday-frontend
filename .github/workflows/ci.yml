@@ -8,6 +8,10 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+  pull-requests: read
+
 jobs:
   commitlint:
     name: Commitlint
@@ -135,3 +139,22 @@ jobs:
 
       - name: Build Next.js application
         run: pnpm build
+
+  # Visible on the PR Checks tab. Do not add this job as a required status check.
+  auto-merge:
+    name: Auto Merge
+    needs: [commitlint, format, lint, typecheck, build]
+    if: >
+      github.event.pull_request.draft == false &&
+      github.event.pull_request.base.ref == 'develop'
+    permissions:
+      contents: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+      REPO: ${{ github.repository }}
+    steps:
+      - name: Merge rebase and delete head branch
+        run: gh pr merge "$PR_NUMBER" --repo "$REPO" --rebase --delete-branch
