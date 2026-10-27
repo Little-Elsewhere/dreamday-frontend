@@ -4,18 +4,32 @@ on:
   pull_request_target:
     types: [opened, reopened, ready_for_review, synchronize]
 
+# Native `gh pr merge --auto` queues the merge for later. When that deferred
+# merge runs, GITHUB_TOKEN is no longer valid for branch deletion, so the
+# repo `delete_branch_on_merge` setting can silently skip removing the head
+# branch. Merge synchronously after required checks so delete succeeds.
+concurrency:
+  group: auto-merge-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 permissions:
   contents: write
   pull-requests: write
+  checks: read
+  statuses: read
+  actions: read
 
 jobs:
-  enable-auto-merge:
+  auto-merge:
     if: ${{ github.event.pull_request.draft == false }}
     runs-on: ubuntu-latest
-
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+      REPO: ${{ github.repository }}
     steps:
-      - name: Enable auto-merge
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PR_URL: ${{ github.event.pull_request.html_url }}
-        run: gh pr merge --auto --rebase "$PR_URL"
+      - name: Wait for required checks
+        run: gh pr checks "$PR_NUMBER" --repo "$REPO" --watch --required
+
+      - name: Merge rebase and delete head branch
+        run: gh pr merge "$PR_NUMBER" --repo "$REPO" --rebase --delete-branch
