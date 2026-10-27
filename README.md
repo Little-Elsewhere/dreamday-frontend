@@ -43,8 +43,7 @@ All `NEXT_PUBLIC_*` values are included in browser-facing output. Do not place s
 
 ```bash
 pnpm dev                 # Run Next.js directly on the host
-pnpm build:dev           # Build using the local .env file
-pnpm build:prod          # Build using the local .env file
+pnpm build               # Build using the local .env file
 pnpm start               # Start the standalone build
 pnpm lint                # Run ESLint
 pnpm typecheck           # Run TypeScript checks
