@@ -108,11 +108,58 @@ jobs:
       - name: Type check
         run: pnpm typecheck
 
+  unit:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 12.8.1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: HUSKY=0 pnpm install --frozen-lockfile
+
       - name: Install Playwright Chromium
         run: pnpm exec playwright install --with-deps chromium
 
-      - name: Run unit tests
+      - name: Run Vitest
         run: pnpm test:unit
+
+  e2e:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 12.8.1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: HUSKY=0 pnpm install --frozen-lockfile
+
+      - name: Prepare environment
+        run: cp .env.example .env
+
+      - name: Install Playwright Chromium
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Run Playwright
+        run: pnpm test:e2e
 
   build:
     name: Build
@@ -142,7 +189,7 @@ jobs:
 
   auto-merge:
     name: Auto Merge
-    needs: [commitlint, format, lint, typecheck, build]
+    needs: [commitlint, format, lint, typecheck, unit, e2e, build]
     if: >
       github.event.pull_request.draft == false &&
       github.event.pull_request.base.ref == 'develop'
