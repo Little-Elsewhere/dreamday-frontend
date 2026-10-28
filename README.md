@@ -78,7 +78,7 @@ messages/
 
 ## Playwright
 
-The auth and private-trip cases in `e2e/auth` are marked skipped while authentication and test-account setup are pending. The config keeps desktop, tablet, and mobile projects and does not start application services.
+The auth and private-trip cases in `e2e/auth` are marked skipped while authentication and test-account setup are pending. The config keeps desktop, tablet, and mobile projects. Playwright starts `pnpm dev` when no server is already running (`reuseExistingServer` outside CI).
 
 ## Docker
 
