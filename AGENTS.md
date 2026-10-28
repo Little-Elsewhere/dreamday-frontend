@@ -76,7 +76,7 @@ Match nearby files before inventing new patterns. Prefer Server Components; keep
 - Unit: Vitest via `pnpm test:unit` (colocated `*.test.ts(x)` under `src/`)
 - E2E: Playwright via `pnpm test:e2e` (specs under `e2e/`)
 - Stories: `src/**/*.stories.tsx`, Storybook on port 6006
-- Before finishing a change, run the checks relevant to what you touched (`lint`, `typecheck`, unit tests). CI on PRs to `develop` also runs format, commitlint, and build from `.env.example`.
+- Before finishing a change, run the checks relevant to what you touched (`lint`, `typecheck`, unit tests). CI on PRs to `develop`/`main` runs a Quality job (commitlint + format + lint + typecheck), Vitest (`pnpm test:unit`), Playwright (`pnpm test:e2e`), and build from `.env.example`.
 
 ## Commits
 
