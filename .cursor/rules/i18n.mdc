@@ -23,7 +23,7 @@ import { getTranslations } from 'next-intl/server'
 
 export default async function Page() {
   const t = await getTranslations('trips.create')
-  return <button>{t('save')}</button>
+  return <button>{t('actions.publish')}</button>
 }
 
 // ✅ GOOD — Client Component + formatter
@@ -41,5 +41,64 @@ export function TripMeta({ date, budget }: Props) {
       })}
     </p>
   )
+}
+```
+
+## Message key grouping
+
+Organize keys in each `messages/{locale}/**/*.json` file into nested groups by purpose. Prefer a small set of shared group names so catalogs stay scannable and consistent across locales and features.
+
+Common groups:
+
+| Group | Use for |
+| --- | --- |
+| `metadata` | Page / document title and description |
+| `content` | Page chrome copy (eyebrow, title, intro, helper text) |
+| `labels` | Field and section labels |
+| `fields` | Form field names when distinct from labels |
+| `placeholders` | Input placeholders |
+| `actions` | Buttons, links, and other CTAs |
+| `errors` | Validation and failure messages |
+| `messages` | Transient status / loading copy |
+| `prompts` | Short prompts (e.g. “New here?”) |
+| `descriptions` | Longer helper or alt text |
+
+Feature-specific groups (`steps`, `filters`, `status`, `itinerary`, …) are fine when they name a clear UI region. Keep leaf keys `camelCase`. Mirror the same nesting in every locale file.
+
+Access nested keys with dotted paths (or a scoped namespace):
+
+```tsx
+const t = useTranslations('auth.login')
+t('actions.submit')
+t('errors.emailInvalid')
+```
+
+```json
+// ❌ BAD — flat bag of unrelated keys
+{
+  "title": "Sign in",
+  "submit": "Sign in",
+  "emailInvalid": "Enter a valid email.",
+  "passwordPlaceholder": "Enter your password"
+}
+
+// ✅ GOOD — grouped by purpose
+{
+  "metadata": {
+    "title": "Sign in",
+    "description": "Sign in to continue planning your journey."
+  },
+  "content": {
+    "title": "Continue your journey"
+  },
+  "placeholders": {
+    "password": "Enter your password"
+  },
+  "actions": {
+    "submit": "Sign in"
+  },
+  "errors": {
+    "emailInvalid": "Enter a valid email."
+  }
 }
 ```
