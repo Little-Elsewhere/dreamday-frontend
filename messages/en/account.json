@@ -17,6 +17,7 @@
   },
   "actions": {
     "viewTrips": "Open my trips",
+    "updatePassword": "Change password",
     "signOut": "Sign out",
     "signingOut": "Signing out…"
   }

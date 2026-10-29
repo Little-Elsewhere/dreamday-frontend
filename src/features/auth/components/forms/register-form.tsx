@@ -2,23 +2,37 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useTranslations } from 'next-intl'
+import { useRef, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
+import { FeedbackMessage } from '@/components/common/feedback-message'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/ui/password-input'
 import { ROUTES } from '@/constants/routes'
+import { register } from '@/features/auth/actions/auth'
 import { type RegistrationFormValues, registrationSchema } from '@/features/auth/schemas/auth'
+import { applyFormError } from '@/features/auth/utils/action-form'
 import { Link } from '@/i18n/navigation'
 
 export const RegisterForm = () => {
   const t = useTranslations('auth')
+  const tRoot = useTranslations()
+  const [formMessage, setFormMessage] = useState('')
+  const feedbackRef = useRef<HTMLDivElement>(null)
   const form = useForm<RegistrationFormValues>({
     resolver: zodResolver(registrationSchema),
-    defaultValues: { name: '', email: '', password: '', confirmPassword: '' },
+    defaultValues: { email: '', password: '', confirmPassword: '' },
   })
 
-  const handleRegistration = (): void => {}
+  const handleRegistration = async (values: RegistrationFormValues) => {
+    setFormMessage('')
+    const result = await register(values)
+    if (result.success) return
+
+    applyFormError(result, form.setError, setFormMessage, tRoot)
+    queueMicrotask(() => feedbackRef.current?.focus())
+  }
 
   return (
     <>
@@ -34,6 +48,8 @@ export const RegisterForm = () => {
       </h1>
       <p className="text-ink-soft mt-4 max-w-[42ch]">{t('register.content.intro')}</p>
 
+      {formMessage && <FeedbackMessage isError message={formMessage} focusRef={feedbackRef} />}
+
       <FormProvider {...form}>
         <form
           className="mt-10 grid gap-5"
@@ -42,17 +58,6 @@ export const RegisterForm = () => {
             void form.handleSubmit(handleRegistration)(event)
           }}
         >
-          <Input
-            name="name"
-            id="register-name"
-            label={t('register.labels.name')}
-            labelClassName="text-ink"
-            type="text"
-            autoComplete="name"
-            placeholder={t('register.placeholders.name')}
-            required
-            maxLength={80}
-          />
           <Input
             name="email"
             id="register-email"
@@ -74,8 +79,8 @@ export const RegisterForm = () => {
             placeholder={t('register.placeholders.password')}
             description={t('register.content.passwordHelp')}
             required
-            minLength={8}
-            maxLength={72}
+            minLength={12}
+            maxLength={128}
             showLabel={t('common.actions.showPassword')}
             hideLabel={t('common.actions.hidePassword')}
           />
@@ -87,8 +92,8 @@ export const RegisterForm = () => {
             autoComplete="new-password"
             placeholder={t('register.placeholders.confirmPassword')}
             required
-            minLength={8}
-            maxLength={72}
+            minLength={12}
+            maxLength={128}
             showLabel={t('common.actions.showPassword')}
             hideLabel={t('common.actions.hidePassword')}
           />

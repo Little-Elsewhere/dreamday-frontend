@@ -2,28 +2,41 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useTranslations } from 'next-intl'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
+import { FeedbackMessage } from '@/components/common/feedback-message'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/ui/password-input'
 import { ROUTES } from '@/constants/routes'
+import { login } from '@/features/auth/actions/auth'
 import { type LoginFormValues, loginSchema } from '@/features/auth/schemas/auth'
+import { applyFormError } from '@/features/auth/utils/action-form'
 import { Link } from '@/i18n/navigation'
 
 import { ForgotPasswordForm } from './forgot-password-form'
 
 export const LoginForm = () => {
   const t = useTranslations('auth')
+  const tRoot = useTranslations()
   const [resetDialogOpen, setResetDialogOpen] = useState(false)
   const [resetInitialEmail, setResetInitialEmail] = useState('')
+  const [formMessage, setFormMessage] = useState('')
+  const feedbackRef = useRef<HTMLDivElement>(null)
   const loginForm = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: { email: '', password: '' },
   })
 
-  const handleLogin = (): void => {}
+  const handleLogin = async (values: LoginFormValues) => {
+    setFormMessage('')
+    const result = await login(values)
+    if (result.success) return
+
+    applyFormError(result, loginForm.setError, setFormMessage, tRoot)
+    queueMicrotask(() => feedbackRef.current?.focus())
+  }
 
   return (
     <>
@@ -38,6 +51,8 @@ export const LoginForm = () => {
         {t('login.content.title')}
       </h1>
       <p className="text-ink-soft mt-4 max-w-[42ch]">{t('login.content.intro')}</p>
+
+      {formMessage && <FeedbackMessage isError message={formMessage} focusRef={feedbackRef} />}
 
       <FormProvider {...loginForm}>
         <form
@@ -67,7 +82,7 @@ export const LoginForm = () => {
             autoComplete="current-password"
             placeholder={t('login.placeholders.password')}
             required
-            maxLength={72}
+            maxLength={128}
             showLabel={t('common.actions.showPassword')}
             hideLabel={t('common.actions.hidePassword')}
           />

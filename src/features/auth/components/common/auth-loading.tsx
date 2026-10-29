@@ -10,8 +10,8 @@ type Props = {
 
 const FIELD_COUNTS: Record<AuthLoadingVariant, number> = {
   login: 2,
-  register: 4,
-  'update-password': 2,
+  register: 3,
+  'update-password': 3,
   error: 0,
   success: 0,
 }
@@ -65,7 +65,7 @@ export const AuthLoading = async ({ variant = 'login' }: Props) => {
                 <div className="grid gap-2" key={index}>
                   <Skeleton className="bg-skeleton rounded-auth h-4 w-24 motion-reduce:animate-none" />
                   <Skeleton className="bg-skeleton rounded-auth h-12 w-full motion-reduce:animate-none" />
-                  {variant === 'register' && index === 2 && (
+                  {variant === 'register' && index === 1 && (
                     <div className="mt-1 grid gap-1">
                       <Skeleton className="bg-skeleton rounded-auth h-4 w-full motion-reduce:animate-none" />
                       <Skeleton className="bg-skeleton rounded-auth h-4 w-1/2 motion-reduce:animate-none" />

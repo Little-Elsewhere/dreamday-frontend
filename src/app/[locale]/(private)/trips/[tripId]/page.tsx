@@ -4,8 +4,8 @@ import { notFound } from 'next/navigation'
 import { getLocale, getTranslations } from 'next-intl/server'
 
 import { buttonVariants } from '@/components/ui/button'
+import { getTripDetail } from '@/features/trips/actions/trips'
 import { TripHeader } from '@/features/trips/components/trip-header'
-import { getTripDetail } from '@/features/trips/data/trips'
 import type { TripDetail } from '@/features/trips/types/trip'
 import {
   formatMinute,

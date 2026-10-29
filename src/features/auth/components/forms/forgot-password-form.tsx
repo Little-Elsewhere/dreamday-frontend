@@ -4,8 +4,10 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Cancel01Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { useTranslations } from 'next-intl'
+import { useRef, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
+import { FeedbackMessage } from '@/components/common/feedback-message'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -16,7 +18,9 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
+import { forgotPassword } from '@/features/auth/actions/auth'
 import { type PasswordResetFormValues, passwordResetSchema } from '@/features/auth/schemas/auth'
+import { applyFormError } from '@/features/auth/utils/action-form'
 
 type Props = {
   initialEmail: string
@@ -25,14 +29,24 @@ type Props = {
 
 export const ForgotPasswordForm = ({ initialEmail, show }: Props) => {
   const t = useTranslations('auth')
+  const tRoot = useTranslations()
+  const [formMessage, setFormMessage] = useState('')
+  const feedbackRef = useRef<HTMLDivElement>(null)
   const form = useForm<PasswordResetFormValues>({
     resolver: zodResolver(passwordResetSchema),
     defaultValues: { email: initialEmail },
   })
-  const { formState, handleSubmit } = form
+  const { formState, handleSubmit, setError } = form
   const pending = formState.isSubmitting
 
-  const handlePasswordReset = (): void => {}
+  const handlePasswordReset = async (values: PasswordResetFormValues) => {
+    setFormMessage('')
+    const result = await forgotPassword(values)
+    if (result.success) return
+
+    applyFormError(result, setError, setFormMessage, tRoot)
+    queueMicrotask(() => feedbackRef.current?.focus())
+  }
 
   return (
     <Dialog open onOpenChange={show}>
@@ -69,6 +83,7 @@ export const ForgotPasswordForm = ({ initialEmail, show }: Props) => {
           <DialogDescription className="text-ink-soft my-0 mt-3 mb-6">
             {t('recovery.content.intro')}
           </DialogDescription>
+          {formMessage && <FeedbackMessage isError message={formMessage} focusRef={feedbackRef} />}
           <FormProvider {...form}>
             <form
               className="mt-10 grid gap-5"

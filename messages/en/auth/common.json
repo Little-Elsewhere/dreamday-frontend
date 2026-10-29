@@ -23,24 +23,28 @@
     "showPassword": "Show password",
     "hidePassword": "Hide password",
     "login": "Sign in",
-    "register": "Create an account"
+    "register": "Create an account",
+    "resend": "Resend email",
+    "resending": "Sending…"
   },
   "messages": {
     "loading": "Loading authentication form",
     "loadingAccount": "Loading your account",
-    "checkingSession": "Checking your session"
+    "checkingSession": "Checking your session",
+    "resent": "If the account still needs verification, another email is on the way."
   },
   "errors": {
     "emailInvalid": "Enter a valid email address.",
     "emailTooLong": "Email must be 254 characters or fewer.",
     "passwordRequired": "Enter your password.",
-    "passwordTooShort": "Use at least 8 characters for your password.",
-    "passwordTooLong": "Password must be 72 characters or fewer.",
+    "passwordTooShort": "Use at least 12 characters for your password.",
+    "passwordTooLong": "Password must be 128 characters or fewer.",
     "confirmPasswordRequired": "Confirm your password.",
-    "confirmPasswordTooLong": "Password confirmation must be 72 characters or fewer.",
+    "confirmPasswordTooLong": "Password confirmation must be 128 characters or fewer.",
     "passwordMismatch": "The passwords do not match.",
     "weakPassword": "Choose a stronger password.",
     "rateLimited": "Too many attempts. Please wait a few minutes and try again.",
-    "invalidInput": "Check the information you entered and try again."
+    "invalidInput": "Check the information you entered and try again.",
+    "system": "Something went wrong. Please try again."
   }
 }

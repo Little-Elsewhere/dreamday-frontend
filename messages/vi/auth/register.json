@@ -7,15 +7,13 @@
     "eyebrow": "Bắt đầu cùng dream day",
     "title": "Tạo tài khoản của bạn",
     "intro": "Lưu mọi ý tưởng, lịch trình và điểm đến trong một không gian dành riêng cho chuyến đi của bạn.",
-    "passwordHelp": "Sử dụng ít nhất 8 ký tự."
+    "passwordHelp": "Sử dụng ít nhất 12 ký tự."
   },
   "labels": {
-    "name": "Họ và tên",
     "confirmPassword": "Xác nhận mật khẩu"
   },
   "placeholders": {
-    "name": "Tên của bạn",
-    "password": "Tối thiểu 8 ký tự",
+    "password": "Tối thiểu 12 ký tự",
     "confirmPassword": "Nhập lại mật khẩu"
   },
   "confirmation": {
@@ -29,8 +27,7 @@
     "submitting": "Đang tạo tài khoản…"
   },
   "errors": {
-    "nameTooShort": "Họ và tên cần có ít nhất 2 ký tự.",
-    "nameTooLong": "Họ và tên không được dài quá 80 ký tự.",
-    "signUpFailed": "Không thể tạo tài khoản. Hãy kiểm tra thông tin rồi thử lại."
+    "signUpFailed": "Không thể tạo tài khoản. Hãy kiểm tra thông tin rồi thử lại.",
+    "emailAlreadyRegistered": "Email này đã được đăng ký. Hãy đăng nhập thay vì tạo mới."
   }
 }

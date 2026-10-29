@@ -13,4 +13,5 @@ export const clientEnvSchema = z.object({
 
 export const serverEnvSchema = clientEnvSchema.extend({
   MAINTENANCE_MODE: z.enum(['true', 'false']).default('false'),
+  API_BASE_URL: z.url().min(1),
 })

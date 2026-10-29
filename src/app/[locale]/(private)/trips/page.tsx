@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 
+import { getTrips } from '@/features/trips/actions/trips'
 import { TripHeader } from '@/features/trips/components/trip-header'
 import { TripsList } from '@/features/trips/components/trips-list'
-import { getTrips } from '@/features/trips/data/trips'
 
 export const generateMetadata = async (): Promise<Metadata> => {
   const t = await getTranslations('trips.list')
