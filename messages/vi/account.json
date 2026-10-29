@@ -17,6 +17,7 @@
   },
   "actions": {
     "viewTrips": "Mở chuyến đi của tôi",
+    "updatePassword": "Đổi mật khẩu",
     "signOut": "Đăng xuất",
     "signingOut": "Đang đăng xuất…"
   }

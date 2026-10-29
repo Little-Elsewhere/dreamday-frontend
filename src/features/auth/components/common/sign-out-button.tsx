@@ -3,8 +3,10 @@
 import { Logout01Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { useTranslations } from 'next-intl'
+import { useState } from 'react'
 
 import { Button } from '@/components/ui/button'
+import { logout } from '@/features/auth/actions/auth'
 
 type Props = {
   compactLabel?: boolean
@@ -12,7 +14,16 @@ type Props = {
 
 export const SignOutButton = ({ compactLabel = false }: Props) => {
   const t = useTranslations('account')
-  const handleSignOut = (): void => {}
+  const [pending, setPending] = useState(false)
+
+  const handleSignOut = async () => {
+    setPending(true)
+    try {
+      await logout()
+    } finally {
+      setPending(false)
+    }
+  }
 
   return (
     <Button
@@ -20,6 +31,8 @@ export const SignOutButton = ({ compactLabel = false }: Props) => {
       variant="outline"
       className={compactLabel ? 'min-h-11 gap-2 px-3 sm:px-4' : undefined}
       aria-label={compactLabel ? t('actions.signOut') : undefined}
+      loading={pending}
+      loadingLabel={t('actions.signingOut')}
       onClick={() => void handleSignOut()}
     >
       {compactLabel && (

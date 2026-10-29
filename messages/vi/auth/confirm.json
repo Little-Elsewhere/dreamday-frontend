@@ -1,0 +1,23 @@
+{
+  "metadata": {
+    "title": "Xác nhận email",
+    "description": "Hoàn tất xác minh tài khoản dream day của bạn."
+  },
+  "content": {
+    "eyebrow": "Xác nhận email",
+    "title": "Đang xác nhận email",
+    "verifying": "Chúng tôi đang xác nhận địa chỉ email của bạn…",
+    "successTitle": "Email đã được xác minh",
+    "successDescription": "Email của bạn đã được xác nhận. Bạn có thể đăng nhập và tiếp tục lên kế hoạch.",
+    "errorTitle": "Liên kết hết hạn hoặc không hợp lệ",
+    "errorDescription": "Liên kết xác nhận này không hợp lệ hoặc đã hết hạn. Hãy yêu cầu liên kết mới khi đăng ký, hoặc đăng nhập nếu bạn đã xác minh."
+  },
+  "actions": {
+    "login": "Đăng nhập",
+    "register": "Tạo tài khoản"
+  },
+  "errors": {
+    "invalidLink": "Liên kết xác nhận này không hợp lệ hoặc đã hết hạn.",
+    "missingToken": "Liên kết xác nhận không đầy đủ. Hãy mở lại liên kết trong email."
+  }
+}

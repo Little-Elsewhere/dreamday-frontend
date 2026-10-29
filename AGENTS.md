@@ -57,7 +57,7 @@ Copy `.env.example` to `.env` before build when needed. Do not commit secrets.
 - `src/stories/` — Storybook stories
 - `src/proxy.ts` — request proxy / middleware entry
 
-Feature folders typically use `components/`, `hooks/`, `schemas/`, `utils/`, `constants/`, `types/`, and `data/` when server data access is needed.
+Feature folders typically use `components/`, `hooks/`, `schemas/`, `utils/`, `constants/`, `types/`, and `actions/` for Server Actions plus backend/session helpers (keep HTTP/session helpers in separate files from `'use server'` action modules).
 
 ## Code style
 

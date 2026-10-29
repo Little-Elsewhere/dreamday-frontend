@@ -21,6 +21,7 @@
   },
   "errors": {
     "signInFailed": "Không thể đăng nhập bằng thông tin này. Hãy kiểm tra email và mật khẩu.",
-    "emailNotConfirmed": "Vui lòng xác nhận địa chỉ email trước khi đăng nhập."
+    "emailNotConfirmed": "Vui lòng xác nhận địa chỉ email trước khi đăng nhập.",
+    "accountDisabled": "Tài khoản này đã bị vô hiệu hóa. Hãy liên hệ hỗ trợ nếu bạn cần giúp đỡ."
   }
 }

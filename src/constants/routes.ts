@@ -8,6 +8,7 @@ export const ROUTES = {
       REGISTER_SUCCESS: '/auth/register/success',
       RECOVERY_SUCCESS: '/auth/recovery/success',
       CONFIRM: '/auth/confirm',
+      RESET_PASSWORD: '/auth/reset-password',
       ERROR: '/auth/error',
     },
   },

@@ -4,6 +4,7 @@ import { getTranslations } from 'next-intl/server'
 
 import { buttonVariants } from '@/components/ui/button'
 import { ROUTES } from '@/constants/routes'
+import { getCurrentUser } from '@/features/auth/actions/session'
 import { SignOutButton } from '@/features/auth/components/common/sign-out-button'
 import { Link } from '@/i18n/navigation'
 
@@ -13,7 +14,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
 }
 
 const Account = async () => {
-  const t = await getTranslations('account')
+  const [t, user] = await Promise.all([getTranslations('account'), getCurrentUser()])
 
   return (
     <main className="bg-surface text-ink min-h-svh antialiased">
@@ -44,11 +45,18 @@ const Account = async () => {
             <div className="border-line mt-10 border-t pt-7">
               <p className="text-ink-soft text-sm">{t('labels.signedInAs')}</p>
               <p className="text-primary mt-1 font-medium break-all">
-                {t('labels.verifiedAccount')}
+                {user?.email ?? t('labels.verifiedAccount')}
               </p>
               <div className="mt-7 flex flex-wrap items-center gap-3">
                 <Link href={ROUTES.PRIVATE.TRIPS} prefetch className={buttonVariants()}>
                   {t('actions.viewTrips')}
+                </Link>
+                <Link
+                  href={ROUTES.PRIVATE.UPDATE_PASSWORD}
+                  prefetch
+                  className={buttonVariants({ variant: 'outline' })}
+                >
+                  {t('actions.updatePassword')}
                 </Link>
                 <SignOutButton />
               </div>

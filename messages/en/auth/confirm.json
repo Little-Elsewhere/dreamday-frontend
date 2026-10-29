@@ -1,0 +1,23 @@
+{
+  "metadata": {
+    "title": "Confirm your email",
+    "description": "Finish verifying your dream day account."
+  },
+  "content": {
+    "eyebrow": "Email confirmation",
+    "title": "Confirming your email",
+    "verifying": "We’re confirming your email address…",
+    "successTitle": "Email verified",
+    "successDescription": "Your email is confirmed. You can sign in and continue planning.",
+    "errorTitle": "Link expired or invalid",
+    "errorDescription": "This confirmation link is invalid or has expired. Request a new one from registration, or sign in if you already verified."
+  },
+  "actions": {
+    "login": "Sign in",
+    "register": "Create an account"
+  },
+  "errors": {
+    "invalidLink": "This confirmation link is invalid or has expired.",
+    "missingToken": "This confirmation link is incomplete. Open the link from your email again."
+  }
+}

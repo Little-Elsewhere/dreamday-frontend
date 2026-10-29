@@ -7,15 +7,13 @@
     "eyebrow": "Start with dream day",
     "title": "Create your account",
     "intro": "Keep every idea, itinerary, and destination together in a space made for your next trip.",
-    "passwordHelp": "Use at least 8 characters."
+    "passwordHelp": "Use at least 12 characters."
   },
   "labels": {
-    "name": "Full name",
     "confirmPassword": "Confirm password"
   },
   "placeholders": {
-    "name": "Your name",
-    "password": "At least 8 characters",
+    "password": "At least 12 characters",
     "confirmPassword": "Enter your password again"
   },
   "confirmation": {
@@ -29,8 +27,7 @@
     "submitting": "Creating account…"
   },
   "errors": {
-    "nameTooShort": "Enter at least 2 characters for your name.",
-    "nameTooLong": "Name must be 80 characters or fewer.",
-    "signUpFailed": "We couldn’t create your account. Check the details and try again."
+    "signUpFailed": "We couldn’t create your account. Check the details and try again.",
+    "emailAlreadyRegistered": "An account with this email already exists. Sign in instead."
   }
 }

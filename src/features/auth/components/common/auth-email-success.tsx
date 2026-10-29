@@ -1,8 +1,16 @@
+'use client'
+
 import { Mail01Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
+import { useTranslations } from 'next-intl'
+import { useRef, useState } from 'react'
 
+import { FeedbackMessage } from '@/components/common/feedback-message'
+import { Button } from '@/components/ui/button'
 import { ROUTES } from '@/constants/routes'
+import { resendVerification } from '@/features/auth/actions/auth'
 import { Link } from '@/i18n/navigation'
+import { ActionErrorKind } from '@/types/action-result'
 
 type Props = {
   eyebrow: string
@@ -10,9 +18,49 @@ type Props = {
   description: string
   helper: string
   actionLabel: string
+  email?: string
+  showResend?: boolean
 }
 
-export const AuthEmailSuccess = ({ eyebrow, title, description, helper, actionLabel }: Props) => {
+export const AuthEmailSuccess = ({
+  eyebrow,
+  title,
+  description,
+  helper,
+  actionLabel,
+  email,
+  showResend = false,
+}: Props) => {
+  const t = useTranslations()
+  const [pending, setPending] = useState(false)
+  const [statusMessage, setStatusMessage] = useState('')
+  const [isError, setIsError] = useState(false)
+  const feedbackRef = useRef<HTMLDivElement>(null)
+
+  const handleResend = async () => {
+    if (!email) return
+
+    setPending(true)
+    setStatusMessage('')
+    setIsError(false)
+
+    const result = await resendVerification(email)
+    setPending(false)
+
+    if (result.success) {
+      setStatusMessage(t('auth.common.messages.resent'))
+      return
+    }
+
+    setIsError(true)
+    if (result.error.kind === ActionErrorKind.Message) {
+      setStatusMessage(t(result.error.key))
+    } else {
+      setStatusMessage(t('auth.common.errors.system'))
+    }
+    queueMicrotask(() => feedbackRef.current?.focus())
+  }
+
   return (
     <section aria-labelledby="auth-title">
       <div
@@ -35,13 +83,31 @@ export const AuthEmailSuccess = ({ eyebrow, title, description, helper, actionLa
       </p>
       <p className="text-ink-soft mt-3 max-w-[42ch] text-sm">{helper}</p>
 
-      <Link
-        prefetch
-        className="focus-visible:outline-focus rounded-auth border-primary bg-primary text-primary-foreground hover:bg-primary/90 mt-8 inline-flex min-h-11 w-full items-center justify-center border px-4 py-2 text-sm leading-5 font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
-        href={ROUTES.PUBLIC.AUTH.LOGIN}
-      >
-        {actionLabel}
-      </Link>
+      {statusMessage && (
+        <FeedbackMessage isError={isError} message={statusMessage} focusRef={feedbackRef} />
+      )}
+
+      <div className="mt-8 grid gap-3">
+        {showResend && email && (
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full"
+            loading={pending}
+            loadingLabel={t('auth.common.actions.resending')}
+            onClick={() => void handleResend()}
+          >
+            {t('auth.common.actions.resend')}
+          </Button>
+        )}
+        <Link
+          prefetch
+          className="focus-visible:outline-focus rounded-auth border-primary bg-primary text-primary-foreground hover:bg-primary/90 inline-flex min-h-11 w-full items-center justify-center border px-4 py-2 text-sm leading-5 font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+          href={ROUTES.PUBLIC.AUTH.LOGIN}
+        >
+          {actionLabel}
+        </Link>
+      </div>
     </section>
   )
 }
