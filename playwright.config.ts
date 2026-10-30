@@ -2,7 +2,6 @@ import { defineConfig, devices } from 'playwright/test'
 
 const E2E_BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:4000'
 
-// Auth E2E cases remain skipped until the API and account setup are ready.
 const browserEnv = {
   PATH: process.env.PATH,
   HOME: process.env.HOME,
