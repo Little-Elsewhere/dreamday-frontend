@@ -1,5 +1,7 @@
 import { z } from 'zod'
 
+import { utcInstantSchema } from '@/schemas/datetime'
+
 export { type MessageResponse, messageResponseSchema } from '@/schemas/api'
 
 export const tokenResponseSchema = z.object({
@@ -14,7 +16,7 @@ export const userResponseSchema = z.object({
   id: z.uuid(),
   email: z.email(),
   is_email_verified: z.boolean(),
-  created_at: z.string().min(1),
+  created_at: utcInstantSchema,
 })
 
 export type TokenResponse = z.infer<typeof tokenResponseSchema>
