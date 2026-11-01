@@ -29,8 +29,14 @@ jobs:
       - name: Install dependencies
         run: HUSKY=0 pnpm install --frozen-lockfile
 
-      - name: Prepare environment
-        run: cp .env.example .env
-
       - name: Build Next.js application
+        env:
+          NEXT_PUBLIC_APP_NAME: ${{ secrets.NEXT_PUBLIC_APP_NAME }}
+          NEXT_PUBLIC_APP_DEFAULT_TITLE: ${{ secrets.NEXT_PUBLIC_APP_DEFAULT_TITLE }}
+          NEXT_PUBLIC_APP_TITLE_TEMPLATE: ${{ secrets.NEXT_PUBLIC_APP_TITLE_TEMPLATE }}
+          NEXT_PUBLIC_APP_DESCRIPTION: ${{ secrets.NEXT_PUBLIC_APP_DESCRIPTION }}
+          NEXT_PUBLIC_APP_URL: ${{ secrets.NEXT_PUBLIC_APP_URL }}
+          MAINTENANCE_MODE: ${{ secrets.MAINTENANCE_MODE }}
+          API_BASE_URL: ${{ secrets.API_BASE_URL }}
+          NEXT_PUBLIC_POSTHOG_HOST: ${{ secrets.NEXT_PUBLIC_POSTHOG_HOST }}
         run: pnpm build

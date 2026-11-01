@@ -135,6 +135,7 @@ jobs:
 
   e2e:
     name: E2E Tests
+    environment: dev
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -152,13 +153,19 @@ jobs:
       - name: Install dependencies
         run: HUSKY=0 pnpm install --frozen-lockfile
 
-      - name: Prepare environment
-        run: cp .env.example .env
-
       - name: Install Playwright Chromium
         run: pnpm exec playwright install --with-deps chromium
 
       - name: Run Playwright
+        env:
+          NEXT_PUBLIC_APP_NAME: ${{ secrets.NEXT_PUBLIC_APP_NAME }}
+          NEXT_PUBLIC_APP_DEFAULT_TITLE: ${{ secrets.NEXT_PUBLIC_APP_DEFAULT_TITLE }}
+          NEXT_PUBLIC_APP_TITLE_TEMPLATE: ${{ secrets.NEXT_PUBLIC_APP_TITLE_TEMPLATE }}
+          NEXT_PUBLIC_APP_DESCRIPTION: ${{ secrets.NEXT_PUBLIC_APP_DESCRIPTION }}
+          NEXT_PUBLIC_APP_URL: http://localhost:4000
+          MAINTENANCE_MODE: ${{ secrets.MAINTENANCE_MODE }}
+          API_BASE_URL: ${{ secrets.API_BASE_URL }}
+          NEXT_PUBLIC_POSTHOG_HOST: ${{ secrets.NEXT_PUBLIC_POSTHOG_HOST }}
         run: pnpm test:e2e
 
   build:
@@ -181,10 +188,16 @@ jobs:
       - name: Install dependencies
         run: HUSKY=0 pnpm install --frozen-lockfile
 
-      - name: Prepare environment
-        run: cp .env.example .env
-
       - name: Build Next.js application
+        env:
+          NEXT_PUBLIC_APP_NAME: ${{ secrets.NEXT_PUBLIC_APP_NAME }}
+          NEXT_PUBLIC_APP_DEFAULT_TITLE: ${{ secrets.NEXT_PUBLIC_APP_DEFAULT_TITLE }}
+          NEXT_PUBLIC_APP_TITLE_TEMPLATE: ${{ secrets.NEXT_PUBLIC_APP_TITLE_TEMPLATE }}
+          NEXT_PUBLIC_APP_DESCRIPTION: ${{ secrets.NEXT_PUBLIC_APP_DESCRIPTION }}
+          NEXT_PUBLIC_APP_URL: ${{ secrets.NEXT_PUBLIC_APP_URL }}
+          MAINTENANCE_MODE: ${{ secrets.MAINTENANCE_MODE }}
+          API_BASE_URL: ${{ secrets.API_BASE_URL }}
+          NEXT_PUBLIC_POSTHOG_HOST: ${{ secrets.NEXT_PUBLIC_POSTHOG_HOST }}
         run: pnpm build
 
   auto-merge:
