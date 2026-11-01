@@ -3,7 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Cancel01Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { useRef, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
@@ -30,6 +30,7 @@ type Props = {
 export const ForgotPasswordForm = ({ initialEmail, show }: Props) => {
   const t = useTranslations('auth')
   const tRoot = useTranslations()
+  const locale = useLocale()
   const [formMessage, setFormMessage] = useState('')
   const feedbackRef = useRef<HTMLDivElement>(null)
   const form = useForm<PasswordResetFormValues>({
@@ -41,7 +42,7 @@ export const ForgotPasswordForm = ({ initialEmail, show }: Props) => {
 
   const handlePasswordReset = async (values: PasswordResetFormValues) => {
     setFormMessage('')
-    const result = await forgotPassword(values)
+    const result = await forgotPassword(values, locale)
     if (result.success) return
 
     applyFormError(result, setError, setFormMessage, tRoot)

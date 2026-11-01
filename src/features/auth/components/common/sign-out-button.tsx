@@ -2,7 +2,7 @@
 
 import { Logout01Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { useState } from 'react'
 
 import { Button } from '@/components/ui/button'
@@ -14,12 +14,13 @@ type Props = {
 
 export const SignOutButton = ({ compactLabel = false }: Props) => {
   const t = useTranslations('account')
+  const locale = useLocale()
   const [pending, setPending] = useState(false)
 
   const handleSignOut = async () => {
     setPending(true)
     try {
-      await logout()
+      await logout(locale)
     } finally {
       setPending(false)
     }

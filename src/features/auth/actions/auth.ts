@@ -1,6 +1,6 @@
 'use server'
 
-import { getLocale } from 'next-intl/server'
+import { hasLocale } from 'next-intl'
 
 import { API_ROUTES } from '@/constants/api-routes'
 import { ROUTES } from '@/constants/routes'
@@ -31,6 +31,7 @@ import {
   updatePasswordSchema,
 } from '@/features/auth/schemas/auth'
 import { redirect } from '@/i18n/navigation'
+import { routing } from '@/i18n/routing'
 import type { ActionResult } from '@/types/action-result'
 import { fieldError, messageError } from '@/utils/action-result'
 import { isMessageCode, post } from '@/utils/api-client'
@@ -40,13 +41,16 @@ const checkEmailHref = (email: string) => {
   return `${ROUTES.PUBLIC.AUTH.REGISTER_SUCCESS}?${params.toString()}`
 }
 
-const redirectTo = async (href: string) => {
-  const locale = await getLocale()
-  redirect({ href, locale })
+const redirectTo = (href: string, locale: string) => {
+  redirect({
+    href,
+    locale: hasLocale(routing.locales, locale) ? locale : routing.defaultLocale,
+  })
 }
 
 export const register = async (
   input: RegistrationFormValues,
+  locale: string,
 ): Promise<ActionResult<{ email: string }, 'email' | 'password' | 'confirmPassword'>> => {
   const parsed = registrationSchema.safeParse(input)
   if (!parsed.success) return messageError('auth.common.errors.system')
@@ -57,7 +61,7 @@ export const register = async (
   })
 
   if (isMessageCode(result, AUTH_MESSAGE_CODE.REGISTRATION_ACCEPTED)) {
-    await redirectTo(checkEmailHref(email))
+    redirectTo(checkEmailHref(email), locale)
   }
 
   if (!result.ok && result.code === AUTH_MESSAGE_CODE.EMAIL_ALREADY_REGISTERED) {
@@ -87,6 +91,7 @@ export const resendVerification = async (
 
 export const login = async (
   input: LoginFormValues,
+  locale: string,
 ): Promise<ActionResult<{ email: string }, 'email' | 'password'>> => {
   const parsed = loginSchema.safeParse(input)
   if (!parsed.success) return messageError('auth.common.errors.system')
@@ -98,14 +103,14 @@ export const login = async (
 
   if (result.ok) {
     await setSessionTokens(result.data)
-    await redirectTo(ROUTES.PRIVATE.ACCOUNT)
+    redirectTo(ROUTES.PRIVATE.ACCOUNT, locale)
   } else if (result.code === AUTH_MESSAGE_CODE.INVALID_CREDENTIALS) {
     return messageError('auth.login.errors.signInFailed')
   } else if (result.code === AUTH_MESSAGE_CODE.EMAIL_NOT_VERIFIED) {
     await post(API_ROUTES.AUTH.RESEND_VERIFICATION, messageResponseSchema, {
       body: { email },
     })
-    await redirectTo(checkEmailHref(email))
+    redirectTo(checkEmailHref(email), locale)
   } else if (result.code === AUTH_MESSAGE_CODE.ACCOUNT_DISABLED) {
     return messageError('auth.login.errors.accountDisabled')
   }
@@ -115,6 +120,7 @@ export const login = async (
 
 export const forgotPassword = async (
   input: PasswordResetFormValues,
+  locale: string,
 ): Promise<ActionResult<{ email: string }, 'email'>> => {
   const parsed = passwordResetSchema.safeParse(input)
   if (!parsed.success) return messageError('auth.common.errors.system')
@@ -125,7 +131,7 @@ export const forgotPassword = async (
     { body: { email: parsed.data.email } },
   )
   if (isMessageCode(result, AUTH_MESSAGE_CODE.PASSWORD_RESET_EMAIL_ACCEPTED)) {
-    await redirectTo(ROUTES.PUBLIC.AUTH.RECOVERY_SUCCESS)
+    redirectTo(ROUTES.PUBLIC.AUTH.RECOVERY_SUCCESS, locale)
   }
 
   return messageError('auth.recovery.errors.resetFailed')
@@ -134,6 +140,7 @@ export const forgotPassword = async (
 export const resetPassword = async (
   token: string,
   input: ResetPasswordFormValues,
+  locale: string,
 ): Promise<ActionResult<{ reset: true }, 'password' | 'confirmPassword'>> => {
   if (!token) return messageError('auth.resetPassword.errors.invalidLink')
 
@@ -150,7 +157,7 @@ export const resetPassword = async (
 
   if (isMessageCode(result, AUTH_MESSAGE_CODE.PASSWORD_RESET_SUCCESS)) {
     await clearSessionTokens()
-    await redirectTo(ROUTES.PUBLIC.AUTH.LOGIN)
+    redirectTo(ROUTES.PUBLIC.AUTH.LOGIN, locale)
   }
 
   if (!result.ok && result.code === AUTH_MESSAGE_CODE.INVALID_OR_EXPIRED_PASSWORD_RESET_LINK) {
@@ -217,7 +224,7 @@ export const updatePassword = async (
   return messageError('auth.updatePassword.errors.updateFailed')
 }
 
-export const logout = async (): Promise<void> => {
+export const logout = async (locale: string): Promise<void> => {
   const refreshToken = await getRefreshToken()
   if (refreshToken) {
     await post(API_ROUTES.AUTH.LOGOUT, messageResponseSchema, {
@@ -226,5 +233,5 @@ export const logout = async (): Promise<void> => {
   }
 
   await clearSessionTokens()
-  await redirectTo(ROUTES.PUBLIC.AUTH.LOGIN)
+  redirectTo(ROUTES.PUBLIC.AUTH.LOGIN, locale)
 }
