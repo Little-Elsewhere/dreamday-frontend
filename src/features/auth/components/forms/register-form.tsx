@@ -1,7 +1,7 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { useRef, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
@@ -18,6 +18,7 @@ import { Link } from '@/i18n/navigation'
 export const RegisterForm = () => {
   const t = useTranslations('auth')
   const tRoot = useTranslations()
+  const locale = useLocale()
   const [formMessage, setFormMessage] = useState('')
   const feedbackRef = useRef<HTMLDivElement>(null)
   const form = useForm<RegistrationFormValues>({
@@ -27,7 +28,7 @@ export const RegisterForm = () => {
 
   const handleRegistration = async (values: RegistrationFormValues) => {
     setFormMessage('')
-    const result = await register(values)
+    const result = await register(values, locale)
     if (result.success) return
 
     applyFormError(result, form.setError, setFormMessage, tRoot)

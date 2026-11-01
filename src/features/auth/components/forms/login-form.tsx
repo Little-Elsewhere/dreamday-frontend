@@ -1,7 +1,7 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { useRef, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
@@ -20,6 +20,7 @@ import { ForgotPasswordForm } from './forgot-password-form'
 export const LoginForm = () => {
   const t = useTranslations('auth')
   const tRoot = useTranslations()
+  const locale = useLocale()
   const [resetDialogOpen, setResetDialogOpen] = useState(false)
   const [resetInitialEmail, setResetInitialEmail] = useState('')
   const [formMessage, setFormMessage] = useState('')
@@ -31,7 +32,7 @@ export const LoginForm = () => {
 
   const handleLogin = async (values: LoginFormValues) => {
     setFormMessage('')
-    const result = await login(values)
+    const result = await login(values, locale)
     if (result.success) return
 
     applyFormError(result, loginForm.setError, setFormMessage, tRoot)

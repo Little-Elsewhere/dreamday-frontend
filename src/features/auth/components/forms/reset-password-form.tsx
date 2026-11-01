@@ -1,7 +1,7 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { useRef, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
@@ -21,6 +21,7 @@ type Props = {
 export const ResetPasswordForm = ({ token }: Props) => {
   const t = useTranslations('auth')
   const tRoot = useTranslations()
+  const locale = useLocale()
   const [formMessage, setFormMessage] = useState('')
   const feedbackRef = useRef<HTMLDivElement>(null)
   const form = useForm<ResetPasswordFormValues>({
@@ -30,7 +31,7 @@ export const ResetPasswordForm = ({ token }: Props) => {
 
   const handleResetPassword = async (values: ResetPasswordFormValues) => {
     setFormMessage('')
-    const result = await resetPassword(token, values)
+    const result = await resetPassword(token, values, locale)
     if (result.success) return
 
     applyFormError(result, form.setError, setFormMessage, tRoot)
