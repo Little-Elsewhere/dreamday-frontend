@@ -187,7 +187,6 @@ jobs:
           NEXT_PUBLIC_APP_URL: http://localhost:4000
           MAINTENANCE_MODE: ${{ secrets.MAINTENANCE_MODE }}
           API_BASE_URL: ${{ secrets.API_BASE_URL }}
-          NEXT_PUBLIC_POSTHOG_HOST: ${{ secrets.NEXT_PUBLIC_POSTHOG_HOST }}
         run: pnpm test:e2e
 
   build:
@@ -219,7 +218,6 @@ jobs:
           NEXT_PUBLIC_APP_URL: ${{ secrets.NEXT_PUBLIC_APP_URL }}
           MAINTENANCE_MODE: ${{ secrets.MAINTENANCE_MODE }}
           API_BASE_URL: ${{ secrets.API_BASE_URL }}
-          NEXT_PUBLIC_POSTHOG_HOST: ${{ secrets.NEXT_PUBLIC_POSTHOG_HOST }}
         run: pnpm build
 
   auto-merge:
