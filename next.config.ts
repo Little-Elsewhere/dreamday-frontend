@@ -8,20 +8,15 @@ const isProduction = process.env.NODE_ENV === 'production'
 const allowedDevOrigins = process.env.NEXT_DEV_ALLOWED_ORIGINS?.split(',')
   .map((origin) => origin.trim())
   .filter(Boolean)
-const posthogSource = process.env.NEXT_PUBLIC_POSTHOG_HOST
-  ? new URL(process.env.NEXT_PUBLIC_POSTHOG_HOST).origin
-  : null
-const posthogSources = ['https://*.posthog.com', ...(posthogSource ? [posthogSource] : [])]
-const connectSources = ["'self'", ...posthogSources].join(' ')
 const imageSources = ["'self'", 'blob:', 'data:'].join(' ')
 
 const contentSecurityPolicy = [
   "default-src 'self'",
-  `script-src 'self' ${posthogSources.join(' ')} 'unsafe-inline'${isDevelopment ? " 'unsafe-eval'" : ''}`,
+  `script-src 'self' 'unsafe-inline'${isDevelopment ? " 'unsafe-eval'" : ''}`,
   "style-src 'self' 'unsafe-inline'",
   `img-src ${imageSources}`,
   "font-src 'self'",
-  `connect-src ${connectSources}`,
+  "connect-src 'self'",
   "media-src 'self'",
   "worker-src 'self' blob: data:",
   "manifest-src 'self'",
@@ -35,11 +30,11 @@ const contentSecurityPolicy = [
 
 const contentSecurityPolicyReportOnly = [
   "default-src 'self'",
-  `script-src 'self' ${posthogSources.join(' ')}`,
+  "script-src 'self'",
   "style-src 'self'",
   `img-src ${imageSources}`,
   "font-src 'self'",
-  `connect-src ${connectSources}`,
+  "connect-src 'self'",
   "media-src 'self'",
   "worker-src 'self' blob: data:",
   "manifest-src 'self'",

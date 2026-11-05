@@ -34,7 +34,6 @@ The frontend validates application settings with Zod in `src/schemas/env.ts`. Ne
 | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
 | Public application metadata | `NEXT_PUBLIC_APP_NAME`, `NEXT_PUBLIC_APP_DEFAULT_TITLE`, `NEXT_PUBLIC_APP_TITLE_TEMPLATE`, `NEXT_PUBLIC_APP_DESCRIPTION`, `NEXT_PUBLIC_APP_URL` |
 | Runtime behavior            | `MAINTENANCE_MODE` (defaults to `false`)                                                                                                        |
-| Client-side analytics       | `NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN` (optional; omit to disable), `NEXT_PUBLIC_POSTHOG_HOST` (defaults to `https://us.i.posthog.com`)            |
 | Development server          | `NEXT_DEV_ALLOWED_ORIGINS` (optional comma-separated hostnames)                                                                                 |
 
 All `NEXT_PUBLIC_*` values are included in browser-facing output. Do not place secrets in them. The current frontend configuration contains no server credentials. For production Docker builds, `NEXT_PUBLIC_*` settings are read from the local `.env` file at build time; the same file is passed to the running container. Keep that host file out of Git.

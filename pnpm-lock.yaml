@@ -242,9 +242,6 @@ importers:
       next-intl:
         specifier: ^4.13.6
         version: 4.14.9(@swc/helpers@0.5.23)(@types/react@19.3.0)(next@16.4.3(@babel/core@7.29.7(supports-color@7.2.0))(@types/node@26.6.4)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)
-      posthog-js:
-        specifier: 1.438.21
-        version: 1.438.21(@types/react@19.3.0)(react@19.3.0)
       react:
         specifier: 19.3.0
         version: 19.3.0
@@ -2484,24 +2481,6 @@ packages:
         integrity: sha512-wwQAWhWSuHaag8c4q/KN/vCoeOJYshAIvMQwD4GpSb3OiZklFfvAgmj0VCBBImRpuF/aFgIRzllXlVX93Jevww==,
       }
 
-  '@posthog/browser-common@0.9.11':
-    resolution:
-      {
-        integrity: sha512-ZCwJIgiDBRoEAlrlYxaIIIAUfITmBDpWDQJp+IZmAcTyvJka5/ebEKu8uV+jSSA/RhpvDKKte1WmhLUbkIWQjA==,
-      }
-
-  '@posthog/core@1.60.1':
-    resolution:
-      {
-        integrity: sha512-UpswaG2957O6Ywfx1aCeI8BbXcfoKduKwq1ytBml80AQuAmgK672OmhDcldA7wg4vGP49LpDTgxcNbLvZwQOqw==,
-      }
-
-  '@posthog/types@1.416.0':
-    resolution:
-      {
-        integrity: sha512-0/9+02s/0uDyrH4G/qUg1yyl6gXUg8Uuxw/PlDad3KLzo9FFS9zS/kAQaEshx/saVGupj1aAy/4EUBxWisBogw==,
-      }
-
   '@rolldown/binding-android-arm-eabi@1.2.15':
     resolution:
       {
@@ -4420,12 +4399,6 @@ packages:
       }
     engines: { node: '>= 0.6' }
 
-  core-js@3.50.0:
-    resolution:
-      {
-        integrity: sha512-BRWgOLKkFeCgRudR6zrs8p9XJZcE14grzKMMssoYrk6krtuEZ7MTKPIY5RzOnqsEKIR9kst7wNzphttraT+Yqw==,
-      }
-
   cors@2.8.6:
     resolution:
       {
@@ -4742,12 +4715,6 @@ packages:
         integrity: sha512-cgwlv/1iFQiFnU96XXgROh8xTeetsnJiDsTc7TYCLFd9+/WNkIqPTxiM/8pSd8VIrhXGTf1Ny1q1hquVqDJB5w==,
       }
     engines: { node: '>= 4' }
-
-  dompurify@3.4.17:
-    resolution:
-      {
-        integrity: sha512-B/pSlYVHQ58kqISD/yDjuJ1yfzI34m1gF4lAod2bwSRhiN4K5Cl3H8Af7hqB2PmTL911tdEudnnXn5FnhRoz0w==,
-      }
 
   domutils@3.2.2:
     resolution:
@@ -5308,12 +5275,6 @@ packages:
     peerDependenciesMeta:
       picomatch:
         optional: true
-
-  fflate@0.4.9:
-    resolution:
-      {
-        integrity: sha512-zdxgIEddhfsyCaWpJ2SdXEP8ZMrKJ6+5jl4OupODcywU0IhRk6gdXuVGcPICyfx2H97hVK7xmJtRLPjkxAX8Vw==,
-      }
 
   figures@3.2.0:
     resolution:
@@ -7540,37 +7501,12 @@ packages:
       }
     engines: { node: ^10 || ^12 || >=14 }
 
-  posthog-js@1.438.21:
-    resolution:
-      {
-        integrity: sha512-KFrb9SOhyWg65OYOJ6dIxog26AqyD3ETj5pin/dWBcGll3pqa3FnqoJxq5IkHC6dtms/YjRCj6cT06u9j+EkoA==,
-      }
-    peerDependencies:
-      '@types/react': '>=16.8.0'
-      react: '>=16.8.0'
-    peerDependenciesMeta:
-      '@types/react':
-        optional: true
-      react:
-        optional: true
-
   powershell-utils@0.2.1:
     resolution:
       {
         integrity: sha512-C+y9x90UElAddDZmV4qOx9W53B61PO7cIqWz2dQsWlwswuq4mr8NEwytdGKboYbQlGZ3awrkTeNvcZiZNHnQ8A==,
       }
     engines: { node: '>=20' }
-
-  preact@10.29.8:
-    resolution:
-      {
-        integrity: sha512-ej2aVZ+vZ8WO7tvlQWRM9N63A0KzF9q4mWJfDUHgYaIofWY9hu74QdnQrjoPMmZi2/nZ5gN0bJCQF49xQqx09Q==,
-      }
-    peerDependencies:
-      preact-render-to-string: '>=5'
-    peerDependenciesMeta:
-      preact-render-to-string:
-        optional: true
 
   prelude-ls@1.2.1:
     resolution:
@@ -7719,12 +7655,6 @@ packages:
         integrity: sha512-5Px6J7rfHBAGUhNQ3es4YzcOdBBw0SDcVtThJml4RdnKw4tKs2epA0kPZ+K8X+WiHktT93RHVcQ/3ym5aTCgtg==,
       }
     engines: { node: '>=0.6' }
-
-  query-selector-shadow-dom@1.0.1:
-    resolution:
-      {
-        integrity: sha512-lT5yCqEBgfoMYpf3F2xQRK7zEr1rhIIZuceDK6+xRkJQ4NMbHTwXqk4NkwDwQMNqXgG9r9fyHnzwNVs6zV5KRw==,
-      }
 
   queue-microtask@1.2.3:
     resolution:
@@ -9017,18 +8947,6 @@ packages:
         optional: true
       jsdom:
         optional: true
-
-  web-vitals@6.2.1:
-    resolution:
-      {
-        integrity: sha512-rLcLXA2sx6+9dE88NHFubwTtGxpK4yYBLj6qHPdFoCaLr0cXGb4efOqtKLlm4loGA4OEKHIQKMKzZkKyOh5ctw==,
-      }
-
-  web-vitals@6.2.3:
-    resolution:
-      {
-        integrity: sha512-Dmy+vdO1UPMqXiAtZSNayhl4f794Bxfd94W4HIj2HlYtczEQfEOon969memlcpcHrTuOKLa5baFjX7WbgmOq+A==,
-      }
 
   webpack-virtual-modules@0.6.2:
     resolution:
@@ -10410,20 +10328,6 @@ snapshots:
 
   '@polka/url@1.0.0-next.29': {}
 
-  '@posthog/browser-common@0.9.11':
-    dependencies:
-      '@posthog/core': 1.60.1
-      '@posthog/types': 1.416.0
-      preact: 10.29.8
-    transitivePeerDependencies:
-      - preact-render-to-string
-
-  '@posthog/core@1.60.1':
-    dependencies:
-      '@posthog/types': 1.416.0
-
-  '@posthog/types@1.416.0': {}
-
   '@rolldown/binding-android-arm-eabi@1.2.15':
     optional: true
 
@@ -11584,8 +11488,6 @@ snapshots:
 
   cookie@0.7.2: {}
 
-  core-js@3.50.0: {}
-
   cors@2.8.6:
     dependencies:
       object-assign: 4.1.1
@@ -11746,10 +11648,6 @@ snapshots:
   domhandler@5.0.3:
     dependencies:
       domelementtype: 2.3.0
-
-  dompurify@3.4.17:
-    optionalDependencies:
-      '@types/trusted-types': 2.0.7
 
   domutils@3.2.2:
     dependencies:
@@ -12298,8 +12196,6 @@ snapshots:
   fdir@6.5.0(picomatch@4.0.7):
     optionalDependencies:
       picomatch: 4.0.7
-
-  fflate@0.4.9: {}
 
   figures@3.2.0:
     dependencies:
@@ -13520,27 +13416,7 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.2
 
-  posthog-js@1.438.21(@types/react@19.3.0)(react@19.3.0):
-    dependencies:
-      '@posthog/browser-common': 0.9.11
-      '@posthog/core': 1.60.1
-      '@posthog/types': 1.416.0
-      core-js: 3.50.0
-      dompurify: 3.4.17
-      fflate: 0.4.9
-      preact: 10.29.8
-      query-selector-shadow-dom: 1.0.1
-      web-vitals: 6.2.3
-      web-vitals-soft-navs: web-vitals@6.2.1
-    optionalDependencies:
-      '@types/react': 19.3.0
-      react: 19.3.0
-    transitivePeerDependencies:
-      - preact-render-to-string
-
   powershell-utils@0.2.1: {}
-
-  preact@10.29.8: {}
 
   prelude-ls@1.2.1: {}
 
@@ -13601,8 +13477,6 @@ snapshots:
     dependencies:
       es-define-property: 1.0.1
       side-channel: 1.1.1
-
-  query-selector-shadow-dom@1.0.1: {}
 
   queue-microtask@1.2.3: {}
 
@@ -14530,10 +14404,6 @@ snapshots:
       '@vitest/coverage-v8': 4.1.12(@vitest/browser@4.1.12)(vitest@4.1.12)
     transitivePeerDependencies:
       - msw
-
-  web-vitals@6.2.1: {}
-
-  web-vitals@6.2.3: {}
 
   webpack-virtual-modules@0.6.2: {}
 
