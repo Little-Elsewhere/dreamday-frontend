@@ -1,0 +1,12 @@
+{
+  "threshold": 2,
+  "reporters": ["console"],
+  "ignore": [
+    "**/node_modules/**",
+    "**/.next/**",
+    "**/coverage/**",
+    "**/storybook-static/**",
+    "**/playwright-report/**",
+    "**/test-results/**"
+  ]
+}
