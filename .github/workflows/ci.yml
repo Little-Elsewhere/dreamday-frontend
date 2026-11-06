@@ -108,6 +108,22 @@ jobs:
       - name: Check duplicated code
         run: pnpm jscpd
 
+  semgrep:
+    name: Semgrep
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Semgrep
+        run: pip install semgrep==1.184.0
+
+      - name: Check inline regular expressions
+        run: semgrep scan --config semgrep --error --metrics=off src e2e .storybook && semgrep --test semgrep
+
   typecheck:
     name: Type Check
     runs-on: ubuntu-latest
@@ -222,7 +238,7 @@ jobs:
 
   auto-merge:
     name: Auto Merge
-    needs: [commitlint, format, lint, jscpd, typecheck, unit, e2e, build]
+    needs: [commitlint, format, lint, jscpd, semgrep, typecheck, unit, e2e, build]
     if: >
       github.event.pull_request.draft == false &&
       github.event.pull_request.base.ref == 'develop'

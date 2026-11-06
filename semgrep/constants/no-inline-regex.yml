@@ -1,0 +1,34 @@
+rules:
+  - id: no-inline-regex
+    languages:
+      - javascript
+      - typescript
+    severity: ERROR
+    message: Assign a regular expression to a constant, or to a property of a constant object, inside its constants module.
+    options:
+      constant_propagation: false
+    paths:
+      include:
+        - '**/constants/**'
+    patterns:
+      - pattern-either:
+          - pattern: /.../
+          - pattern: new RegExp(...)
+      - pattern-not-inside:
+          pattern-either:
+            - pattern: |
+                const $NAME = /.../
+            - pattern: |
+                const $NAME = new RegExp(...)
+            - pattern: |
+                export const $NAME = /.../
+            - pattern: |
+                export const $NAME = new RegExp(...)
+            - pattern: |
+                const $NAME = { ..., $KEY: /.../, ... }
+            - pattern: |
+                const $NAME = { ..., $KEY: new RegExp(...), ... }
+            - pattern: |
+                export const $NAME = { ..., $KEY: /.../, ... }
+            - pattern: |
+                export const $NAME = { ..., $KEY: new RegExp(...), ... }

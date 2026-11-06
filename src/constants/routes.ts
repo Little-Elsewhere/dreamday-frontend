@@ -1,3 +1,5 @@
+import { TRIP_DETAIL_PATH } from '@/constants/patterns'
+
 export const ROUTES = {
   PUBLIC: {
     ROOT: '/',
@@ -16,7 +18,7 @@ export const ROUTES = {
     ACCOUNT: '/account',
     TRIPS: '/trips',
     TRIP_DETAIL: Object.assign((tripId: string) => `/trips/${tripId}`, {
-      pattern: /^\/trips\/[^/]+$/,
+      pattern: TRIP_DETAIL_PATH,
     }),
     TRIP_CREATE: '/trips/create',
     UPDATE_PASSWORD: '/auth/update-password',

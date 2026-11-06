@@ -13,6 +13,7 @@
     "start": "sh scripts/start-standalone.sh",
     "lint": "eslint",
     "jscpd": "jscpd .",
+    "semgrep": "semgrep scan --config semgrep --error --metrics=off src e2e .storybook && semgrep --test semgrep",
     "test:unit": "vitest run",
     "test:e2e": "playwright test",
     "prepare": "husky",

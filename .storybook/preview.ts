@@ -2,12 +2,14 @@ import '@/app/globals.css'
 
 import type { Preview } from '@storybook/nextjs-vite'
 
+import { COLOR_MATCHER, DATE_MATCHER } from './constants/controls'
+
 const preview: Preview = {
   parameters: {
     controls: {
       matchers: {
-        color: /(background|color)$/i,
-        date: /Date$/i,
+        color: COLOR_MATCHER,
+        date: DATE_MATCHER,
       },
     },
 
