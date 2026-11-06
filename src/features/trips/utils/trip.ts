@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 
-import { TRIP_APP_TIME_ZONE } from '@/features/trips/constants/trips'
+import { CLOCK_TIME, TRIP_APP_TIME_ZONE } from '@/features/trips/constants/trips'
 import type {
   TripActivity,
   TripCard,
@@ -114,7 +114,7 @@ export const formatMinute = (minute: number): string => {
 
 export const parseMinute = (value: string, allowMidnight = false): number => {
   if (allowMidnight && value === '24:00') return 1440
-  const match = /^(?:([01]\d|2[0-3])):([0-5]\d)$/.exec(value)
+  const match = CLOCK_TIME.exec(value)
   if (!match) return Number.NaN
   return Number(match[1]) * 60 + Number(match[2])
 }

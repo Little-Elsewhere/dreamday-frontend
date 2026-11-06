@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
+import { UUID_V4 } from '@/constants/patterns'
 import type { TripActivity } from '@/features/trips/types/trip'
 import {
   createUuidV4,
@@ -26,9 +27,7 @@ const createActivity = (id: string, activityDate: string, startMinute: number): 
 
 describe('trip date and time utilities', () => {
   it('creates a version 4 UUID using Web Crypto random values', () => {
-    expect(createUuidV4()).toMatch(
-      /^[\da-f]{8}-[\da-f]{4}-4[\da-f]{3}-[89ab][\da-f]{3}-[\da-f]{12}$/,
-    )
+    expect(createUuidV4()).toMatch(UUID_V4)
   })
 
   it('formats app dates in the configured Ho Chi Minh timezone', () => {

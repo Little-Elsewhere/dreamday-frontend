@@ -6,6 +6,7 @@ import type { PrecacheEntry, SerwistGlobalConfig } from 'serwist'
 import { NetworkOnly, Serwist } from 'serwist'
 
 import { DEFAULT_LOCALE } from '@/constants/locale'
+import { AUTH_PATHNAME } from '@/constants/patterns'
 import { isPrivateRoute } from '@/features/auth/utils/route'
 import { getPathnameLocale } from '@/utils/locale'
 
@@ -25,8 +26,7 @@ const serwist = new Serwist({
   runtimeCaching: [
     {
       matcher: ({ sameOrigin, url }) =>
-        sameOrigin &&
-        (/^\/(?:[a-z]{2}\/)?auth(?:\/|$)/.test(url.pathname) || isPrivateRoute(url.pathname)),
+        sameOrigin && (AUTH_PATHNAME.test(url.pathname) || isPrivateRoute(url.pathname)),
       handler: new NetworkOnly(),
     },
     ...defaultCache,

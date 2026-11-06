@@ -1,5 +1,7 @@
 import { expect, test } from 'playwright/test'
 
+import { EN_LOGIN_URL } from '../../src/features/auth/constants/patterns'
+
 test('shows an email error before sign-in on mobile', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'mobile', 'This check covers the mobile login layout.')
 
@@ -14,7 +16,7 @@ test('shows an email error before sign-in on mobile', async ({ page }, testInfo)
 
   await expect(page.locator('#login-email-error')).toHaveText('Enter a valid email address.')
   await expect(email).toHaveAttribute('aria-invalid', 'true')
-  await expect(page).toHaveURL(/\/en\/auth\/login$/)
+  await expect(page).toHaveURL(EN_LOGIN_URL)
 
   const screenshotPath = testInfo.outputPath('invalid-email.png')
   await page.screenshot({ path: screenshotPath, fullPage: true })

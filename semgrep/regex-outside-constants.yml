@@ -1,0 +1,16 @@
+rules:
+  - id: regex-outside-constants
+    languages:
+      - javascript
+      - typescript
+    severity: ERROR
+    message: Define regular expressions in a global or feature constants module, then import them.
+    options:
+      constant_propagation: false
+    paths:
+      exclude:
+        - '**/constants/**'
+    patterns:
+      - pattern-either:
+          - pattern: /.../
+          - pattern: new RegExp(...)
