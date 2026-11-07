@@ -12,6 +12,8 @@ export const TRIP_APP_TIME_ZONE = 'Asia/Ho_Chi_Minh'
 
 export const CLOCK_TIME = /^(?:([01]\d|2[0-3])):([0-5]\d)$/
 
+export const TRIP_MESSAGE_NAMESPACE = /^trips\./
+
 export const PUBLISH_ERROR_TRANSLATION_KEYS: Record<string, TripCreateErrorTranslationKey> = {
   'trips.create.errors.nameRequired': 'create.errors.nameRequired',
   'trips.create.errors.startDateRequired': 'create.errors.startDateRequired',
