@@ -2,11 +2,14 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { getLocale, getTranslations } from 'next-intl/server'
+import { Suspense } from 'react'
 
 import { buttonVariants } from '@/components/ui/button'
-import { getTripDetail } from '@/features/trips/actions/trips'
+import { getTripDetail, listTripMembers } from '@/features/trips/actions/trips'
 import { TripDetailActions } from '@/features/trips/components/trip-detail-actions'
+import { TripDetailLoading } from '@/features/trips/components/trip-detail-loading'
 import { TripHeader } from '@/features/trips/components/trip-header'
+import { TripMembersPanel } from '@/features/trips/components/trip-members-panel'
 import type { TripDetail } from '@/features/trips/types/trip'
 import {
   formatMinute,
@@ -17,16 +20,9 @@ import { Link } from '@/i18n/navigation'
 
 type Props = { params: Promise<{ tripId: string }> }
 
-export const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
-  const [{ tripId }, t] = await Promise.all([params, getTranslations('trips.detail')])
-  const trip = await getTripDetail(tripId)
-  return trip
-    ? {
-        title: trip.name,
-        description:
-          trip.description || t('metadataDescription', { destination: trip.destination }),
-      }
-    : { title: t('notFoundTitle') }
+export const generateMetadata = async (): Promise<Metadata> => {
+  const t = await getTranslations('trips.detail')
+  return { title: t('scheduleTitle'), description: t('emptySchedule') }
 }
 
 const TripSchedule = ({
@@ -85,7 +81,7 @@ const TripSchedule = ({
   )
 }
 
-const TripDetailPage = async ({ params }: Props) => {
+const TripDetailContent = async ({ params }: Props) => {
   const [{ tripId }, locale, t] = await Promise.all([
     params,
     getLocale(),
@@ -93,6 +89,7 @@ const TripDetailPage = async ({ params }: Props) => {
   ])
   const trip = await getTripDetail(tripId)
   if (!trip) notFound()
+  const members = await listTripMembers(tripId)
   const duration = trip.durationDays
 
   return (
@@ -160,8 +157,9 @@ const TripDetailPage = async ({ params }: Props) => {
                   <div>
                     <dt className="text-ink-soft text-xs">{t('facts.dateRange')}</dt>
                     <dd className="text-primary mt-1 font-medium">
-                      {formatTripDetailDate(trip.startDate, locale)} –{' '}
-                      {formatTripDetailDate(trip.endDate, locale)}
+                      {trip.startDate && trip.endDate
+                        ? `${formatTripDetailDate(trip.startDate, locale)} – ${formatTripDetailDate(trip.endDate, locale)}`
+                        : t('facts.notSet')}
                     </dd>
                   </div>
                   <div>
@@ -178,6 +176,12 @@ const TripDetailPage = async ({ params }: Props) => {
                     <dt className="text-ink-soft text-xs">{t('facts.status')}</dt>
                     <dd className="text-primary mt-1 font-medium">{t(`status.${trip.status}`)}</dd>
                   </div>
+                  <div>
+                    <dt className="text-ink-soft text-xs">{t('facts.visibility')}</dt>
+                    <dd className="text-primary mt-1 font-medium">
+                      {t(`visibility.${trip.visibility}`)}
+                    </dd>
+                  </div>
                 </dl>
               </section>
               <section className="border-line bg-paper rounded-2xl border p-5 sm:p-6">
@@ -189,6 +193,7 @@ const TripDetailPage = async ({ params }: Props) => {
                   {trip.note || t('note.empty')}
                 </p>
               </section>
+              <TripMembersPanel initialMembers={members} tripId={trip.id} />
               <TripDetailActions tripId={trip.id} />
               <Link
                 prefetch
@@ -204,5 +209,11 @@ const TripDetailPage = async ({ params }: Props) => {
     </main>
   )
 }
+
+const TripDetailPage = (props: Props) => (
+  <Suspense fallback={<TripDetailLoading />}>
+    <TripDetailContent {...props} />
+  </Suspense>
+)
 
 export default TripDetailPage

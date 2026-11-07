@@ -22,7 +22,28 @@
     "days": "{count, plural, one {# day} other {# days}}",
     "pace": "Pace",
     "status": "Status",
+    "visibility": "Visibility",
     "notSet": "Not set"
+  },
+  "visibility": {
+    "private": "Private",
+    "public": "Public"
+  },
+  "members": {
+    "eyebrow": "Together",
+    "title": "Trip members",
+    "description": "Owners can invite other Dreamday users by email. Members can view a private trip.",
+    "emailLabel": "Member email",
+    "emailPlaceholder": "friend@example.com",
+    "add": "Add member",
+    "adding": "Adding…",
+    "remove": "Remove",
+    "addFailed": "We couldn’t add that member. Check the email and try again.",
+    "removeFailed": "We couldn’t remove that member. Please try again.",
+    "roles": {
+      "owner": "Owner",
+      "member": "Member"
+    }
   },
   "paces": {
     "relaxed": "Slow and easy",

@@ -26,9 +26,15 @@
     "startDate": "Departure",
     "endDate": "Return",
     "timezone": "Trip timezone",
-    "pace": "What pace feels right?"
+    "pace": "What pace feels right?",
+    "visibility": "Who can see this trip?"
   },
   "timezoneHelp": "IANA timezone used for upcoming/past status (for example Asia/Tokyo).",
+  "visibilityHelp": "Private trips stay with members. Public trips can be viewed by anyone after you publish.",
+  "visibility": {
+    "private": "Private",
+    "public": "Public"
+  },
   "duration": {
     "notSet": "Not set",
     "days": "{count, plural, one {# day} other {# days}}",

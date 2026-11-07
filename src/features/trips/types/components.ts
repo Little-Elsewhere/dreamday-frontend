@@ -9,6 +9,7 @@ export type TripDraftFormValues = Pick<
   | 'endDate'
   | 'pace'
   | 'timezone'
+  | 'visibility'
   | 'coverPath'
   | 'note'
 >

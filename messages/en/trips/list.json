@@ -20,6 +20,7 @@
   "resultsTitle": "Your trip list",
   "coverMissing": "No cover photo",
   "noDescription": "A journey you planned for yourself.",
+  "datesNotSet": "Dates not set",
   "viewDetails": "View details",
   "openTrip": "View details for {name}",
   "paginationStatus": "Showing {shown} of {total} trips",

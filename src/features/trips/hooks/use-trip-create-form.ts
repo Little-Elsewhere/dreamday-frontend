@@ -34,6 +34,7 @@ export const useTripCreateForm = (initialDraft: TripDraft | null) => {
     endDate: initialDraft?.endDate ?? '',
     pace: initialDraft?.pace ?? '',
     timezone: initialDraft?.timezone ?? TRIP_APP_TIME_ZONE,
+    visibility: initialDraft?.visibility ?? 'private',
     coverPath: initialDraft?.coverPath ?? null,
     note: initialDraft?.note ?? '',
   })
@@ -61,6 +62,7 @@ export const useTripCreateForm = (initialDraft: TripDraft | null) => {
     pace: values.pace,
     note: values.note,
     timezone: values.timezone || TRIP_APP_TIME_ZONE,
+    visibility: values.visibility,
   })
 
   const ensureId = async () => {

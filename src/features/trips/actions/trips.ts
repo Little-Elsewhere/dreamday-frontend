@@ -7,6 +7,8 @@ import {
   tripActivityResponseSchema,
   tripDetailResponseSchema,
   tripListResponseSchema,
+  tripMemberListResponseSchema,
+  tripMemberResponseSchema,
 } from '@/features/trips/schemas/api'
 import {
   publishTripFieldsSchema,
@@ -15,7 +17,14 @@ import {
   tripIdSchema,
   tripNoteSchema,
 } from '@/features/trips/schemas/trip'
-import type { TripActivity, TripCard, TripDetail, TripDraft } from '@/features/trips/types/trip'
+import type {
+  TripActivity,
+  TripCard,
+  TripDetail,
+  TripDraft,
+  TripMember,
+  TripVisibility,
+} from '@/features/trips/types/trip'
 import {
   authedDel,
   authedGet,
@@ -39,6 +48,7 @@ const toDraftBody = (input: {
   pace: string
   note: string
   timezone?: string
+  visibility?: TripVisibility
 }) => ({
   name: input.name,
   destination: input.destination,
@@ -51,6 +61,7 @@ const toDraftBody = (input: {
       : null,
   note: input.note,
   timezone: input.timezone || 'Asia/Ho_Chi_Minh',
+  visibility: input.visibility ?? 'private',
 })
 
 export const getTrips = async (): Promise<TripCard[]> => {
@@ -100,6 +111,7 @@ export const saveDraft = async (input: {
   pace: string
   note: string
   timezone?: string
+  visibility?: TripVisibility
 }): Promise<ActionResult<TripDraft>> => {
   const parsed = tripDraftSchema.safeParse({
     name: input.name,
@@ -111,9 +123,19 @@ export const saveDraft = async (input: {
     coverPath: null,
     note: input.note,
   })
-  if (!parsed.success) return systemError()
+  if (!parsed.success) {
+    const endBeforeStart = parsed.error.issues.some(
+      (issue) => issue.message === 'trips.create.errors.endBeforeStart',
+    )
+    if (endBeforeStart) return messageError('trips.create.errors.endBeforeStart')
+    return systemError()
+  }
 
-  const body = toDraftBody({ ...parsed.data, timezone: input.timezone })
+  const body = toDraftBody({
+    ...parsed.data,
+    timezone: input.timezone,
+    visibility: input.visibility,
+  })
 
   if (input.tripId) {
     const id = tripIdSchema.safeParse(input.tripId)
@@ -355,6 +377,7 @@ export const ensureTripId = async (
     pace: string
     note: string
     timezone?: string
+    visibility?: TripVisibility
   },
 ): Promise<ActionResult<{ tripId: string }>> => {
   if (tripId) {
@@ -364,4 +387,56 @@ export const ensureTripId = async (
   const saved = await saveDraft(draftInput)
   if (!saved.success) return saved
   return { success: true, data: { tripId: saved.data.id } }
+}
+
+export const listTripMembers = async (tripId: string): Promise<TripMember[]> => {
+  const parsed = tripIdSchema.safeParse(tripId)
+  if (!parsed.success) return []
+  const result = await authedGet(
+    API_ROUTES.TRIPS.MEMBERS(parsed.data),
+    tripMemberListResponseSchema,
+  )
+  if (!result.ok) return []
+  return result.data.items.map((member) => ({
+    id: member.id,
+    userId: member.user_id,
+    email: member.email,
+    role: member.role,
+  }))
+}
+
+export const addTripMember = async (
+  tripId: string,
+  email: string,
+): Promise<ActionResult<TripMember>> => {
+  const parsed = tripIdSchema.safeParse(tripId)
+  if (!parsed.success) return systemError()
+  const result = await authedPost(API_ROUTES.TRIPS.MEMBERS(parsed.data), tripMemberResponseSchema, {
+    email,
+  })
+  if (!result.ok) return systemError()
+  return {
+    success: true,
+    data: {
+      id: result.data.id,
+      userId: result.data.user_id,
+      email: result.data.email,
+      role: result.data.role,
+    },
+  }
+}
+
+export const removeTripMember = async (
+  tripId: string,
+  userId: string,
+): Promise<ActionResult<{ removed: true }>> => {
+  const tripParsed = tripIdSchema.safeParse(tripId)
+  const userParsed = tripIdSchema.safeParse(userId)
+  if (!tripParsed.success || !userParsed.success) return systemError()
+  const result = await authedDel(
+    API_ROUTES.TRIPS.MEMBER(tripParsed.data, userParsed.data),
+    messageResponseSchema,
+  )
+  if (!result.ok) return systemError()
+  return { success: true, data: { removed: true } }
 }

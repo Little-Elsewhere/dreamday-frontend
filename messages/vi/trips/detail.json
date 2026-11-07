@@ -22,7 +22,28 @@
     "days": "{count, plural, one {# ngày} other {# ngày}}",
     "pace": "Nhịp chuyến đi",
     "status": "Trạng thái",
+    "visibility": "Quyền xem",
     "notSet": "Chưa có"
+  },
+  "visibility": {
+    "private": "Riêng tư",
+    "public": "Công khai"
+  },
+  "members": {
+    "eyebrow": "Cùng đi",
+    "title": "Thành viên chuyến đi",
+    "description": "Chủ chuyến đi có thể mời người dùng Dreamday khác bằng email. Thành viên có thể xem chuyến đi riêng tư.",
+    "emailLabel": "Email thành viên",
+    "emailPlaceholder": "ban@example.com",
+    "add": "Thêm thành viên",
+    "adding": "Đang thêm…",
+    "remove": "Xóa",
+    "addFailed": "Không thêm được thành viên. Kiểm tra email và thử lại.",
+    "removeFailed": "Không xóa được thành viên. Vui lòng thử lại.",
+    "roles": {
+      "owner": "Chủ chuyến đi",
+      "member": "Thành viên"
+    }
   },
   "paces": {
     "relaxed": "Thư thả",

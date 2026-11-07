@@ -204,8 +204,9 @@ export const TripsList = ({ trips }: Props) => {
                     </span>
                   </div>
                   <p className="text-ink text-sm">
-                    {formatTripDate(trip.startDate, locale)} –{' '}
-                    {formatTripDate(trip.endDate, locale)}
+                    {trip.startDate && trip.endDate
+                      ? `${formatTripDate(trip.startDate, locale)} – ${formatTripDate(trip.endDate, locale)}`
+                      : t('list.datesNotSet')}
                   </p>
                   <p className="text-ink-soft line-clamp-3 min-h-0 text-sm leading-relaxed">
                     {trip.description || t('list.noDescription')}

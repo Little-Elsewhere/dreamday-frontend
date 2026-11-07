@@ -57,10 +57,12 @@ const formatDateOnly = (
   date: string,
   locale: string,
   options: Intl.DateTimeFormatOptions,
-): string =>
-  new Intl.DateTimeFormat(locale, { ...options, timeZone: 'UTC' }).format(
-    new Date(`${date}T00:00:00.000Z`),
-  )
+): string => {
+  if (!date) return ''
+  const instant = new Date(`${date}T00:00:00.000Z`)
+  if (Number.isNaN(instant.getTime())) return ''
+  return new Intl.DateTimeFormat(locale, { ...options, timeZone: 'UTC' }).format(instant)
+}
 
 export const formatTripDate = (date: string, locale: string): string =>
   formatDateOnly(date, locale, { day: 'numeric', month: 'short', year: 'numeric' })

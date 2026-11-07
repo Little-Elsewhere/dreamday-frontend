@@ -8,7 +8,18 @@ const isProduction = process.env.NODE_ENV === 'production'
 const allowedDevOrigins = process.env.NEXT_DEV_ALLOWED_ORIGINS?.split(',')
   .map((origin) => origin.trim())
   .filter(Boolean)
-const imageSources = ["'self'", 'blob:', 'data:'].join(' ')
+const mediaOrigins = (process.env.NEXT_PUBLIC_MEDIA_ORIGINS?.split(',') ?? [])
+  .map((value) => value.trim())
+  .filter(Boolean)
+  .map((value) => {
+    try {
+      return new URL(value).origin
+    } catch {
+      return null
+    }
+  })
+  .filter((origin): origin is string => Boolean(origin))
+const imageSources = ["'self'", 'blob:', 'data:', ...mediaOrigins].join(' ')
 
 const contentSecurityPolicy = [
   "default-src 'self'",

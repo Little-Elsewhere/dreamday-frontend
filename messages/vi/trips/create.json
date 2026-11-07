@@ -26,9 +26,15 @@
     "startDate": "Ngày đi",
     "endDate": "Ngày về",
     "timezone": "Múi giờ chuyến đi",
-    "pace": "Bạn muốn đi theo nhịp nào?"
+    "pace": "Bạn muốn đi theo nhịp nào?",
+    "visibility": "Ai có thể xem chuyến đi này?"
   },
   "timezoneHelp": "Múi giờ IANA dùng để phân loại sắp tới/đã qua (ví dụ Asia/Tokyo).",
+  "visibilityHelp": "Chuyến đi riêng tư chỉ dành cho thành viên. Chuyến đi công khai ai cũng xem được sau khi xuất bản.",
+  "visibility": {
+    "private": "Riêng tư",
+    "public": "Công khai"
+  },
   "duration": {
     "notSet": "Chưa xác định",
     "days": "{count} ngày",

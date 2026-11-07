@@ -3,10 +3,19 @@ import type {
   TripCardResponse,
   TripDetailResponse,
 } from '@/features/trips/schemas/api'
-import type { TripActivity, TripCard, TripDetail, TripDraft } from '@/features/trips/types/trip'
+import type {
+  TripActivity,
+  TripCard,
+  TripDetail,
+  TripDraft,
+  TripVisibility,
+} from '@/features/trips/types/trip'
 import { getTripDuration, getTripStatus } from '@/features/trips/utils/trip'
 
 const todayIso = () => new Date().toISOString().slice(0, 10)
+
+const coverProxyUrl = (tripId: string, hasCover: boolean): string | null =>
+  hasCover ? `/api/trips/${tripId}/cover` : null
 
 export const mapActivity = (activity: TripActivityResponse): TripActivity => ({
   id: activity.id,
@@ -30,7 +39,8 @@ export const mapTripCard = (trip: TripCardResponse): TripCard => {
     startDate,
     endDate,
     pace: trip.pace ?? 'balanced',
-    coverUrl: trip.cover_url,
+    visibility: trip.visibility,
+    coverUrl: coverProxyUrl(trip.id, Boolean(trip.cover_url)),
     status,
     durationDays:
       trip.duration_days ?? (startDate && endDate ? getTripDuration(startDate, endDate) : 0),
@@ -52,8 +62,9 @@ export const mapTripDraft = (trip: TripDetailResponse): TripDraft => ({
   endDate: trip.end_date ?? '',
   pace: trip.pace ?? '',
   timezone: trip.timezone,
+  visibility: trip.visibility as TripVisibility,
   coverPath: trip.cover_path,
-  coverUrl: trip.cover_url,
+  coverUrl: coverProxyUrl(trip.id, Boolean(trip.cover_path || trip.cover_url)),
   note: trip.note,
   activities: trip.activities.map(mapActivity),
 })

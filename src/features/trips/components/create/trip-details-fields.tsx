@@ -8,7 +8,7 @@ import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { TRIP_PACES } from '@/features/trips/constants/trips'
 import type { TripDraftFormValues } from '@/features/trips/types/components'
-import type { TripPace } from '@/features/trips/types/trip'
+import type { TripPace, TripVisibility } from '@/features/trips/types/trip'
 import { getTripDuration } from '@/features/trips/utils/trip'
 import { cn } from '@/utils/cn'
 
@@ -237,6 +237,37 @@ export const TripDetailsFields = ({
               </label>
             ))}
           </div>
+          <fieldset className="mt-4 grid gap-2">
+            <legend className="text-ink text-sm font-medium">
+              {t('create.fields.visibility')}
+            </legend>
+            <p className="text-ink-soft text-xs">{t('create.visibilityHelp')}</p>
+            <div className="flex flex-wrap gap-2">
+              {(['private', 'public'] as const).map((visibility) => (
+                <label
+                  key={visibility}
+                  className={cn(
+                    'rounded-auth flex min-h-11 cursor-pointer items-center border px-3 transition-colors',
+                    values.visibility === visibility
+                      ? 'border-primary bg-paper text-primary'
+                      : 'border-line-strong bg-surface text-ink-soft hover:bg-paper',
+                  )}
+                >
+                  <input
+                    checked={values.visibility === visibility}
+                    className="peer sr-only"
+                    name="trip-visibility"
+                    onChange={() => onChange({ visibility: visibility as TripVisibility })}
+                    type="radio"
+                    value={visibility}
+                  />
+                  <span className="peer-focus-visible:outline-focus rounded-auth px-1 text-xs font-medium peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 sm:text-sm">
+                    {t(`create.visibility.${visibility}`)}
+                  </span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
         </fieldset>
       </div>
     </section>

@@ -21,6 +21,8 @@ export const API_ROUTES = {
     PUBLISH: (tripId: string) => `${API_V1}/trips/${tripId}/publish`,
     RESTORE: (tripId: string) => `${API_V1}/trips/${tripId}/restore`,
     COVER: (tripId: string) => `${API_V1}/trips/${tripId}/cover`,
+    MEMBERS: (tripId: string) => `${API_V1}/trips/${tripId}/members`,
+    MEMBER: (tripId: string, userId: string) => `${API_V1}/trips/${tripId}/members/${userId}`,
     ACTIVITIES: (tripId: string) => `${API_V1}/trips/${tripId}/activities`,
     ACTIVITY: (tripId: string, activityId: string) =>
       `${API_V1}/trips/${tripId}/activities/${activityId}`,

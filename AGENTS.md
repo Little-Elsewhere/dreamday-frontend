@@ -75,7 +75,7 @@ Match nearby files before inventing new patterns. Prefer Server Components; keep
 ## Testing instructions
 
 - Unit: Vitest via `pnpm test:unit` (colocated `*.test.ts(x)` under `src/`)
-- E2E: Playwright via `pnpm test:e2e` (specs under `e2e/`)
+- E2E: Playwright via `pnpm test:e2e` (specs under `e2e/` — auth, trips, account, public; needs API + Mailpit for integration cases)
 - Stories: `src/**/*.stories.tsx`, Storybook on port 6006
 - Before finishing a change, run the checks relevant to what you touched (`lint`, `typecheck`, unit tests). CI on PRs to `develop`/`main` also runs format, commitlint, jscpd, Semgrep, unit, e2e, and build from `.env.example`.
 - Regular expressions live in a global `src/constants/` module or a feature `constants/` module, then are imported. Inside those modules, a regex is a `const` or a property of a `const` object. Semgrep rejects a regex written anywhere else, including a local `const`.
