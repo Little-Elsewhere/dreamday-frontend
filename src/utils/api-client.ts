@@ -10,6 +10,7 @@ import type {
   ParseableSchema,
   RequestBaseOptions,
   RequestBodyOptions,
+  RequestFormDataOptions,
   RequestOptions,
 } from '@/types/api'
 
@@ -44,8 +45,10 @@ export const request = async <TData>(
   options: RequestOptions,
 ): Promise<ApiResult<TData>> => {
   const headers = new Headers({ Accept: 'application/json' })
+  const formData = 'formData' in options ? options.formData : undefined
+  const jsonBody = 'body' in options ? options.body : undefined
 
-  if (options.body !== undefined) {
+  if (jsonBody !== undefined) {
     headers.set('Content-Type', 'application/json')
   }
 
@@ -59,7 +62,12 @@ export const request = async <TData>(
     response = await fetch(buildUrl(path, options.prefix), {
       method: options.method,
       headers,
-      body: options.body !== undefined ? JSON.stringify(options.body) : undefined,
+      body:
+        formData !== undefined
+          ? formData
+          : jsonBody !== undefined
+            ? JSON.stringify(jsonBody)
+            : undefined,
       cache: options.cache ?? 'no-store',
     })
   } catch {
@@ -112,6 +120,12 @@ export const del = <TData>(
   schema: ParseableSchema<TData>,
   options: RequestBodyOptions = {},
 ) => request(path, schema, { ...options, method: 'DELETE' })
+
+export const postForm = <TData>(
+  path: string,
+  schema: ParseableSchema<TData>,
+  options: RequestFormDataOptions,
+) => request(path, schema, { ...options, method: 'POST' })
 
 export const isMessageCode = (
   result: ApiResult<MessageResponse>,

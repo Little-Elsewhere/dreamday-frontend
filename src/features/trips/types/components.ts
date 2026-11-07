@@ -2,7 +2,15 @@ import type { TripActivity, TripDraft } from '@/features/trips/types/trip'
 
 export type TripDraftFormValues = Pick<
   TripDraft,
-  'name' | 'destination' | 'description' | 'startDate' | 'endDate' | 'pace' | 'coverPath' | 'note'
+  | 'name'
+  | 'destination'
+  | 'description'
+  | 'startDate'
+  | 'endDate'
+  | 'pace'
+  | 'timezone'
+  | 'coverPath'
+  | 'note'
 >
 export type TripActivityFormValues = Omit<TripActivity, 'id'> & { id?: string }
 export type TripCreateErrorTranslationKey =

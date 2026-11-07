@@ -1,6 +1,7 @@
 {
   "eyebrow": "Một hành trình mới",
   "title": "Tạo chuyến đi",
+  "editTitle": "Sửa {name}",
   "intro": "Bắt đầu với điểm đến và ngày đi. Bạn có thể lưu bất cứ lúc nào rồi tiếp tục bản nháp sau.",
   "scheduleTitle": "Sắp xếp lịch trình",
   "scheduleIntro": "Thêm những điều bạn muốn dành thời gian. Hoạt động có thể trùng giờ và bạn có thể di chuyển chúng sau.",
@@ -24,8 +25,10 @@
     "duration": "Thời lượng",
     "startDate": "Ngày đi",
     "endDate": "Ngày về",
+    "timezone": "Múi giờ chuyến đi",
     "pace": "Bạn muốn đi theo nhịp nào?"
   },
+  "timezoneHelp": "Múi giờ IANA dùng để phân loại sắp tới/đã qua (ví dụ Asia/Tokyo).",
   "duration": {
     "notSet": "Chưa xác định",
     "days": "{count} ngày",
@@ -35,7 +38,8 @@
   "placeholders": {
     "name": "Vài ngày bên biển",
     "destination": "Vịnh Lan Hạ, Việt Nam",
-    "description": "Bạn mong chờ điều gì trong chuyến đi?"
+    "description": "Bạn mong chờ điều gì trong chuyến đi?",
+    "timezone": "Asia/Ho_Chi_Minh"
   },
   "coverAlt": "Ảnh xem trước bìa chuyến đi",
   "coverEmpty": "Một bức ảnh gợi nhớ về chuyến đi",
@@ -81,7 +85,9 @@
     "invalidCover": "Hãy chọn ảnh JPG, PNG hoặc WebP có dung lượng tối đa 2 MB.",
     "coverUploadFailed": "Chưa thể lưu ảnh bìa. Vui lòng thử lại.",
     "activityOutsideTrip": "Ngày hoạt động cần nằm trong khoảng ngày của chuyến đi.",
-    "activitySaveFailed": "Không thể lưu hoạt động này. Vui lòng thử lại."
+    "activitySaveFailed": "Không thể lưu hoạt động này. Vui lòng thử lại.",
+    "system": "Đã có lỗi xảy ra. Vui lòng thử lại.",
+    "draftExists": "Bạn đã có một bản nháp. Hãy hoàn tất hoặc xóa nó trước khi tạo bản mới."
   },
   "itinerary": {
     "heading": "Từng ngày một",

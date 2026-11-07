@@ -37,5 +37,15 @@
     "eyebrow": "Để dành sau",
     "title": "Ghi chú chuyến đi",
     "empty": "Chưa có ghi chú nào."
+  },
+  "actions": {
+    "edit": "Sửa chuyến đi",
+    "delete": "Xóa chuyến đi",
+    "deleting": "Đang xóa…",
+    "deleteConfirm": "Chuyển chuyến đi này vào thùng rác? Bạn có thể khôi phục sau."
+  },
+  "errors": {
+    "notFound": "Không tìm thấy chuyến đi này.",
+    "deleteFailed": "Không xóa được chuyến đi. Vui lòng thử lại."
   }
 }

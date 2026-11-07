@@ -6,6 +6,7 @@ import { MAX_TRIP_COVER_SIZE_BYTES } from '@/features/trips/constants/trips'
 
 export const useTripCover = (initialCoverUrl: string | null) => {
   const [coverUrl, setCoverUrl] = useState<string | null>(initialCoverUrl)
+  const [isUploading, setUploading] = useState(false)
   const previewUrlRef = useRef<string | null>(null)
 
   useEffect(
@@ -36,9 +37,17 @@ export const useTripCover = (initialCoverUrl: string | null) => {
     setCoverUrl(null)
   }
 
+  const setRemoteUrl = (url: string | null) => {
+    if (previewUrlRef.current) {
+      URL.revokeObjectURL(previewUrlRef.current)
+      previewUrlRef.current = null
+    }
+    setCoverUrl(url)
+  }
+
   return {
     data: { coverUrl },
-    handlers: { chooseCover, removeCover },
-    statuses: { isUploading: false },
+    handlers: { chooseCover, removeCover, setRemoteUrl, setUploading },
+    statuses: { isUploading },
   }
 }

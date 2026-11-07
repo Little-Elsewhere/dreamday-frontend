@@ -30,5 +30,14 @@
   "noResultsDescription": "Thử tên hoặc điểm đến khác, hoặc xóa bộ lọc để xem tất cả chuyến đi.",
   "clearFilters": "Xóa bộ lọc",
   "resultCount": "{count, plural, one {# chuyến đi} other {# chuyến đi}}",
-  "days": "{count, plural, one {# ngày} other {# ngày}}"
+  "days": "{count, plural, one {# ngày} other {# ngày}}",
+  "trash": {
+    "eyebrow": "Có thể khôi phục",
+    "title": "Chuyến đi đã xóa",
+    "description": "Các chuyến đi xóa mềm vẫn nằm ở đây cho đến khi bạn khôi phục.",
+    "untitled": "Chuyến đi chưa đặt tên",
+    "restore": "Khôi phục",
+    "restoring": "Đang khôi phục…",
+    "restoreFailed": "Không khôi phục được chuyến đi. Vui lòng thử lại."
+  }
 }

@@ -30,5 +30,14 @@
   "noResultsDescription": "Try another name or destination, or clear your filters to see every trip.",
   "clearFilters": "Clear filters",
   "resultCount": "{count, plural, one {# trip} other {# trips}}",
-  "days": "{count, plural, one {# day} other {# days}}"
+  "days": "{count, plural, one {# day} other {# days}}",
+  "trash": {
+    "eyebrow": "Recoverable",
+    "title": "Deleted trips",
+    "description": "Soft-deleted trips stay here until you restore them.",
+    "untitled": "Untitled trip",
+    "restore": "Restore",
+    "restoring": "Restoring…",
+    "restoreFailed": "We couldn’t restore that trip. Please try again."
+  }
 }

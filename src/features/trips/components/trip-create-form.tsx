@@ -141,7 +141,7 @@ export const TripCreateForm = ({ initialDraft }: Props) => {
             coverUploading={coverUploading}
             coverUrl={coverUrl}
             onChange={patchValues}
-            onChooseCover={handleCover}
+            onChooseCover={(file) => void handleCover(file)}
             onRemoveCover={handleRemoveCover}
             pending={pending}
             values={values}

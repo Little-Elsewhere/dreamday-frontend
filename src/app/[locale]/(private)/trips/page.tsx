@@ -1,9 +1,10 @@
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 
-import { getTrips } from '@/features/trips/actions/trips'
+import { getDeletedTrips, getTrips } from '@/features/trips/actions/trips'
 import { TripHeader } from '@/features/trips/components/trip-header'
 import { TripsList } from '@/features/trips/components/trips-list'
+import { TripsTrash } from '@/features/trips/components/trips-trash'
 
 export const generateMetadata = async (): Promise<Metadata> => {
   const t = await getTranslations('trips.list')
@@ -11,7 +12,11 @@ export const generateMetadata = async (): Promise<Metadata> => {
 }
 
 const TripsContent = async () => {
-  const [t, trips] = await Promise.all([getTranslations('trips.list'), getTrips()])
+  const [t, trips, deletedTrips] = await Promise.all([
+    getTranslations('trips.list'),
+    getTrips(),
+    getDeletedTrips(),
+  ])
 
   return (
     <div className="bg-paper text-ink min-h-svh antialiased">
@@ -25,6 +30,7 @@ const TripsContent = async () => {
         </h1>
         <p className="text-ink-soft mt-3 max-w-xl leading-relaxed">{t('description')}</p>
         <TripsList trips={trips} />
+        <TripsTrash trips={deletedTrips} />
       </main>
     </div>
   )

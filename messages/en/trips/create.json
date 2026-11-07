@@ -1,6 +1,7 @@
 {
   "eyebrow": "A new journey",
   "title": "Create a trip",
+  "editTitle": "Edit {name}",
   "intro": "Start with the place and dates. You can save any time and come back to your draft.",
   "scheduleTitle": "Shape your itinerary",
   "scheduleIntro": "Add the moments you want to make room for. Activities can overlap and you can move them later.",
@@ -24,8 +25,10 @@
     "duration": "Duration",
     "startDate": "Departure",
     "endDate": "Return",
+    "timezone": "Trip timezone",
     "pace": "What pace feels right?"
   },
+  "timezoneHelp": "IANA timezone used for upcoming/past status (for example Asia/Tokyo).",
   "duration": {
     "notSet": "Not set",
     "days": "{count, plural, one {# day} other {# days}}",
@@ -35,7 +38,8 @@
   "placeholders": {
     "name": "A few days by the sea",
     "destination": "Lan Ha Bay, Vietnam",
-    "description": "What are you looking forward to?"
+    "description": "What are you looking forward to?",
+    "timezone": "Asia/Ho_Chi_Minh"
   },
   "coverAlt": "Trip cover preview",
   "coverEmpty": "A photo that feels like this trip",
@@ -81,7 +85,9 @@
     "invalidCover": "Choose a JPG, PNG, or WebP image up to 2 MB.",
     "coverUploadFailed": "We couldn’t save the cover photo. Please try again.",
     "activityOutsideTrip": "Keep this activity within the trip dates.",
-    "activitySaveFailed": "We couldn’t save that activity. Please try again."
+    "activitySaveFailed": "We couldn’t save that activity. Please try again.",
+    "system": "Something went wrong. Please try again.",
+    "draftExists": "You already have a draft trip. Finish or delete it before starting another."
   },
   "itinerary": {
     "heading": "A day at a time",

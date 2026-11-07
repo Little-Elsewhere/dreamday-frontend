@@ -42,6 +42,7 @@ export interface TripDraft {
   startDate: string
   endDate: string
   pace: TripPace | ''
+  timezone: string
   coverPath: string | null
   coverUrl: string | null
   note: string

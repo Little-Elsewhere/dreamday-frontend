@@ -27,7 +27,11 @@ export type RequestBodyOptions = RequestBaseOptions & {
   body?: JsonBody
 }
 
-export type RequestOptions = RequestBodyOptions & {
+export type RequestFormDataOptions = RequestBaseOptions & {
+  formData: FormData
+}
+
+export type RequestOptions = (RequestBodyOptions | RequestFormDataOptions) & {
   method: HttpMethod
 }
 
