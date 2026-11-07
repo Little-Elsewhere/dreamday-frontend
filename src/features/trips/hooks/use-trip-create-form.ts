@@ -14,7 +14,7 @@ import {
   saveTripNote,
   uploadTripCover,
 } from '@/features/trips/actions/trips'
-import { TRIP_APP_TIME_ZONE } from '@/features/trips/constants/trips'
+import { TRIP_APP_TIME_ZONE, TRIP_MESSAGE_NAMESPACE } from '@/features/trips/constants/trips'
 import { useTripActivities } from '@/features/trips/hooks/use-trip-activities'
 import { useTripCover } from '@/features/trips/hooks/use-trip-cover'
 import type { TripDraftFormValues } from '@/features/trips/types/components'
@@ -68,7 +68,7 @@ export const useTripCreateForm = (initialDraft: TripDraft | null) => {
     if (!result.success) {
       const key =
         result.error.kind === 'message'
-          ? result.error.key.replace(/^trips\./, '')
+          ? result.error.key.replace(TRIP_MESSAGE_NAMESPACE, '')
           : 'create.errors.system'
       setError(t(key as 'create.errors.system'))
       return null
@@ -86,7 +86,7 @@ export const useTripCreateForm = (initialDraft: TripDraft | null) => {
       setError(
         t(
           result.error.kind === 'message'
-            ? result.error.key.replace(/^trips\./, '')
+            ? result.error.key.replace(TRIP_MESSAGE_NAMESPACE, '')
             : 'create.errors.system',
         ),
       )
@@ -217,7 +217,7 @@ export const useTripCreateForm = (initialDraft: TripDraft | null) => {
       setError(
         t(
           synced.error.kind === 'message'
-            ? synced.error.key.replace(/^trips\./, '')
+            ? synced.error.key.replace(TRIP_MESSAGE_NAMESPACE, '')
             : 'create.errors.activitySaveFailed',
         ),
       )
@@ -236,7 +236,7 @@ export const useTripCreateForm = (initialDraft: TripDraft | null) => {
       setError(
         t(
           result.error.kind === 'message'
-            ? result.error.key.replace(/^trips\./, '')
+            ? result.error.key.replace(TRIP_MESSAGE_NAMESPACE, '')
             : 'create.errors.publishRequired',
         ),
       )
