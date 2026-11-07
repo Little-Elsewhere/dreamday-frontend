@@ -72,6 +72,11 @@ describe('trip date and time utilities', () => {
     expect(formatTripDetailDate('2026-10-06', 'en-US')).toBe('October 6, 2026')
   })
 
+  it('returns an empty string for missing or invalid calendar dates', () => {
+    expect(formatTripDate('', 'en-US')).toBe('')
+    expect(formatTripDetailDate('not-a-date', 'en-US')).toBe('')
+  })
+
   it('parses and formats quarter-hour times including 24:00', () => {
     expect(parseMinute('09:15')).toBe(555)
     expect(parseMinute('24:00', true)).toBe(1440)

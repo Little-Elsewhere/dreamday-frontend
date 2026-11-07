@@ -20,6 +20,7 @@
   "resultsTitle": "Danh sách chuyến đi",
   "coverMissing": "Chưa có ảnh bìa",
   "noDescription": "Một hành trình bạn đã dành riêng cho mình.",
+  "datesNotSet": "Chưa chọn ngày",
   "viewDetails": "Xem chi tiết",
   "openTrip": "Xem chi tiết chuyến đi {name}",
   "paginationStatus": "Đang hiển thị {shown} trên {total} chuyến đi",

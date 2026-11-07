@@ -1,9 +1,11 @@
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
+import { Suspense } from 'react'
 
 import { getDeletedTrips, getTrips } from '@/features/trips/actions/trips'
 import { TripHeader } from '@/features/trips/components/trip-header'
 import { TripsList } from '@/features/trips/components/trips-list'
+import { TripsListLoading } from '@/features/trips/components/trips-list-loading'
 import { TripsTrash } from '@/features/trips/components/trips-trash'
 
 export const generateMetadata = async (): Promise<Metadata> => {
@@ -36,4 +38,10 @@ const TripsContent = async () => {
   )
 }
 
-export default TripsContent
+const TripsPage = () => (
+  <Suspense fallback={<TripsListLoading />}>
+    <TripsContent />
+  </Suspense>
+)
+
+export default TripsPage

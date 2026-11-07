@@ -34,6 +34,7 @@ The frontend validates application settings with Zod in `src/schemas/env.ts`. Ne
 | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
 | Public application metadata | `NEXT_PUBLIC_APP_NAME`, `NEXT_PUBLIC_APP_DEFAULT_TITLE`, `NEXT_PUBLIC_APP_TITLE_TEMPLATE`, `NEXT_PUBLIC_APP_DESCRIPTION`, `NEXT_PUBLIC_APP_URL` |
 | Runtime behavior            | `MAINTENANCE_MODE` (defaults to `false`)                                                                                                        |
+| Media / CSP                 | `NEXT_PUBLIC_MEDIA_ORIGINS` (optional; covers use same-origin `/api/trips/{id}/cover`, so usually empty)                                        |
 | Development server          | `NEXT_DEV_ALLOWED_ORIGINS` (optional comma-separated hostnames)                                                                                 |
 
 All `NEXT_PUBLIC_*` values are included in browser-facing output. Do not place secrets in them. The current frontend configuration contains no server credentials. For production Docker builds, `NEXT_PUBLIC_*` settings are read from the local `.env` file at build time; the same file is passed to the running container. Keep that host file out of Git.
@@ -47,7 +48,7 @@ pnpm start               # Start the standalone build
 pnpm lint                # Run ESLint
 pnpm typecheck           # Run TypeScript checks
 pnpm test:unit           # Run unit tests in Node.js
-pnpm test:e2e            # Run skipped Playwright auth cases
+pnpm test:e2e            # Run Playwright e2e (auth, trips, account, public)
 pnpm format              # Format the project with Prettier
 pnpm format:check        # Check formatting without changing files
 pnpm storybook           # Start Storybook
@@ -77,7 +78,20 @@ messages/
 
 ## Playwright
 
-The auth and private-trip cases in `e2e/auth` are marked skipped while authentication and test-account setup are pending. The config keeps desktop, tablet, and mobile projects. Playwright starts `pnpm dev` when no server is already running (`reuseExistingServer` outside CI).
+Specs live under `e2e/` (auth, trips, account, public) and cover happy paths,
+validation, and abnormal flows. Integration cases talk to a running API and
+Mailpit; they skip automatically when those services are unreachable.
+
+```bash
+# Against the root Compose stack (API :8000, Mailpit :8025, app :4000)
+E2E_BASE_URL=http://localhost:4000 \
+E2E_API_BASE_URL=http://localhost:8000 \
+E2E_MAILPIT_URL=http://localhost:8025 \
+pnpm test:e2e
+```
+
+Desktop runs the full suite. Tablet/mobile run public smoke plus login validation.
+Playwright starts `pnpm dev` when no server is already running (`reuseExistingServer` outside CI).
 
 ## Docker
 

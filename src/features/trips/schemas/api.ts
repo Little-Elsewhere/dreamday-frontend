@@ -25,6 +25,7 @@ export const tripCardResponseSchema = z.object({
   pace: z.enum(TRIP_PACES).nullable(),
   timezone: z.string(),
   lifecycle: z.enum(['draft', 'published']),
+  visibility: z.enum(['private', 'public']),
   cover_url: z.string().nullable(),
   status: z.enum(['upcoming', 'past']).nullable(),
   duration_days: z.number().int().nullable(),
@@ -32,6 +33,19 @@ export const tripCardResponseSchema = z.object({
   updated_at: utcInstantSchema,
   published_at: utcInstantSchema.nullable(),
   deleted_at: utcInstantSchema.nullable().optional(),
+})
+
+export const tripMemberResponseSchema = z.object({
+  id: z.uuid(),
+  user_id: z.uuid(),
+  email: z.email(),
+  role: z.enum(['owner', 'member']),
+  created_at: utcInstantSchema,
+  updated_at: utcInstantSchema,
+})
+
+export const tripMemberListResponseSchema = z.object({
+  items: z.array(tripMemberResponseSchema),
 })
 
 export const tripDetailResponseSchema = tripCardResponseSchema.extend({
@@ -51,3 +65,5 @@ export type TripCardResponse = z.infer<typeof tripCardResponseSchema>
 export type TripDetailResponse = z.infer<typeof tripDetailResponseSchema>
 export type TripListResponse = z.infer<typeof tripListResponseSchema>
 export type TripActivityResponse = z.infer<typeof tripActivityResponseSchema>
+export type TripMemberResponse = z.infer<typeof tripMemberResponseSchema>
+export type TripMemberListResponse = z.infer<typeof tripMemberListResponseSchema>
