@@ -21,6 +21,9 @@ export const ROUTES = {
       pattern: TRIP_DETAIL_PATH,
     }),
     TRIP_CREATE: '/trips/create',
+    TRIP_EDIT: Object.assign((tripId: string) => `/trips/${tripId}/edit`, {
+      pattern: /^\/trips\/[^/]+\/edit$/,
+    }),
     UPDATE_PASSWORD: '/auth/update-password',
   },
 } as const

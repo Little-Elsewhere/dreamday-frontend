@@ -5,6 +5,7 @@ import { getLocale, getTranslations } from 'next-intl/server'
 
 import { buttonVariants } from '@/components/ui/button'
 import { getTripDetail } from '@/features/trips/actions/trips'
+import { TripDetailActions } from '@/features/trips/components/trip-detail-actions'
 import { TripHeader } from '@/features/trips/components/trip-header'
 import type { TripDetail } from '@/features/trips/types/trip'
 import {
@@ -188,6 +189,7 @@ const TripDetailPage = async ({ params }: Props) => {
                   {trip.note || t('note.empty')}
                 </p>
               </section>
+              <TripDetailActions tripId={trip.id} />
               <Link
                 prefetch
                 className={buttonVariants({ className: 'w-full', variant: 'outline' })}

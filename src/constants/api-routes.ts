@@ -13,4 +13,18 @@ export const API_ROUTES = {
     LOGOUT: `${API_V1}/auth/logout`,
     ME: `${API_V1}/auth/me`,
   },
+  TRIPS: {
+    LIST: `${API_V1}/trips`,
+    DELETED: `${API_V1}/trips/deleted`,
+    DRAFT: `${API_V1}/trips/draft`,
+    DETAIL: (tripId: string) => `${API_V1}/trips/${tripId}`,
+    PUBLISH: (tripId: string) => `${API_V1}/trips/${tripId}/publish`,
+    RESTORE: (tripId: string) => `${API_V1}/trips/${tripId}/restore`,
+    COVER: (tripId: string) => `${API_V1}/trips/${tripId}/cover`,
+    ACTIVITIES: (tripId: string) => `${API_V1}/trips/${tripId}/activities`,
+    ACTIVITY: (tripId: string, activityId: string) =>
+      `${API_V1}/trips/${tripId}/activities/${activityId}`,
+    ACTIVITY_RESTORE: (tripId: string, activityId: string) =>
+      `${API_V1}/trips/${tripId}/activities/${activityId}/restore`,
+  },
 } as const

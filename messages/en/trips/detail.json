@@ -37,5 +37,15 @@
     "eyebrow": "For later",
     "title": "Trip note",
     "empty": "No note has been added."
+  },
+  "actions": {
+    "edit": "Edit trip",
+    "delete": "Delete trip",
+    "deleting": "Deleting…",
+    "deleteConfirm": "Move this trip to trash? You can restore it later."
+  },
+  "errors": {
+    "notFound": "This trip could not be found.",
+    "deleteFailed": "We couldn’t delete this trip. Please try again."
   }
 }

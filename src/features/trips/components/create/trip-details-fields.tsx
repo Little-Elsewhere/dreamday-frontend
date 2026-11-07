@@ -15,7 +15,7 @@ import { cn } from '@/utils/cn'
 type Props = {
   coverUrl: string | null
   onChange: (patch: Partial<TripDraftFormValues>) => void
-  onChooseCover: (file: File | undefined) => void
+  onChooseCover: (file: File | undefined) => void | Promise<void>
   onRemoveCover: () => Promise<void>
   coverUploading: boolean
   pending: boolean
@@ -183,6 +183,18 @@ export const TripDetailsFields = ({
               />
             </label>
           </div>
+          <label className="grid min-w-0 gap-2" htmlFor="trip-timezone">
+            <span className="text-ink-soft text-xs">{t('create.fields.timezone')}</span>
+            <input
+              id="trip-timezone"
+              maxLength={64}
+              onChange={(event) => onChange({ timezone: event.target.value })}
+              placeholder={t('create.placeholders.timezone')}
+              value={values.timezone}
+              className="border-line-strong bg-field text-ink placeholder:text-placeholder focus-visible:border-primary focus-visible:ring-primary/20 rounded-auth min-h-12 w-full min-w-0 border px-2.5 text-sm outline-none focus-visible:ring-3 sm:px-3"
+            />
+            <span className="text-ink-soft text-xs">{t('create.timezoneHelp')}</span>
+          </label>
         </section>
 
         <section className="border-line grid content-center gap-2 border-t px-5 py-4 md:border-t-0 md:border-l md:px-6">
