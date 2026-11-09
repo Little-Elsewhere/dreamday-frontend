@@ -2,7 +2,7 @@
 
 Dreamday travel planning frontend: Next.js 16 App Router, React 19, TypeScript, Tailwind v4, shadcn/ui (Base UI), next-intl, Zod.
 
-This root file orients agents to the repo. Put domain- or package-specific instructions in a nested `AGENTS.md` closer to that code (nearest file wins). Cursor-scoped coding rules live in `.cursor/rules/*.mdc`.
+This root file orients agents to the repo. Put domain- or package-specific instructions in a nested `AGENTS.md` closer to that code (nearest file wins). Cursor-scoped coding rules live in `.cursor/rules/*.mdc`; Claude Code path-scoped rules live in `.claude/rules/*.md` (same topics; keep both in sync).
 
 The codebase and folder layout are still incomplete (~80% of the intended organization). Treat the paths below as the current map, not a finished contract. When unsure where a file or folder should live, or when a change would invent a new top-level / feature layout, ask the user before creating or moving structure.
 
@@ -33,7 +33,8 @@ Copy `.env.example` to `.env` before build when needed. Do not commit secrets.
 - `docker/` — Docker assets for dev/prod
 - `.github/workflows/` — CI, CD, release
 - `.cursor/rules/` — Cursor rule modules
-- `.agents/`, `.claude/` — agent skills and Claude helpers
+- `.claude/rules/` — Claude Code path-scoped rules (same topics; keep in sync with `.cursor/rules/`)
+- `.agents/`, `.claude/skills/`, `.claude/commands/` — agent skills and Claude helpers
 - `.storybook/` — Storybook config
 - `.husky/` — Git hooks
 
@@ -62,13 +63,13 @@ Feature folders typically use `components/`, `hooks/`, `schemas/`, `utils/`, `co
 
 ## Code style
 
-Follow `.cursor/rules/` for enforceable conventions:
+Follow `.cursor/rules/` and matching `.claude/rules/` for enforceable conventions (keep both in sync):
 
-- `typescript.mdc` — untrusted input, return types, Props, interface vs type
-- `tailwind.mdc` — `cn()` for conditional/merged classes only
-- `i18n.mdc` — next-intl for UI copy and formatters
-- `hooks.mdc` — group complex hook returns by data/handlers/statuses/refs
-- `react-compiler.mdc` — no manual `memo` / `useMemo` / `useCallback` by default
+- `typescript` — untrusted input, return types, Props, interface vs type
+- `tailwind` — `cn()` for conditional/merged classes only
+- `i18n` — next-intl for UI copy and formatters
+- `hooks` — group complex hook returns by data/handlers/statuses/refs
+- `react-compiler` — no manual `memo` / `useMemo` / `useCallback` by default
 
 Match nearby files before inventing new patterns. Prefer Server Components; keep Client Components small and leaf-level.
 

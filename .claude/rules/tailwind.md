@@ -1,0 +1,28 @@
+---
+paths:
+  - src/**/*.{ts,tsx}
+---
+
+# Tailwind class composition with `cn()`
+
+Import `cn` from `@/utils/cn`. Use it when composing **conditional** Tailwind classes, merging component classes with a `className` prop, or resolving conflicting utilities (`clsx` + `tailwind-merge`).
+
+Use plain class strings for **static** styles. Do not recreate `cn()`, wrap it, or add other class-merging helpers (`classnames`, `clsx` alone, local `cx`, etc.).
+
+```tsx
+import { cn } from '@/utils/cn'
+
+// ❌ BAD — static classes do not need cn()
+<div className={cn('flex flex-col gap-4')} />
+
+// ✅ GOOD — plain string for static styles
+<div className="flex flex-col gap-4" />
+
+// ✅ GOOD — conditional classes
+<button className={cn('rounded-lg px-3', isActive && 'bg-primary text-primary-foreground')} />
+
+// ✅ GOOD — merge defaults with a className prop
+function Panel({ className, ...props }: Props) {
+  return <div className={cn('rounded-xl border p-4', className)} {...props} />
+}
+```
