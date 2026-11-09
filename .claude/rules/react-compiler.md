@@ -1,0 +1,27 @@
+---
+paths:
+  - src/**/*.{ts,tsx}
+---
+
+# React Compiler memoization
+
+React Compiler is enabled. It memoizes components and values at build time. Do not add `React.memo`, `useMemo`, or `useCallback` by hand.
+
+Add one only when profiling shows a real cost the compiler does not remove. Name the measurement in a comment next to that exception.
+
+```tsx
+// ❌ BAD — manual memoization the compiler already handles
+const TripCard = memo(function TripCard({ trip }: Props) {
+  const label = useMemo(() => formatTripLabel(trip), [trip])
+  const handleOpen = useCallback(() => openTrip(trip.id), [trip.id])
+
+  return <button onClick={handleOpen}>{label}</button>
+})
+
+// ✅ GOOD — plain component; the compiler memoizes it
+function TripCard({ trip }: Props) {
+  const label = formatTripLabel(trip)
+
+  return <button onClick={() => openTrip(trip.id)}>{label}</button>
+}
+```
