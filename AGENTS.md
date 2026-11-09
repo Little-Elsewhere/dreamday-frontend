@@ -34,7 +34,7 @@ Copy `.env.example` to `.env` before build when needed. Do not commit secrets.
 - `.github/workflows/` — CI, CD, release
 - `.cursor/rules/` — Cursor rule modules
 - `.claude/rules/` — Claude Code path-scoped rules (same topics; keep in sync with `.cursor/rules/`)
-- `.agents/`, `.claude/skills/`, `.claude/commands/` — agent skills and Claude helpers
+- `.agents/`, `.claude/skills/` — agent skills and Claude helpers
 - `.storybook/` — Storybook config
 - `.husky/` — Git hooks
 
