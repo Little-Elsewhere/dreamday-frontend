@@ -54,18 +54,6 @@
       "sourceType": "github",
       "skillPath": "skills/shadcn/SKILL.md",
       "computedHash": "8f8bcc9024aa068245fac646d654a18c80280e4b06112ccd3e691a8c96cd66bd"
-    },
-    "turborepo": {
-      "source": "vercel/turborepo",
-      "sourceType": "github",
-      "skillPath": "skills/turborepo/SKILL.md",
-      "computedHash": "b7c3165ae67a2892d6195a5b2cba15c8d96341f5c64ddd0d3ce4225c94a2ae83"
-    },
-    "vercel-microfrontends": {
-      "source": "vercel/microfrontends",
-      "sourceType": "github",
-      "skillPath": "skills/vercel-microfrontends/SKILL.md",
-      "computedHash": "cabdceabe3985a640fb5b5569aae0fdab7d0bcb2d077197ad43e485c1b05da07"
     }
   }
 }
